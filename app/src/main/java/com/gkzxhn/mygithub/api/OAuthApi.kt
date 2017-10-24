@@ -23,7 +23,7 @@ interface OAuthApi {
     @GET("/user/repos")
     fun getRepos(@Query("visibility")visibility :String = "all",
                  @Query("affiliation")affiliation :String = "owner,collaborator,organization_member",
-                 @Query("type")type :String = "all",
+//                 @Query("type")type :String = "all",
                  @Query("sort")sort :String = "full_name",
                  @Query("direction")direction :String = "asc") : Observable<List<Repo>>
 }

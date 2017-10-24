@@ -60,7 +60,7 @@ class LoginActivity :BaseActivity(), BaseView{
     override fun setupComponent() {
         App.getInstance()
                 .baseComponent
-                .plus(AuthModule(this, null))
+                .plus(AuthModule(this))
                 .inject(this)
     }
 }

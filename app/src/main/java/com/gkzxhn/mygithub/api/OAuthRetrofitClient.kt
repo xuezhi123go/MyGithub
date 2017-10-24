@@ -8,7 +8,7 @@ import okhttp3.Interceptor
 /**
  * Created by 方 on 2017/10/23.
  */
-class OAuthRetrofitClient constructor(private val baseUrl: String): BaseRetrofitClient(baseUrl){
+class OAuthRetrofitClient constructor(baseUrl: String): BaseRetrofitClient(baseUrl){
 
 
     override fun createInterceptor(vararg properties: String): Interceptor {

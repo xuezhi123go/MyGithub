@@ -29,7 +29,6 @@ class App : Application() {
     private fun setupComponent() {
         DaggerBaseComponent.builder()
                 .baseModule(BaseModule(this))
-//                .githubAuthModule(AuthModule())
                 .build()
                 .inject(this)
     }

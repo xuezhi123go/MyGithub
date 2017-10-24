@@ -27,30 +27,10 @@ class BaseModule(private val context: Context) {
     @Singleton
     @Provides fun provideGson() = GsonBuilder().create()
 
-//    @Provides
-//    @Singleton
-//    fun provideInterceptor() : Interceptor {
-//        val interceptor = Interceptor { chain ->
-//            // https://developer.github.com/v3/auth/#basic-authentication
-//            // https://developer.github.com/v3/oauth/#non-web-application-flow
-//            val userCredentials = "" + ":" + ""
-//
-//            val basicAuth = "Basic " + String(Base64.encode(userCredentials.toByteArray(), Base64.DEFAULT))
-//
-//            val original = chain.request()
-//
-//            val requestBuilder = original.newBuilder()
-//                    .header("Authorization", basicAuth.trim { it <= ' ' })
-//
-//            val request = requestBuilder.build()
-//            chain.proceed(request)
-//        }
-//        return interceptor
-//    }
 
     @Singleton
     @Provides
-    fun provideOkhttp(/*interceptor: Interceptor*/): OkHttpClient {
+    fun provideOkhttp(): OkHttpClient {
         val cacheSize = 1024 * 1024 * 10L
         val cacheDir = File(context.cacheDir, "http")
         val cache = Cache(cacheDir, cacheSize)
