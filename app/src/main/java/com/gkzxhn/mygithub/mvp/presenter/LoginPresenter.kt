@@ -32,7 +32,7 @@ class LoginPresenter @Inject constructor(private val accountApi: AccountApi,
 
     fun login(username: String, password: String) {
         val api = AuthorRetrofitClient.getInstance(GithubConstant.BASE_URL)
-                .createAuthorRetrofit(username, password)!!
+                .createRetrofit(username, password)!!
                 .create(AccountApi::class.java)
         val createAuthorization = CreateAuthorization()
         createAuthorization.note = GithubConstant.NOTE

@@ -11,8 +11,8 @@ import okhttp3.Interceptor
 class OAuthRetrofitClient constructor(private val baseUrl: String): BaseRetrofitClient(baseUrl){
 
 
-    override fun createInterceptor(vararg properties: String) {
-        interceptor = Interceptor { chain ->
+    override fun createInterceptor(vararg properties: String): Interceptor {
+        val interceptor = Interceptor { chain ->
             val original = chain.request()
             val requestBuilder = original.newBuilder()
                     .header("Accept", "application/vnd.github.v3.json")
@@ -27,6 +27,7 @@ class OAuthRetrofitClient constructor(private val baseUrl: String): BaseRetrofit
             val request = requestBuilder.build()
             chain.proceed(request)
         }
+        return interceptor
     }
 
     companion object{

@@ -15,15 +15,10 @@ abstract class BaseRetrofitClient constructor(baseUrl: String) {
     var okHttpClient : OkHttpClient? = null
     var retrofit : Retrofit? = null
     val DEFAULT_TIMEOUT : Long = 20
-    var interceptor : Interceptor? = null
     var url = baseUrl
 
-    fun createRetrofit(): Retrofit? {
-        //创建interceptor
-        createInterceptor()
-        //okhttp创建
-        createClient(interceptor)
-        //retrofit创建
+    fun createRetrofit(vararg properties: String): Retrofit? {
+        createClient(createInterceptor(*properties))
         retrofit = Retrofit.Builder()
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -33,9 +28,9 @@ abstract class BaseRetrofitClient constructor(baseUrl: String) {
         return retrofit
     }
 
-    abstract fun  createInterceptor(vararg properties: String)
+    abstract fun createInterceptor(vararg properties: String): Interceptor
 
-    protected fun createClient(interceptor: Interceptor?) {
+    protected fun createClient(interceptor: Interceptor) {
         okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
