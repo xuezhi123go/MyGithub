@@ -10,5 +10,6 @@
     <color name="blue_grey">#607D8B</color>
 
     <color name="button_bg">@color/blue_grey</color>
+    <color name="md_grey_300">#E0E0E0</color>
 
 </resources>

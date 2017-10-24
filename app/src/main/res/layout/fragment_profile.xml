@@ -16,10 +16,41 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_profile"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     </android.support.v7.widget.RecyclerView>
+        <RelativeLayout
+            android:id="@+id/fl_to_login"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_marginTop="100dp"
+                android:id="@+id/iv_mengbi"
+                android:layout_width="200dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/mengbi"
+                android:layout_height="250dp"/>
+            <TextView
+                android:id="@+id/tv_to_login"
+                android:layout_marginTop="30dp"
+                android:layout_below="@+id/iv_mengbi"
+                android:text="@string/to_login"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/button_bg"
+                android:padding="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+
+    </FrameLayout>
 </LinearLayout>

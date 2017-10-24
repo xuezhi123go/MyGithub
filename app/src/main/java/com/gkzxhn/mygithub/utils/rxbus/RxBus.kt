@@ -1,4 +1,10 @@
-package com.gkzxhn.gank_kotlin.utils.rxbus
+package com.gkzxhn.mygithub.utils.rxbus
+
+import io.reactivex.Flowable
+import io.reactivex.processors.FlowableProcessor
+import io.reactivex.processors.PublishProcessor
+
+
 
 
 /**
@@ -7,18 +13,39 @@ package com.gkzxhn.gank_kotlin.utils.rxbus
 
 class RxBus private constructor() {
 
-    /*private val _bus =  PublishRelay.create().toSerialized();
+    private lateinit var mBus: FlowableProcessor<Any>
 
-
-    fun send(o: Any) {
-        _bus.accept(o)
+    init {
+        // toSerialized method made bus thread safe
+        mBus = PublishProcessor.create<Any>().toSerialized()
     }
 
-    fun asFlowable(): Flowable<Any> {
-        return _bus.toFlowable(BackpressureStrategy.LATEST)
+    companion object{
+        val instance : RxBus by lazy { Holder.BUS }
     }
 
-    fun hasObservers(): Boolean {
-        return _bus.hasObservers()
-    }*/
+    fun post(obj: Any) {
+        mBus.onNext(obj)
+    }
+
+    fun <T> toFlowable(tClass: Class<T>): Flowable<T> {
+        return mBus.ofType(tClass)
+    }
+
+    fun toFlowable(): Flowable<Any> {
+        return mBus
+    }
+
+    fun hasSubscribers(): Boolean {
+        return mBus.hasSubscribers()
+    }
+
+    fun unregisterAll() {
+        //会将所有由mBus生成的Flowable都置completed状态后续的所有消息都收不到了
+        mBus.onComplete()
+    }
+
+    private object Holder {
+        val BUS = RxBus()
+    }
 }

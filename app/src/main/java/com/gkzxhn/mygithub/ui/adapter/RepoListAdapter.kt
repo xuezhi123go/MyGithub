@@ -14,6 +14,6 @@ class RepoListAdapter(datas: List<Repo>?) : BaseQuickAdapter<Repo, BaseViewHolde
     override fun convert(helper: BaseViewHolder?, item: Repo?) {
         helper!!.setText(R.id.tv_name, item!!.name)
         helper.setText(R.id.tv_desc, item.description)
-        helper.setText(R.id.tv_create, item.created_at)
+        helper.setText(R.id.tv_create, item.created_at.substring(0, item.created_at.indexOf("T")))
     }
 }

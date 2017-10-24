@@ -15,6 +15,7 @@ import com.gkzxhn.mygithub.extension.edit
 import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
+import com.gkzxhn.mygithub.utils.rxbus.RxBus
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
@@ -25,7 +26,7 @@ import javax.inject.Inject
  * Created by 方 on 2017/10/20.
  */
 
-class LoginPresenter @Inject constructor(private val accountApi: AccountApi,
+class LoginPresenter @Inject constructor(private val rxBus: RxBus,
                                          private val view: BaseView){
 
     val TAG = javaClass.simpleName
@@ -74,7 +75,8 @@ class LoginPresenter @Inject constructor(private val accountApi: AccountApi,
                             .edit{
                                 putString(SharedPreConstant.AVATAR_URL, avatar_url)
                             }
-                    (view as LoginActivity).setResult(view.RESULT_OK, intent)
+//                    (view as LoginActivity).setResult(view.RESULT_OK, intent)
+                    rxBus.post(user)
                     view.killMyself()
                     Log.i(TAG, "user: ${user}"
                     )},{

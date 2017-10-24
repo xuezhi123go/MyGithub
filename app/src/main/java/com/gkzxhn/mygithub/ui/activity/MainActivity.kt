@@ -10,20 +10,27 @@ import com.gkzxhn.balabala.base.BaseActivity
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.R.id.*
-import com.gkzxhn.mygithub.constant.IntentConstant
+import com.gkzxhn.mygithub.base.App
+import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.constant.SharedPreConstant
+import com.gkzxhn.mygithub.di.module.AuthModule
 import com.gkzxhn.mygithub.extension.edit
 import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.extension.load
+import com.gkzxhn.mygithub.mvp.presenter.MainPresenter
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
 import com.gkzxhn.mygithub.ui.fragment.HomeFragment
 import com.gkzxhn.mygithub.ui.fragment.ProfileFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 /**
  * Created by 方 on 2017/10/19.
  */
 class MainActivity : BaseActivity(), BaseView {
+    @Inject
+    lateinit var mainPresenter: MainPresenter
+
     override fun launchActivity(intent: Intent) {
         startActivity(intent)
     }
@@ -54,13 +61,16 @@ class MainActivity : BaseActivity(), BaseView {
         initFragments()
         setBottomBar()
         setDrawer()
+
+        mainPresenter.subscribe()
+
     }
 
     private lateinit var text_username:TextView
     private lateinit var img_avatar:ImageView
 
     private val LOGIN_REQUEST = 1000
-    private val RESULT_OK = 0
+    private val RESULT_OK = 1
 
     private fun setDrawer() {
         val headerView = navigation.getHeaderView(0)
@@ -81,7 +91,7 @@ class MainActivity : BaseActivity(), BaseView {
         img_avatar.setOnClickListener {
             if (TextUtils.isEmpty(access_token)) {
                 val intent = Intent(this, LoginActivity::class.java)
-                startActivityForResult(intent, LOGIN_REQUEST)
+                startActivity(intent)
             }
         }
 
@@ -106,18 +116,25 @@ class MainActivity : BaseActivity(), BaseView {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when(requestCode){
-            LOGIN_REQUEST -> {
-                if (resultCode == RESULT_OK){
-                    val avatar = data!!.getStringExtra(IntentConstant.AVATAR)
-                    val name = data.getStringExtra(IntentConstant.NAME)
-                    img_avatar.load(this, avatar, R.drawable.default_avatar)
-                    text_username.text = name
-                }
-            }
-        }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        when(requestCode){
+//            LOGIN_REQUEST -> {
+//                if (resultCode == RESULT_OK){
+//                    val avatar = data!!.getStringExtra(IntentConstant.AVATAR)
+//                    val name = data.getStringExtra(IntentConstant.NAME)
+//                    img_avatar.load(this, avatar, R.drawable.default_avatar)
+//                    text_username.text = name
+//                }
+//            }
+//        }
+//    }
+
+    override fun setupComponent() {
+        App.getInstance()
+                .baseComponent
+                .plus(AuthModule(this))
+                .inject(this)
     }
 
     private fun setBottomBar() {
@@ -170,5 +187,12 @@ class MainActivity : BaseActivity(), BaseView {
         mFragments.add(HomeFragment())
         mFragments.add(HomeFragment())
         mFragments.add(ProfileFragment())
+    }
+
+    fun toLogin(user: User) {
+        val avatar = user.avatar_url
+        val name = user.name
+        img_avatar.load(this, avatar, R.drawable.default_avatar)
+        text_username.text = name
     }
 }

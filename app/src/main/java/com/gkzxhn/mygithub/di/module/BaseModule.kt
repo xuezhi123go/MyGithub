@@ -2,6 +2,7 @@ package com.gkzxhn.mygithub.di.module
 
 import android.content.Context
 import com.gkzxhn.mygithub.constant.GithubConstant
+import com.gkzxhn.mygithub.utils.rxbus.RxBus
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -53,4 +54,7 @@ class BaseModule(private val context: Context) {
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                     .build()
 
+    @Provides
+    @Singleton
+    fun provideRxbus() = RxBus.instance
 }

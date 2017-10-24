@@ -20,7 +20,7 @@ class LoginActivity :BaseActivity(), BaseView{
 
     @Inject lateinit var presenter: LoginPresenter
 
-    val RESULT_OK = 0
+    val RESULT_OK = 1
 
     override fun launchActivity(intent: Intent) {
 

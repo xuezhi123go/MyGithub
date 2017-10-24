@@ -75,4 +75,5 @@ dependencies {
     //glide
     compile dependencies.glide
     kapt dependencies.glide_kapt
+    compile 'com.ldoublem.loadingview:loadingviewlib:1.0'
 }
