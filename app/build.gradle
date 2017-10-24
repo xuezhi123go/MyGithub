@@ -1,0 +1,78 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
+    defaultConfig {
+        applicationId "com.gkzxhn.mygithub"
+        minSdkVersion 16
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    def dependencies = rootProject.ext.dependencies
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha9'
+
+    compile dependencies.supportAppCompat
+
+    //Rx
+    compile dependencies.supportAppCompat
+    // Rx
+    compile dependencies. rxJava2
+    compile dependencies. rxAndroid2
+    //RxKotlin
+    compile dependencies. rxKotlin
+    //RxLifecycle
+    compile dependencies. rxLifecycle
+    compile dependencies. rxLifecycle_kotlin
+    //RxPermissions
+    compile dependencies. rxPermissions
+    //Dagger2
+    compile dependencies.dagger
+    kapt dependencies.daggerCompiler
+    provided dependencies.javaxAnnotation
+    //Retrofit, OkHttp
+    compile dependencies.retrofit
+    compile dependencies.retrofitRxjava2Adapter
+    compile dependencies.retrofitGsonConverter
+    compile dependencies.okhttp3
+    compile dependencies.gson
+    //design
+    compile dependencies.supportDesign
+    //recycleView
+    compile dependencies.baseRecyclerView
+    compile dependencies.supportCardView
+    //simple xml
+    compile('com.squareup.retrofit2:converter-simplexml:2.3.0') {
+        exclude module: 'stax'
+        exclude module: 'stax-api'
+        exclude module: 'xpp3'
+    }
+    //banner
+    compile dependencies.banner
+    //jsoup
+    compile dependencies.jsoup
+    //glide
+    compile dependencies.glide
+    kapt dependencies.glide_kapt
+}
