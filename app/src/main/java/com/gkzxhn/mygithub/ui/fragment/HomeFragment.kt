@@ -11,6 +11,7 @@ import com.gkzxhn.mygithub.R
  * Created by 方 on 2017/10/19.
  */
 class HomeFragment : BaseFragment(){
+
     override fun initContentView() {
 //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

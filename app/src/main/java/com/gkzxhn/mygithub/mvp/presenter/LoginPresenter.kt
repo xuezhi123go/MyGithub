@@ -16,6 +16,7 @@ import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
+import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Function
@@ -32,6 +33,7 @@ class LoginPresenter @Inject constructor(private val rxBus: RxBus,
     val TAG = javaClass.simpleName
 
     fun login(username: String, password: String) {
+        (view as LoginActivity).showLoading()
         val api = AuthorRetrofitClient.getInstance(GithubConstant.BASE_URL)
                 .createRetrofit(username, password)!!
                 .create(AccountApi::class.java)
@@ -52,10 +54,10 @@ class LoginPresenter @Inject constructor(private val rxBus: RxBus,
                             }
                     return@Function api.getUserInfo(accessToken)
                 })
+                .bindToLifecycle(view)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate { view.showLoading() }
                 .doAfterTerminate { view.hideLoading() }
                 .subscribe({
                     user: User? ->
@@ -81,8 +83,8 @@ class LoginPresenter @Inject constructor(private val rxBus: RxBus,
                     Log.i(TAG, "user: ${user}"
                     )},{
                     e ->
-                        (view as LoginActivity).toast("登录失败")
-                    Log.e(TAG, "login error : ${e.message}")
+                        view.toast("登录失败")
+                        Log.e(TAG, "login error : ${e.message}")
                 })
 
 //        val createAuthorization = CreateAuthorization()

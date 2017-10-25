@@ -4,6 +4,7 @@ import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.balabala.ui.activity.MainActivity
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
+import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import javax.inject.Inject
 
 /**
@@ -13,9 +14,10 @@ class MainPresenter @Inject constructor(private val rxBus: RxBus, private val vi
 
     fun subscribe(){
         rxBus.toFlowable(User::class.java)
+                .bindToLifecycle(view as MainActivity)
                 .subscribe(
                         {user: User? ->
-                            (view as MainActivity).toLogin(user!!)
+                            view.toLogin(user!!)
                         }
                 )
     }

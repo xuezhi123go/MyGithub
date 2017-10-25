@@ -14,6 +14,7 @@ import com.trello.rxlifecycle2.components.support.RxFragment
  */
 abstract class BaseFragment :RxFragment(){
 
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = initView(inflater, container, savedInstanceState)
         setupComponent()
@@ -61,5 +62,4 @@ abstract class BaseFragment :RxFragment(){
         val statusBarHeight = activity.resources.getDimensionPixelSize(resourceId)
         return statusBarHeight
     }
-
 }

@@ -3,7 +3,9 @@ package com.gkzxhn.balabala.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.GravityCompat
 import android.text.TextUtils
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import com.gkzxhn.balabala.base.BaseActivity
@@ -17,11 +19,15 @@ import com.gkzxhn.mygithub.di.module.AuthModule
 import com.gkzxhn.mygithub.extension.edit
 import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.extension.load
+import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.MainPresenter
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
 import com.gkzxhn.mygithub.ui.fragment.HomeFragment
 import com.gkzxhn.mygithub.ui.fragment.ProfileFragment
+import com.trello.rxlifecycle2.kotlin.bindToLifecycle
+import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -49,6 +55,7 @@ class MainActivity : BaseActivity(), BaseView {
 
     override fun killMyself() {
 //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        finish()
     }
 
     override fun initView(savedInstanceState: Bundle?) {
@@ -116,20 +123,6 @@ class MainActivity : BaseActivity(), BaseView {
 
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        when(requestCode){
-//            LOGIN_REQUEST -> {
-//                if (resultCode == RESULT_OK){
-//                    val avatar = data!!.getStringExtra(IntentConstant.AVATAR)
-//                    val name = data.getStringExtra(IntentConstant.NAME)
-//                    img_avatar.load(this, avatar, R.drawable.default_avatar)
-//                    text_username.text = name
-//                }
-//            }
-//        }
-//    }
-
     override fun setupComponent() {
         App.getInstance()
                 .baseComponent
@@ -191,8 +184,31 @@ class MainActivity : BaseActivity(), BaseView {
 
     fun toLogin(user: User) {
         val avatar = user.avatar_url
-        val name = user.name
+        val name = user.login
         img_avatar.load(this, avatar, R.drawable.default_avatar)
+        img_avatar.isClickable = false
         text_username.text = name
+    }
+
+    var back = 0
+
+    override fun onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+            return
+        }
+        back++
+        if (back == 2){
+            finish()
+        }else {
+            toast("再按一次退出")
+        }
+        Flowable.timer(2000, TimeUnit.MILLISECONDS)
+                .bindToLifecycle(this)
+                .subscribe {
+                    t: Long? ->
+                    Log.i(javaClass.simpleName, "long :${t}")
+                    back = 0
+                }
     }
 }
