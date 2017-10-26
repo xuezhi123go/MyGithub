@@ -1,5 +1,8 @@
 package com.gkzxhn.mygithub.bean.info
 
+import android.os.Parcel
+import android.os.Parcelable
+
 /**
  * Created by 方 on 2017/10/19.
  *
@@ -59,11 +62,125 @@ data class User(
 		val collaborators: Int, //8
 		val two_factor_authentication: Boolean, //true
 		val plan: Plan
-)
+) : Parcelable {
+	constructor(source: Parcel) : this(
+			source.readString(),
+			source.readInt(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			1 == source.readInt(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			1 == source.readInt(),
+			source.readString(),
+			source.readInt(),
+			source.readInt(),
+			source.readInt(),
+			source.readInt(),
+			source.readString(),
+			source.readString(),
+			source.readInt(),
+			source.readInt(),
+			source.readInt(),
+			source.readInt(),
+			source.readInt(),
+			1 == source.readInt(),
+			source.readParcelable<Plan>(Plan::class.java.classLoader)
+	)
+
+	override fun describeContents() = 0
+
+	override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+		writeString(login)
+		writeInt(id)
+		writeString(avatar_url)
+		writeString(gravatar_id)
+		writeString(url)
+		writeString(html_url)
+		writeString(followers_url)
+		writeString(following_url)
+		writeString(gists_url)
+		writeString(starred_url)
+		writeString(subscriptions_url)
+		writeString(organizations_url)
+		writeString(repos_url)
+		writeString(events_url)
+		writeString(received_events_url)
+		writeString(type)
+		writeInt((if (site_admin) 1 else 0))
+		writeString(name)
+		writeString(company)
+		writeString(blog)
+		writeString(location)
+		writeString(email)
+		writeInt((if (hireable) 1 else 0))
+		writeString(bio)
+		writeInt(public_repos)
+		writeInt(public_gists)
+		writeInt(followers)
+		writeInt(following)
+		writeString(created_at)
+		writeString(updated_at)
+		writeInt(total_private_repos)
+		writeInt(owned_private_repos)
+		writeInt(private_gists)
+		writeInt(disk_usage)
+		writeInt(collaborators)
+		writeInt((if (two_factor_authentication) 1 else 0))
+		writeParcelable(plan, 0)
+	}
+
+	companion object {
+		@JvmField
+		val CREATOR: Parcelable.Creator<User> = object : Parcelable.Creator<User> {
+			override fun createFromParcel(source: Parcel): User = User(source)
+			override fun newArray(size: Int): Array<User?> = arrayOfNulls(size)
+		}
+	}
+}
 
 data class Plan(
 		val name: String, //Medium
 		val space: Int, //400
 		val private_repos: Int, //20
 		val collaborators: Int //0
-)
+) : Parcelable {
+	constructor(source: Parcel) : this(
+			source.readString(),
+			source.readInt(),
+			source.readInt(),
+			source.readInt()
+	)
+
+	override fun describeContents() = 0
+
+	override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+		writeString(name)
+		writeInt(space)
+		writeInt(private_repos)
+		writeInt(collaborators)
+	}
+
+	companion object {
+		@JvmField
+		val CREATOR: Parcelable.Creator<Plan> = object : Parcelable.Creator<Plan> {
+			override fun createFromParcel(source: Parcel): Plan = Plan(source)
+			override fun newArray(size: Int): Array<Plan?> = arrayOfNulls(size)
+		}
+	}
+}

@@ -16,4 +16,5 @@ class RepoListAdapter(datas: List<Repo>?) : BaseQuickAdapter<Repo, BaseViewHolde
         helper.setText(R.id.tv_desc, item.description)
         helper.setText(R.id.tv_create, item.created_at.substring(0, item.created_at.indexOf("T")))
     }
+
 }

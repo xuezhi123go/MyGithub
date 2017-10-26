@@ -7,4 +7,5 @@ object IntentConstant {
     val AVATAR = "avatar"
     val NAME = "name"
 
+    val REPO = "repo"
 }

@@ -47,6 +47,7 @@ class LoginPresenter @Inject constructor(private val rxBus: RxBus,
                     t : AuthorizationResp->
 
                     val accessToken = t.token
+                    Log.i(TAG, "accessToken : ${accessToken}")
                     SharedPreConstant.USER_SP
                             .getSharedPreference()
                             .edit {

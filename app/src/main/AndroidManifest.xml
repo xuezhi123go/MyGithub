@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.LoginActivity"/>
+        <activity android:name=".ui.activity.RepoDetailActivity"/>
     </application>
 
 </manifest>

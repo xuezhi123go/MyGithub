@@ -3,7 +3,6 @@ package com.gkzxhn.mygithub.mvp.presenter
 import android.util.Log
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.api.OAuthApi
-import com.gkzxhn.mygithub.api.OAuthRetrofitClient
 import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.ui.fragment.ProfileFragment
@@ -12,20 +11,17 @@ import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
-import javax.inject.Named
 
 /**
  * Created by 方 on 2017/10/24.
  */
-class ProfilePresenter @Inject constructor(@Named("OAuth")private val oAuthRetrofitClient: OAuthRetrofitClient,
+class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                                            private val view : BaseView,
                                            private val rxBus: RxBus){
 
     fun loadData(){
         view.showLoading()
-        oAuthRetrofitClient.createRetrofit()!!
-                .create(OAuthApi::class.java)
-                .getRepos(sort = "pushed", direction = "desc")
+        oAuthApi.getRepos(sort = "pushed", direction = "desc")
                 .bindToLifecycle(view as ProfileFragment)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
