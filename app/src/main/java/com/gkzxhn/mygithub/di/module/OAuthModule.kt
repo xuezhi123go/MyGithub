@@ -1,6 +1,7 @@
 package com.gkzxhn.mygithub.di.module
 
 import com.gkzxhn.balabala.mvp.contract.BaseView
+import com.gkzxhn.mygithub.api.OAuthApi
 import com.gkzxhn.mygithub.api.OAuthRetrofitClient
 import com.gkzxhn.mygithub.constant.GithubConstant
 import dagger.Module
@@ -17,6 +18,9 @@ class OAuthModule constructor(private val view : BaseView) {
     @Provides
     @Named("OAuth")
     fun provideOAuthRetrofit() = OAuthRetrofitClient.getInstance(baseUrl = GithubConstant.BASE_URL)
+
+    @Provides
+    fun provideOAuthApi(@Named("OAuth")client: OAuthRetrofitClient) = client.createRetrofit()!!.create(OAuthApi::class.java)
 
     @Provides fun getView() = view
 

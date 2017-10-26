@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:background="#fff"
+    android:foreground="?attr/selectableItemBackground"
+    android:orientation="vertical"
+    app:cardCornerRadius="2dp"
+    android:paddingTop="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/ll_issue_title"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_issue"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:text="issue"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tv_issue_name"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/primary_text"
+                android:text="name"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_issue_body"
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/ll_issue_title"
+            android:layout_margin="4dp"
+            android:textSize="14sp"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    </android.support.v7.widget.CardView>

@@ -1,6 +1,7 @@
 package com.gkzxhn.mygithub.di.component
 
 import com.gkzxhn.mygithub.di.module.OAuthModule
+import com.gkzxhn.mygithub.ui.fragment.IssueFragment
 import com.gkzxhn.mygithub.ui.fragment.ProfileFragment
 import dagger.Subcomponent
 
@@ -12,4 +13,6 @@ import dagger.Subcomponent
 interface OAuthComponent {
 
     fun inject(profileFragment: ProfileFragment)
+
+    fun inject(issueFragment: IssueFragment)
 }

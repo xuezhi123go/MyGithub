@@ -1,9 +1,12 @@
 package com.gkzxhn.mygithub.bean.info
 
+import android.os.Parcel
+import android.os.Parcelable
+import android.text.TextUtils
+
 /**
  * Created by 方 on 2017/10/23.
  */
-
 
 
 data class Repo(
@@ -63,14 +66,14 @@ data class Repo(
 		val size: Int, //129
 		val stargazers_count: Int, //0
 		val watchers_count: Int, //0
-		val language: Any, //null
+		val language: String, //null
 		val has_issues: Boolean, //false
 		val has_projects: Boolean, //true
 		val has_downloads: Boolean, //true
 		val has_wiki: Boolean, //true
 		val has_pages: Boolean, //false
 		val forks_count: Int, //0
-		val mirror_url: Any, //null
+		val mirror_url: String, //null
 		val archived: Boolean, //false
 		val open_issues_count: Int, //0
 		val forks: Int, //0
@@ -78,7 +81,165 @@ data class Repo(
 		val watchers: Int, //0
 		val default_branch: String, //master
 		val permissions: Permissions
-)
+) : Parcelable {
+	constructor(source: Parcel) : this(
+			source.readInt(),
+			source.readString(),
+			source.readString(),
+			source.readParcelable<Owner>(Owner::class.java.classLoader),
+			1 == source.readInt(),
+			source.readString(),
+			source.readString(),
+			1 == source.readInt(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			/*if (TextUtils.isEmpty(source.readString())) "" else */source.readString(),
+			source.readInt(),
+			source.readInt(),
+			source.readInt(),
+			/*if (TextUtils.isEmpty(source.readString())) "" else */source.readString(),
+			1 == source.readInt(),
+			1 == source.readInt(),
+			1 == source.readInt(),
+			1 == source.readInt(),
+			1 == source.readInt(),
+			source.readInt(),
+			/*if(TextUtils.isEmpty(source.readString())) "" else */source.readString(),
+			1 == source.readInt(),
+			source.readInt(),
+			source.readInt(),
+			source.readInt(),
+			source.readInt(),
+			source.readString(),
+			source.readParcelable<Permissions>(Permissions::class.java.classLoader)
+	)
+
+	override fun describeContents() = 0
+
+	override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+		writeInt(id)
+		writeString(name)
+		writeString(full_name)
+		writeParcelable(owner, 0)
+		writeInt((if (private) 1 else 0))
+		writeString(html_url)
+		writeString(if (TextUtils.isEmpty(description)) "" else description)
+		writeInt((if (fork) 1 else 0))
+		writeString(url)
+		writeString(forks_url)
+		writeString(keys_url)
+		writeString(collaborators_url)
+		writeString(teams_url)
+		writeString(hooks_url)
+		writeString(issue_events_url)
+		writeString(events_url)
+		writeString(assignees_url)
+		writeString(branches_url)
+		writeString(tags_url)
+		writeString(blobs_url)
+		writeString(git_tags_url)
+		writeString(git_refs_url)
+		writeString(trees_url)
+		writeString(statuses_url)
+		writeString(languages_url)
+		writeString(stargazers_url)
+		writeString(contributors_url)
+		writeString(subscribers_url)
+		writeString(subscription_url)
+		writeString(commits_url)
+		writeString(git_commits_url)
+		writeString(comments_url)
+		writeString(issue_comment_url)
+		writeString(contents_url)
+		writeString(compare_url)
+		writeString(merges_url)
+		writeString(archive_url)
+		writeString(downloads_url)
+		writeString(issues_url)
+		writeString(pulls_url)
+		writeString(milestones_url)
+		writeString(notifications_url)
+		writeString(labels_url)
+		writeString(releases_url)
+		writeString(deployments_url)
+		writeString(created_at)
+		writeString(updated_at)
+		writeString(pushed_at)
+		writeString(git_url)
+		writeString(ssh_url)
+		writeString(clone_url)
+		writeString(svn_url)
+		writeString(if (TextUtils.isEmpty(homepage)) "" else homepage)
+		writeInt(size)
+		writeInt(stargazers_count)
+		writeInt(watchers_count)
+		writeString(if(TextUtils.isEmpty(language)) "" else language)
+		writeInt((if (has_issues) 1 else 0))
+		writeInt((if (has_projects) 1 else 0))
+		writeInt((if (has_downloads) 1 else 0))
+		writeInt((if (has_wiki) 1 else 0))
+		writeInt((if (has_pages) 1 else 0))
+		writeInt(forks_count)
+		writeString(if(TextUtils.isEmpty(mirror_url)) "" else mirror_url)
+		writeInt((if (archived) 1 else 0))
+		writeInt(open_issues_count)
+		writeInt(forks)
+		writeInt(open_issues)
+		writeInt(watchers)
+		writeString(default_branch)
+		writeParcelable(permissions, 0)
+	}
+
+	companion object {
+		@JvmField
+		val CREATOR: Parcelable.Creator<Repo> = object : Parcelable.Creator<Repo> {
+			override fun createFromParcel(source: Parcel): Repo = Repo(source)
+			override fun newArray(size: Int): Array<Repo?> = arrayOfNulls(size)
+		}
+	}
+}
 
 data class Owner(
 		val login: String, //FangforFun
@@ -98,10 +259,82 @@ data class Owner(
 		val received_events_url: String, //https://api.github.com/users/FangforFun/received_events
 		val type: String, //User
 		val site_admin: Boolean //false
-)
+) : Parcelable {
+	constructor(source: Parcel) : this(
+			source.readString(),
+			source.readInt(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			source.readString(),
+			1 == source.readInt()
+	)
+
+	override fun describeContents() = 0
+
+	override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+		writeString(login)
+		writeInt(id)
+		writeString(avatar_url)
+		writeString(gravatar_id)
+		writeString(url)
+		writeString(html_url)
+		writeString(followers_url)
+		writeString(following_url)
+		writeString(gists_url)
+		writeString(starred_url)
+		writeString(subscriptions_url)
+		writeString(organizations_url)
+		writeString(repos_url)
+		writeString(events_url)
+		writeString(received_events_url)
+		writeString(type)
+		writeInt((if (site_admin) 1 else 0))
+	}
+
+	companion object {
+		@JvmField
+		val CREATOR: Parcelable.Creator<Owner> = object : Parcelable.Creator<Owner> {
+			override fun createFromParcel(source: Parcel): Owner = Owner(source)
+			override fun newArray(size: Int): Array<Owner?> = arrayOfNulls(size)
+		}
+	}
+}
 
 data class Permissions(
 		val admin: Boolean, //true
 		val push: Boolean, //true
 		val pull: Boolean //true
-)
+) : Parcelable {
+	constructor(source: Parcel) : this(
+			1 == source.readInt(),
+			1 == source.readInt(),
+			1 == source.readInt()
+	)
+
+	override fun describeContents() = 0
+
+	override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+		writeInt((if (admin) 1 else 0))
+		writeInt((if (push) 1 else 0))
+		writeInt((if (pull) 1 else 0))
+	}
+
+	companion object {
+		@JvmField
+		val CREATOR: Parcelable.Creator<Permissions> = object : Parcelable.Creator<Permissions> {
+			override fun createFromParcel(source: Parcel): Permissions = Permissions(source)
+			override fun newArray(size: Int): Array<Permissions?> = arrayOfNulls(size)
+		}
+	}
+}

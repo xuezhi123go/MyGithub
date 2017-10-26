@@ -10,17 +10,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.gkzxhn.balabala.base.BaseFragment
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.info.Repo
+import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.mvp.presenter.ProfilePresenter
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
+import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
 import com.gkzxhn.mygithub.ui.adapter.RepoListAdapter
 import com.ldoublem.loadingviewlib.view.LVGhost
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -69,6 +72,17 @@ class ProfileFragment : BaseFragment(), BaseView {
 
         rv_profile.layoutManager = LinearLayoutManager(context)
         repoListAdapter = RepoListAdapter(null)
+        repoListAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN)
+        repoListAdapter.setOnItemClickListener {
+            adapter, view, position ->
+
+            val repo = adapter.data[position] as Repo
+            val intent = Intent(context, RepoDetailActivity::class.java)
+            val mBundle = Bundle()
+            mBundle.putParcelable(IntentConstant.REPO, repo)
+            intent.putExtras(mBundle)
+            startActivity(intent)
+        }
         rv_profile.adapter = repoListAdapter
         val token = SharedPreConstant.USER_SP.getSharedPreference()
                 .getString(SharedPreConstant.ACCESS_TOKEN, "")
