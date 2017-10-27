@@ -24,6 +24,7 @@ import com.gkzxhn.mygithub.mvp.presenter.MainPresenter
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
 import com.gkzxhn.mygithub.ui.fragment.HomeFragment
 import com.gkzxhn.mygithub.ui.fragment.ProfileFragment
+import com.gkzxhn.mygithub.ui.fragment.StarsFragment
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.activity_main.*
@@ -36,6 +37,8 @@ import javax.inject.Inject
 class MainActivity : BaseActivity(), BaseView {
     @Inject
     lateinit var mainPresenter: MainPresenter
+
+//    private lateinit var repo: Repo
 
     override fun launchActivity(intent: Intent) {
         startActivity(intent)
@@ -65,6 +68,7 @@ class MainActivity : BaseActivity(), BaseView {
 //                .inject(this)
 
         setContentView(R.layout.activity_main)
+//        repo = intent.getParcelableExtra<Repo>(IntentConstant.REPO)
         initFragments()
         setBottomBar()
         setDrawer()
@@ -73,8 +77,8 @@ class MainActivity : BaseActivity(), BaseView {
 
     }
 
-    private lateinit var text_username:TextView
-    private lateinit var img_avatar:ImageView
+    private lateinit var text_username: TextView
+    private lateinit var img_avatar: ImageView
 
     private val LOGIN_REQUEST = 1000
     private val RESULT_OK = 1
@@ -109,9 +113,8 @@ class MainActivity : BaseActivity(), BaseView {
      * 设置侧边栏点击事件
      */
     private fun setDrawerItemClick() {
-        navigation.setNavigationItemSelectedListener {
-            item ->
-            when(item.itemId){
+        navigation.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
                 R.id.drawer_logout ->
                     SharedPreConstant.USER_SP.getSharedPreference()
                             .edit {
@@ -131,8 +134,7 @@ class MainActivity : BaseActivity(), BaseView {
     }
 
     private fun setBottomBar() {
-        bottom_navigation.setOnNavigationItemSelectedListener {
-            item ->
+        bottom_navigation.setOnNavigationItemSelectedListener { item ->
             val transaction = supportFragmentManager.beginTransaction()
             when (item.itemId) {
                 navigation_home -> {
@@ -178,7 +180,7 @@ class MainActivity : BaseActivity(), BaseView {
     private fun initFragments() {
         mFragments = ArrayList()
         mFragments.add(HomeFragment())
-        mFragments.add(HomeFragment())
+        mFragments.add(StarsFragment())
         mFragments.add(ProfileFragment())
     }
 
@@ -198,15 +200,14 @@ class MainActivity : BaseActivity(), BaseView {
             return
         }
         back++
-        if (back == 2){
+        if (back == 2) {
             finish()
-        }else {
+        } else {
             toast("再按一次退出")
         }
         Flowable.timer(2000, TimeUnit.MILLISECONDS)
                 .bindToLifecycle(this)
-                .subscribe {
-                    t: Long? ->
+                .subscribe { t: Long? ->
                     Log.i(javaClass.simpleName, "long :${t}")
                     back = 0
                 }

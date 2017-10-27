@@ -35,7 +35,7 @@ import javax.inject.Inject
 class ProfileFragment : BaseFragment(), BaseView {
 
     private lateinit var repoListAdapter: RepoListAdapter
-    private lateinit var loading : LVGhost
+    private lateinit var loading: LVGhost
 
     @Inject
     lateinit var presenter: ProfilePresenter
@@ -73,8 +73,7 @@ class ProfileFragment : BaseFragment(), BaseView {
         rv_profile.layoutManager = LinearLayoutManager(context)
         repoListAdapter = RepoListAdapter(null)
         repoListAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN)
-        repoListAdapter.setOnItemClickListener {
-            adapter, view, position ->
+        repoListAdapter.setOnItemClickListener { adapter, view, position ->
 
             val repo = adapter.data[position] as Repo
             val intent = Intent(context, RepoDetailActivity::class.java)
@@ -88,7 +87,7 @@ class ProfileFragment : BaseFragment(), BaseView {
                 .getString(SharedPreConstant.ACCESS_TOKEN, "")
         if (TextUtils.isEmpty(token)) {
             fl_to_login.visibility = View.VISIBLE
-        }else {
+        } else {
             getNewData()
         }
     }
@@ -117,7 +116,7 @@ class ProfileFragment : BaseFragment(), BaseView {
                 .inject(this)
     }
 
-    fun loadData(lists : List<Repo>){
+    fun loadData(lists: List<Repo>) {
         repoListAdapter.setNewData(lists)
     }
 }
