@@ -32,6 +32,7 @@ class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     view.loadData(t!!)
                     Log.i(javaClass.simpleName, t.get(0).toString())
                 },{
+
                     e ->
                     Log.e(javaClass.simpleName, e.message)
                 })

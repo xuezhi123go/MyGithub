@@ -5,8 +5,6 @@ import io.reactivex.processors.FlowableProcessor
 import io.reactivex.processors.PublishProcessor
 
 
-
-
 /**
  * Created by 方 on 2017/8/9.
  */
@@ -20,8 +18,8 @@ class RxBus private constructor() {
         mBus = PublishProcessor.create<Any>().toSerialized()
     }
 
-    companion object{
-        val instance : RxBus by lazy { Holder.BUS }
+    companion object {
+        val instance: RxBus by lazy { Holder.BUS }
     }
 
     fun post(obj: Any) {
