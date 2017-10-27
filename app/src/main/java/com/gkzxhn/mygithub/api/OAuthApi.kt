@@ -2,6 +2,7 @@ package com.gkzxhn.mygithub.api
 
 import com.gkzxhn.mygithub.bean.info.Issue
 import com.gkzxhn.mygithub.bean.info.Repo
+import com.gkzxhn.mygithub.bean.info.Starred
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -23,11 +24,11 @@ interface OAuthApi {
      * @param direction    asc或desc
      */
     @GET("/user/repos")
-    fun getRepos(@Query("visibility")visibility :String = "all",
-                 @Query("affiliation")affiliation :String = "owner,collaborator,organization_member",
+    fun getRepos(@Query("visibility") visibility: String = "all",
+                 @Query("affiliation") affiliation: String = "owner,collaborator,organization_member",
 //                 @Query("type")type :String = "all",
-                 @Query("sort")sort :String = "full_name",
-                 @Query("direction")direction :String = "asc") : Observable<List<Repo>>
+                 @Query("sort") sort: String = "full_name",
+                 @Query("direction") direction: String = "asc"): Observable<List<Repo>>
 
 
     /**
@@ -51,12 +52,24 @@ interface OAuthApi {
     @GET("/repos/{owner}/{repo}/issues")
     fun getIssues(@Path("owner") owner: String, @Path("repo") repo: String,
 //                  @Query("milestone")milestone :String = "none",
-                  @Query("state")state :String = "all",
+                  @Query("state") state: String = "all",
 //                  @Query("assignee")assignee :String = "none",
 //                  @Query("creator")creator :String = "none",
 //                  @Query("mentioned")mentioned :String = "none",
 //                  @Query("labels")labels :String = "none",
-                  @Query("sort")sort :String = "created",
-                  @Query("direction")direction :String = "desc"
-                  /*@Query("since")since :String = "none"*/): Observable<List<Issue>>
+                  @Query("sort") sort: String = "created",
+                  @Query("direction") direction: String = "desc"
+            /*@Query("since")since :String = "none"*/): Observable<List<Issue>>
+
+
+    /**
+     * 获取别人的Stars
+     */
+    @GET("/users/{username}/starred")
+    fun getStars(@Path("username") username: String)
+            : Observable<List<Starred>>
+
+
+    @GET("/user/starred")
+    fun getMyStars(): Observable<List<Starred>>
 }

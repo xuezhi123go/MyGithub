@@ -22,10 +22,10 @@ import javax.inject.Inject
 /**
  * Created by 方 on 2017/10/25.
  */
-class IssueFragment constructor(private val repo: Repo): BaseFragment(), BaseView {
+class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseView {
 
     @Inject lateinit var presenter: IssuePresenter
-    private lateinit var adapter : IssueAdapter
+    private lateinit var adapter: IssueAdapter
 
     override fun launchActivity(intent: Intent) {
 //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -64,7 +64,7 @@ class IssueFragment constructor(private val repo: Repo): BaseFragment(), BaseVie
                 .inject(this)
     }
 
-    fun loadData(issues : List<Issue>){
+    fun loadData(issues: List<Issue>) {
         Log.i(javaClass.simpleName, issues[0].toString())
         adapter.setNewData(issues)
     }
