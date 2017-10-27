@@ -8,4 +8,5 @@ object IntentConstant {
     val NAME = "name"
 
     val REPO = "repo"
+    val ISSUE_NUM = "issue_num"
 }

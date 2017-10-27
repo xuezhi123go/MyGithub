@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_marginTop="@dimen/dp_40"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/img_avatar"
+        android:src="@drawable/default_avatar"
+        android:layout_margin="12dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_name"
+            android:text="name"
+            android:textSize="13sp"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:textColor="@color/user_blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tv_support"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                android:paddingRight="5dp"
+                android:drawableLeft="@android:drawable/ic_menu_view"
+                android:layout_width="wrap_content"
+                android:text="6"
+                android:layout_height="20dp"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_margin="4dp"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:textSize="16sp"
+            android:id="@+id/tv_body"
+            android:textColor="@android:color/black"
+            android:text="破旧的弗兰克跋涉百八十个好想吃老龄化萨菲隆传播好地方此女福利可接受的禄口机场大富科技成功被风吹"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv_create_time"
+            android:text="2017年10月"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</LinearLayout>

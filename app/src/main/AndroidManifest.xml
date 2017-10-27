@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".ui.activity.LoginActivity"/>
         <activity android:name=".ui.activity.RepoDetailActivity"/>
+        <activity android:name=".ui.activity.IssueDetailActivity"/>
+        <activity android:name=".ui.activity.EditIssueActivity"/>
     </application>
 
 </manifest>
