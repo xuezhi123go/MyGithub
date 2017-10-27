@@ -21,7 +21,6 @@ import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.mvp.presenter.StarsPresenter
 import com.gkzxhn.mygithub.ui.adapter.StarsAdapter
 import com.ldoublem.loadingviewlib.view.LVGhost
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_stars.*
 import javax.inject.Inject
 

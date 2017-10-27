@@ -1,12 +1,9 @@
 package com.gkzxhn.mygithub.api
 
-import com.gkzxhn.mygithub.bean.info.Issue
-import com.gkzxhn.mygithub.bean.info.Repo
-import com.gkzxhn.mygithub.bean.info.Starred
+import com.gkzxhn.mygithub.bean.info.*
 import io.reactivex.Observable
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import okhttp3.RequestBody
+import retrofit2.http.*
 
 /**
  * Created by 方 on 2017/10/23.
@@ -24,11 +21,11 @@ interface OAuthApi {
      * @param direction    asc或desc
      */
     @GET("/user/repos")
-    fun getRepos(@Query("visibility") visibility: String = "all",
-                 @Query("affiliation") affiliation: String = "owner,collaborator,organization_member",
+    fun getRepos(@Query("visibility")visibility :String = "all",
+                 @Query("affiliation")affiliation :String = "owner,collaborator,organization_member",
 //                 @Query("type")type :String = "all",
-                 @Query("sort") sort: String = "full_name",
-                 @Query("direction") direction: String = "asc"): Observable<List<Repo>>
+                 @Query("sort")sort :String = "full_name",
+                 @Query("direction")direction :String = "asc") : Observable<List<Repo>>
 
 
     /**
@@ -52,7 +49,7 @@ interface OAuthApi {
     @GET("/repos/{owner}/{repo}/issues")
     fun getIssues(@Path("owner") owner: String, @Path("repo") repo: String,
 //                  @Query("milestone")milestone :String = "none",
-                  @Query("state") state: String = "all",
+                  @Query("state")state :String = "all",
 //                  @Query("assignee")assignee :String = "none",
 //                  @Query("creator")creator :String = "none",
 //                  @Query("mentioned")mentioned :String = "none",
@@ -71,5 +68,24 @@ interface OAuthApi {
 
 
     @GET("/user/starred")
-    fun getMyStars(): Observable<List<Starred>>
+    fun getMyStars(
+                  @Query("sort")sort :String = "created",
+                  @Query("direction")direction :String = "desc"
+                  /*@Query("since")since :String = "none"*/): Observable<List<Starred>>
+
+    /**
+     * 得到问题评论列表
+     */
+    @GET("/repos/{owner}/{repo}/issues/{number}/comments")
+    fun getComments(@Path("owner") owner: String,
+                    @Path("repo") repo: String,
+                    @Path("number") number: Int): Observable<List<Comment>>
+
+    /**
+     * 提交issue
+     */
+    @POST("/repos/{owner}/{repo}/issues")
+    fun postIssue(@Path("owner") owner: String,
+                  @Path("repo") repo: String,
+                  @Body requestBody: RequestBody): Observable<PostIssueResponse>
 }

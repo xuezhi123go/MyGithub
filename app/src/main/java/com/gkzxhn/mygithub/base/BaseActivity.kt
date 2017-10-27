@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
+import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.extension.edit
 import com.gkzxhn.mygithub.extension.getSharedPreference
@@ -20,6 +21,11 @@ abstract class BaseActivity: RxAppCompatActivity() {
         setupComponent()
         initView(savedInstanceState)
         initToolBar()
+        getToolbar()?.let {
+            if (canBack) {
+                it.setNavigationIcon(R.drawable.ic_arrow_back)
+            }
+        }
         initStatusBar()
     }
 
@@ -32,10 +38,22 @@ abstract class BaseActivity: RxAppCompatActivity() {
 
     abstract fun initView(savedInstanceState: Bundle?)
 
+    private var listener : Toolbar.OnMenuItemClickListener? = null
+
+    fun setToolbarMenuClickListener(listener: Toolbar.OnMenuItemClickListener?){this.listener = listener!!}
+
     open fun initToolBar() {
         getToolbar()?.let{
             setSupportActionBar(it)
+            it.setOnMenuItemClickListener(listener)
+            it.setNavigationOnClickListener { finish() }
         }
+    }
+
+    private var canBack = false
+
+    fun setToolBarBack(canBack : Boolean){
+        this.canBack = canBack
     }
 
     private fun initStatusBar() {

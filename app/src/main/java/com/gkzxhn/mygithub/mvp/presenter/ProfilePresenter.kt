@@ -26,9 +26,9 @@ class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doAfterTerminate { view.hideLoading() }
                 .subscribe({
                     t: List<Repo>? ->
+                    view.hideLoading()
                     view.loadData(t!!)
                     Log.i(javaClass.simpleName, t.get(0).toString())
                 },{

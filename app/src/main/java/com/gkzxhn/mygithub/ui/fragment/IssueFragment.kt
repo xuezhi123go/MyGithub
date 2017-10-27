@@ -13,8 +13,10 @@ import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.info.Issue
 import com.gkzxhn.mygithub.bean.info.Repo
+import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.mvp.presenter.IssuePresenter
+import com.gkzxhn.mygithub.ui.activity.IssueDetailActivity
 import com.gkzxhn.mygithub.ui.adapter.IssueAdapter
 import kotlinx.android.synthetic.main.fragment_issue.*
 import javax.inject.Inject
@@ -27,14 +29,24 @@ class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseVi
     @Inject lateinit var presenter: IssuePresenter
     private lateinit var adapter: IssueAdapter
 
+    lateinit var repoName : String
+    lateinit var owner : String
+
     override fun launchActivity(intent: Intent) {
 //        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun showLoading() {
+        if (srl_issue.isRefreshing) {
+            return
+        }
+        srl_issue.isRefreshing = true
     }
 
     override fun hideLoading() {
+        if (srl_issue.isRefreshing) {
+            srl_issue.isRefreshing = false
+        }
     }
 
     override fun showMessage() {
@@ -44,12 +56,32 @@ class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseVi
     }
 
     override fun initContentView() {
+        srl_issue.setOnRefreshListener {
+            getNewData()
+        }
+
         adapter = IssueAdapter(null)
         rv_issue.layoutManager = LinearLayoutManager(context)
+        adapter.setOnItemClickListener { adapter, view, position ->
+            val issue = adapter.data[position] as Issue
+            val name = owner
+            val repo = repoName
+            val number = issue.number
+            val intent = Intent(context, IssueDetailActivity::class.java)
+            intent.putExtra(IntentConstant.NAME, name)
+            intent.putExtra(IntentConstant.REPO, repo)
+            intent.putExtra(IntentConstant.ISSUE_NUM, number)
+            startActivity(intent)
+        }
         rv_issue.adapter = adapter
 
-        val owner = repo.owner.login
-        val repoName = repo.name
+        presenter.addSubscribe()
+        getNewData()
+    }
+
+    private fun getNewData() {
+        owner = repo.owner.login
+        repoName = repo.name
         presenter.getIssues(owner, repoName)
     }
 

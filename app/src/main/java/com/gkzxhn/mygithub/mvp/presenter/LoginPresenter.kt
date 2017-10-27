@@ -28,7 +28,7 @@ import javax.inject.Inject
  */
 
 class LoginPresenter @Inject constructor(private val rxBus: RxBus,
-                                         private val view: BaseView){
+                                         private val view: BaseView) {
 
     val TAG = javaClass.simpleName
 
@@ -43,8 +43,7 @@ class LoginPresenter @Inject constructor(private val rxBus: RxBus,
         createAuthorization.client_secret = GithubConstant.CLIENT_SECRET
         createAuthorization.scopes = GithubConstant.SCOPES
         api.createAuthorization(createAuthorization)
-                .flatMap(Function<AuthorizationResp, Observable<User>> {
-                    t : AuthorizationResp->
+                .flatMap(Function<AuthorizationResp, Observable<User>> { t: AuthorizationResp ->
 
                     val accessToken = t.token
                     Log.i(TAG, "accessToken : ${accessToken}")
@@ -59,9 +58,8 @@ class LoginPresenter @Inject constructor(private val rxBus: RxBus,
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doAfterTerminate { view.hideLoading() }
-                .subscribe({
-                    user: User? ->
+                .subscribe({ user: User? ->
+                    view.hideLoading()
                     val intent = Intent()
                     val avatar_url = user!!.avatar_url
                     val name = user.login
@@ -70,22 +68,23 @@ class LoginPresenter @Inject constructor(private val rxBus: RxBus,
 
                     SharedPreConstant.USER_SP
                             .getSharedPreference()
-                            .edit{
+                            .edit {
                                 putString(SharedPreConstant.USER_NAME, name)
                             }
                     SharedPreConstant.USER_SP
                             .getSharedPreference()
-                            .edit{
+                            .edit {
                                 putString(SharedPreConstant.AVATAR_URL, avatar_url)
                             }
 //                    (view as LoginActivity).setResult(view.RESULT_OK, intent)
                     rxBus.post(user)
                     view.killMyself()
                     Log.i(TAG, "user: ${user}"
-                    )},{
-                    e ->
-                        view.toast("登录失败")
-                        Log.e(TAG, "login error : ${e.message}")
+                    )
+                }, { e ->
+                    view.hideLoading()
+                    view.toast("登录失败")
+                    Log.e(TAG, "login error : ${e.message}")
                 })
 
 //        val createAuthorization = CreateAuthorization()
