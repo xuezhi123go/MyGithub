@@ -21,11 +21,11 @@ interface OAuthApi {
      * @param direction    asc或desc
      */
     @GET("/user/repos")
-    fun getRepos(@Query("visibility")visibility :String = "all",
-                 @Query("affiliation")affiliation :String = "owner,collaborator,organization_member",
+    fun getRepos(@Query("visibility") visibility: String = "all",
+                 @Query("affiliation") affiliation: String = "owner,collaborator,organization_member",
 //                 @Query("type")type :String = "all",
-                 @Query("sort")sort :String = "full_name",
-                 @Query("direction")direction :String = "asc") : Observable<List<Repo>>
+                 @Query("sort") sort: String = "full_name",
+                 @Query("direction") direction: String = "asc"): Observable<List<Repo>>
 
 
     /**
@@ -49,7 +49,7 @@ interface OAuthApi {
     @GET("/repos/{owner}/{repo}/issues")
     fun getIssues(@Path("owner") owner: String, @Path("repo") repo: String,
 //                  @Query("milestone")milestone :String = "none",
-                  @Query("state")state :String = "all",
+                  @Query("state") state: String = "all",
 //                  @Query("assignee")assignee :String = "none",
 //                  @Query("creator")creator :String = "none",
 //                  @Query("mentioned")mentioned :String = "none",
@@ -69,12 +69,12 @@ interface OAuthApi {
 
     @GET("/user/starred")
     fun getMyStars(
-                  @Query("sort")sort :String = "created",
-                  @Query("direction")direction :String = "desc"
-                  /*@Query("since")since :String = "none"*/): Observable<List<Starred>>
+            @Query("sort") sort: String = "created",
+            @Query("direction") direction: String = "desc"
+            /*@Query("since")since :String = "none"*/): Observable<List<Starred>>
 
     /**
-     * 得到问题评论列表
+     * 得到issue评论列表
      */
     @GET("/repos/{owner}/{repo}/issues/{number}/comments")
     fun getComments(@Path("owner") owner: String,
@@ -88,4 +88,45 @@ interface OAuthApi {
     fun postIssue(@Path("owner") owner: String,
                   @Path("repo") repo: String,
                   @Body requestBody: RequestBody): Observable<PostIssueResponse>
+
+    /**
+     * 提交issue评论
+     */
+    @POST("/repos/{owner}/{repo}/issues/{number}/comments")
+    fun postIssueComment(@Path("owner") owner: String,
+                         @Path("repo") repo: String,
+                         @Path("number") number: Int,
+                         @Body requestBody: RequestBody): Observable<Comment>
+
+
+    /**
+     * 获取您的组织列表
+     */
+    @GET("/user/orgs")
+    fun getOrgs():Observable<List<Organization>>
+
+    /**
+     * 获取用户的组织列表
+     */
+    @GET("/users/{username}/orgs")
+    fun getUserOrgs(
+            @Path("username") username: String
+    ):Observable<List<Organization>>
+
+    /**
+     * 得到一个组织
+     */
+    @GET("/orgs/{org}")
+    fun getOrg(
+            @Path("org") org: String
+    ):Observable<Organization>
+
+    /**
+     * 获取组织仓库列表
+     * @param 可以是一个all，public，private，forks，sources，member。默认：all
+     */
+    @GET("/orgs/{org}/repos")
+    fun getOrgRepos(
+            @Path("org")org : String,
+            @Query("type") type : String = "all"):Observable<List<Repo>>
 }

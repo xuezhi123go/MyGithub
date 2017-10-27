@@ -16,7 +16,7 @@ class OAuthRetrofitClient constructor(baseUrl: String): BaseRetrofitClient(baseU
             val original = chain.request()
             val requestBuilder = original.newBuilder()
                     .header("Accept", "application/vnd.github.v3.json")
-                    .header("User-Agent", "GithubApp")
+                    .header("User-Agent", "MyGithub")
 
             val token = SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.ACCESS_TOKEN, "")
             if (!TextUtils.isEmpty(token)) {

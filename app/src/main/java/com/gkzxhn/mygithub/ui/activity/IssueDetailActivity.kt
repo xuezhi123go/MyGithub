@@ -35,6 +35,8 @@ class IssueDetailActivity: BaseActivity(), BaseView {
     @Inject
     lateinit var presenter: IssueDetailPresenter
 
+    private lateinit var repoName : String
+
     override fun launchActivity(intent: Intent) {
 
     }
@@ -66,13 +68,19 @@ class IssueDetailActivity: BaseActivity(), BaseView {
         setContentView(R.layout.activity_issue_detail)
 
         val name = intent.getStringExtra(IntentConstant.NAME)
-        val repo = intent.getStringExtra(IntentConstant.REPO)
+        repoName = intent.getStringExtra(IntentConstant.REPO)
         val number = intent.getIntExtra(IntentConstant.ISSUE_NUM, 0)
 
+        setToolBar()
         initRecyclerView()
         initReplyView()
 
-        presenter.getComments(name, repo, number)
+        presenter.getComments(name, repoName, number)
+    }
+
+    private fun setToolBar() {
+        toolbar.title = repoName
+        setToolBarBack(true)
     }
 
     private fun initReplyView() {
@@ -84,7 +92,7 @@ class IssueDetailActivity: BaseActivity(), BaseView {
                     toast("您还未输入任何内容")
                     return@liveCommentEdit
                 }else{
-
+                    presenter.postComment(comment)
                 }
             })
         }
@@ -92,6 +100,7 @@ class IssueDetailActivity: BaseActivity(), BaseView {
 
     private fun initRecyclerView() {
         adapter = IssueDetailAdapter(null)
+        adapter.openLoadAnimation()
         rv_issue_detail.layoutManager = LinearLayoutManager(this)
         rv_issue_detail.adapter = adapter
     }
@@ -109,5 +118,9 @@ class IssueDetailActivity: BaseActivity(), BaseView {
 
     fun loadData(comments: List<Comment>){
         adapter.setNewData(comments)
+    }
+
+    fun addComment(comment: Comment) {
+        adapter.addData(0, comment)
     }
 }

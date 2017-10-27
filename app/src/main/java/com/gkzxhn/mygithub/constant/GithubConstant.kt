@@ -9,10 +9,10 @@ object GithubConstant {
     val CLIENT_SECRET = "18beb7c379545fd32b6f32c944112b289167f84b"
 
     // scopes
-    val SCOPES = arrayOf("user", "repo", "notifications", "gist", "admin:org")
+    val SCOPES = arrayOf("user", "repo", "notifications", "gist", /*"read:org", */"admin:org")
 
-    val NOTE = "GithubApp"
+    val NOTE = "MyGithub"
 
-    val AUTHOR_NAME = "mingjunli"
+    val AUTHOR_NAME = "FangforFun"
     val BASE_URL = "https://api.github.com/"
 }

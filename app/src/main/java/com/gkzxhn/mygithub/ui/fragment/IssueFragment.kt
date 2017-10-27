@@ -61,6 +61,7 @@ class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseVi
         }
 
         adapter = IssueAdapter(null)
+        adapter.openLoadAnimation()
         rv_issue.layoutManager = LinearLayoutManager(context)
         adapter.setOnItemClickListener { adapter, view, position ->
             val issue = adapter.data[position] as Issue

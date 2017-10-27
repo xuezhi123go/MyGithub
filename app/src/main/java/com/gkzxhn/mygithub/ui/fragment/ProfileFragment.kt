@@ -10,21 +10,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.chad.library.adapter.base.BaseQuickAdapter
 import com.gkzxhn.balabala.base.BaseFragment
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
-import com.gkzxhn.mygithub.bean.info.Repo
+import com.gkzxhn.mygithub.bean.info.Organization
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.getSharedPreference
+import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.mvp.presenter.ProfilePresenter
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
-import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
-import com.gkzxhn.mygithub.ui.adapter.RepoListAdapter
+import com.gkzxhn.mygithub.ui.activity.RepoListActivity
+import com.gkzxhn.mygithub.ui.adapter.IconListAdapter
 import com.ldoublem.loadingviewlib.view.LVGhost
 import kotlinx.android.synthetic.main.fragment_profile.*
 import javax.inject.Inject
@@ -34,7 +34,7 @@ import javax.inject.Inject
  */
 class ProfileFragment : BaseFragment(), BaseView {
 
-    private lateinit var repoListAdapter: RepoListAdapter
+    private lateinit var iconAdapter: IconListAdapter
     private lateinit var loading: LVGhost
 
     @Inject
@@ -44,6 +44,8 @@ class ProfileFragment : BaseFragment(), BaseView {
     }
 
     override fun showLoading() {
+        organization_layout.visibility = View.GONE
+        repos_layout.visibility = View.GONE
         loading = LVGhost(context)
         val params = FrameLayout.LayoutParams(300f.dp2px().toInt(), 150f.dp2px().toInt(), Gravity.CENTER)
         loading.layoutParams = params
@@ -53,6 +55,8 @@ class ProfileFragment : BaseFragment(), BaseView {
     }
 
     override fun hideLoading() {
+        organization_layout.visibility = View.VISIBLE
+        repos_layout.visibility = View.VISIBLE
         loading.stopAnim()
         fl_profile.removeView(loading)
     }
@@ -70,31 +74,56 @@ class ProfileFragment : BaseFragment(), BaseView {
             startActivity(intent)
         }
 
-        rv_profile.layoutManager = LinearLayoutManager(context)
-        repoListAdapter = RepoListAdapter(null)
-        repoListAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN)
-        repoListAdapter.setOnItemClickListener { adapter, view, position ->
+        iv_avatar_small.load(context, SharedPreConstant.USER_SP.getSharedPreference()
+                .getString(SharedPreConstant.AVATAR_URL, ""), R.drawable.default_avatar)
 
-            val repo = adapter.data[position] as Repo
-            val intent = Intent(context, RepoDetailActivity::class.java)
-            val mBundle = Bundle()
-            mBundle.putParcelable(IntentConstant.REPO, repo)
-            intent.putExtras(mBundle)
-            startActivity(intent)
-        }
-        rv_profile.adapter = repoListAdapter
+        setOrgRecyclerView()
+        setClickListener()
+
         val token = SharedPreConstant.USER_SP.getSharedPreference()
                 .getString(SharedPreConstant.ACCESS_TOKEN, "")
         if (TextUtils.isEmpty(token)) {
             fl_to_login.visibility = View.VISIBLE
+            organization_layout.visibility = View.GONE
+            repos_layout.visibility = View.GONE
         } else {
+            fl_to_login.visibility = View.GONE
+            organization_layout.visibility = View.VISIBLE
+            repos_layout.visibility = View.VISIBLE
             getNewData()
         }
     }
 
+    private fun setClickListener() {
+        repos_layout.setOnClickListener {
+            val intent = Intent(context, RepoListActivity::class.java)
+            intent.action = IntentConstant.MY_REPOS
+            startActivity(intent)
+        }
+    }
+
+    /**
+     * 设置组织头像列表
+     */
+    private fun setOrgRecyclerView() {
+        rv_organization.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        iconAdapter = IconListAdapter(null)
+        iconAdapter.setOnItemClickListener { adapter, view, position ->
+            val org = (adapter.data[position] as Organization).login
+            val intent = Intent(context, RepoListActivity::class.java)
+            intent.action = IntentConstant.ORG_REPOS
+            intent.putExtra(IntentConstant.ORG_NAME, org)
+            startActivity(intent)
+        }
+        rv_organization.adapter = iconAdapter
+    }
+
     fun getNewData() {
         fl_to_login.visibility = View.GONE
-        presenter.loadData()
+        iv_avatar_small.load(context, SharedPreConstant.USER_SP.getSharedPreference()
+                .getString(SharedPreConstant.AVATAR_URL, ""), R.drawable.default_avatar)
+        presenter.loadUserData(SharedPreConstant.USER_SP.getSharedPreference()
+                .getString(SharedPreConstant.USER_NAME, ""))
     }
 
     override fun initView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -116,7 +145,7 @@ class ProfileFragment : BaseFragment(), BaseView {
                 .inject(this)
     }
 
-    fun loadData(lists: List<Repo>) {
-        repoListAdapter.setNewData(lists)
+    fun loadData(orgs: List<Organization>){
+        iconAdapter.setNewData(orgs)
     }
 }

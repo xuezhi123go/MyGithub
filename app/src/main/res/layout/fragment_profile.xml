@@ -1,57 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <View
         android:id="@+id/status_view"
         android:layout_width="match_parent"
-        android:layout_height="26dp"/>
+        android:layout_height="26dp"
+        android:background="@color/blue_grey"/>
 
     <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
         android:id="@+id/toolbar"
-        android:layout_height="@dimen/bottom_height">
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_height"
+        android:background="@color/blue_grey">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_avatar_small"
+            android:layout_centerVertical="true"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/default_avatar"/>
+
+        <TextView
+            android:layout_toRightOf="@+id/iv_avatar_small"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="28dp"
+            android:text="@string/title_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/fl_profile"
+        android:padding="@dimen/dimen_10"
+        android:background="@color/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_profile"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/organization_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:orientation="vertical"
+            >
 
-    </android.support.v7.widget.RecyclerView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_40"
+                android:background="@drawable/button_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dimen_10">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Organization"/>
+
+                <TextView
+                    android:id="@+id/contributors_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_40"
+                    android:gravity="center_vertical"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_organization"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_60"
+                android:layout_marginTop="@dimen/dimen_2"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/repos_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:layout_below="@+id/organization_layout"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:background="@drawable/button_bg"
+            android:paddingLeft="@dimen/dimen_10">
+
+            <TextView
+                android:id="@+id/tv_repository"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_40"
+                android:gravity="center_vertical"
+                android:text="Repository"/>
+
+        </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/fl_to_login"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:layout_marginTop="100dp"
                 android:id="@+id/iv_mengbi"
                 android:layout_width="200dp"
+                android:layout_height="250dp"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/mengbi"
-                android:layout_height="250dp"/>
+                android:layout_marginTop="100dp"
+                android:src="@drawable/mengbi"/>
+
             <TextView
                 android:id="@+id/tv_to_login"
-                android:layout_marginTop="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/iv_mengbi"
-                android:text="@string/to_login"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/button_bg"
                 android:padding="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:text="@string/to_login"/>
 
         </RelativeLayout>
 
-    </FrameLayout>
+    </RelativeLayout>
 </LinearLayout>

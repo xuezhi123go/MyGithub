@@ -3,7 +3,7 @@ package com.gkzxhn.mygithub.mvp.presenter
 import android.util.Log
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.api.OAuthApi
-import com.gkzxhn.mygithub.bean.info.Repo
+import com.gkzxhn.mygithub.bean.info.Organization
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.ui.fragment.ProfileFragment
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
@@ -19,21 +19,23 @@ class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                                            private val view : BaseView,
                                            private val rxBus: RxBus){
 
-    fun loadData(){
+    fun loadUserData(username: String){
         view.showLoading()
-        oAuthApi.getRepos(sort = "pushed", direction = "desc")
+        oAuthApi.getOrg("GKZX-HN")
                 .bindToLifecycle(view as ProfileFragment)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    t: List<Repo>? ->
+                    t ->
                     view.hideLoading()
-                    view.loadData(t!!)
-                    Log.i(javaClass.simpleName, t.get(0).toString())
+                    val datas = arrayListOf<Organization>()
+                    datas.add(t)
+                    view.loadData(datas!!)
+                    Log.i(javaClass.simpleName, t.toString())
                 },{
-
-                    e ->
+                    e->
+                    view.hideLoading()
                     Log.e(javaClass.simpleName, e.message)
                 })
     }

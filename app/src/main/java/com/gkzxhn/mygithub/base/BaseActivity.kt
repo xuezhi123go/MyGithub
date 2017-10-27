@@ -52,6 +52,9 @@ abstract class BaseActivity: RxAppCompatActivity() {
 
     private var canBack = false
 
+    /**
+     * 设置ToolBar是否带返回键
+     */
     fun setToolBarBack(canBack : Boolean){
         this.canBack = canBack
     }
