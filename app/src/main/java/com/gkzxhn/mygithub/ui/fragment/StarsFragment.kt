@@ -47,12 +47,12 @@ class StarsFragment : BaseFragment(), BaseView {
         val params = FrameLayout.LayoutParams(300f.dp2px().toInt(), 150f.dp2px().toInt(), Gravity.CENTER)
         loading.layoutParams = params
         loading.startAnim()
-        fl_profile.addView(loading)
+        fl_stars.addView(loading)
     }
 
     override fun hideLoading() {
         loading.stopAnim()
-        fl_profile.removeView(loading)
+        fl_stars.removeView(loading)
     }
 
     override fun showMessage() {
