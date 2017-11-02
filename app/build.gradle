@@ -11,8 +11,8 @@ android {
         applicationId "com.gkzxhn.mygithub"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -24,29 +24,26 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     def dependencies = rootProject.ext.dependencies
     testCompile 'junit:junit:4.12'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha9'
-
     compile dependencies.supportAppCompat
-
     //Rx
     compile dependencies.supportAppCompat
     // Rx
-    compile dependencies. rxJava2
-    compile dependencies. rxAndroid2
+    compile dependencies.rxJava2
+    compile dependencies.rxAndroid2
     //RxKotlin
-    compile dependencies. rxKotlin
+    compile dependencies.rxKotlin
     //RxLifecycle
-    compile dependencies. rxLifecycle
-    compile dependencies. rxLifecycle_kotlin
+    compile dependencies.rxLifecycle
+    compile dependencies.rxLifecycle_kotlin
     //RxPermissions
-    compile dependencies. rxPermissions
+    compile dependencies.rxPermissions
     //Dagger2
     compile dependencies.dagger
     kapt dependencies.daggerCompiler
@@ -75,5 +72,8 @@ dependencies {
     //glide
     compile dependencies.glide
     kapt dependencies.glide_kapt
+    //rxpermission2
+    compile dependencies.rxPermissions2
     compile 'com.ldoublem.loadingview:loadingviewlib:1.0'
+    compile files('libs/AutoUpdate_SDK.jar')
 }

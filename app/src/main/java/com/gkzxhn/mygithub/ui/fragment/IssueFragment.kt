@@ -75,6 +75,7 @@ class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseVi
             startActivity(intent)
         }
         rv_issue.adapter = adapter
+        adapter.setEmptyView(LayoutInflater.from(context).inflate(R.layout.empty_view, null, false))
 
         presenter.addSubscribe()
         getNewData()

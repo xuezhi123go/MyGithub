@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
+import android.view.LayoutInflater
 import android.widget.RelativeLayout
 import com.gkzxhn.balabala.base.BaseActivity
 import com.gkzxhn.balabala.mvp.contract.BaseView
@@ -103,6 +104,7 @@ class IssueDetailActivity: BaseActivity(), BaseView {
         adapter.openLoadAnimation()
         rv_issue_detail.layoutManager = LinearLayoutManager(this)
         rv_issue_detail.adapter = adapter
+        adapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
     }
 
     override fun setupComponent() {

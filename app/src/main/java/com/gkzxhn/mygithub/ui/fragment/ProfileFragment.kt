@@ -74,8 +74,11 @@ class ProfileFragment : BaseFragment(), BaseView {
             startActivity(intent)
         }
 
-        iv_avatar_small.load(context, SharedPreConstant.USER_SP.getSharedPreference()
-                .getString(SharedPreConstant.AVATAR_URL, ""), R.drawable.default_avatar)
+        val url = SharedPreConstant.USER_SP.getSharedPreference()
+                .getString(SharedPreConstant.AVATAR_URL, "")
+        if (!TextUtils.isEmpty(url)) {
+            iv_avatar_small.load(context, url, R.drawable.default_avatar)
+        }
 
         setOrgRecyclerView()
         setClickListener()

@@ -13,5 +13,7 @@ class IssueAdapter(datas : List<Issue>?): BaseQuickAdapter<Issue, BaseViewHolder
         helper!!.setText(R.id.tv_issue, item!!.title)
         helper.setText(R.id.tv_issue_body, item.body)
         helper.setText(R.id.tv_issue_name, item.user.login)
+        helper.setText(R.id.tv_is_open, item.state)
+        helper.setBackgroundRes(R.id.tv_is_open, if ("open".equals(item.state)) R.drawable.green_bg else R.drawable.red_bg)
     }
 }
