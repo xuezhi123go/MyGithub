@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.LinearLayout
-import com.chad.library.adapter.base.BaseQuickAdapter
 import com.gkzxhn.balabala.base.BaseActivity
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
@@ -101,7 +100,7 @@ class RepoListActivity :BaseActivity(), BaseView {
     private fun setReposRecyclerView() {
         rv_repo_list.layoutManager = LinearLayoutManager(this)
         repoListAdapter = RepoListAdapter(null)
-        repoListAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN)
+        repoListAdapter.openLoadAnimation()
         repoListAdapter.setOnItemClickListener { adapter, view, position ->
 
             val repo = adapter.data[position] as Repo

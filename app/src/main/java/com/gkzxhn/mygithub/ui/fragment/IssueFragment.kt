@@ -74,7 +74,6 @@ class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseVi
             startActivity(intent)
         }
         rv_issue.adapter = adapter
-        adapter.setEmptyView(LayoutInflater.from(context).inflate(R.layout.empty_view, null, false))
 
         presenter.addSubscribe()
         getNewData()
@@ -99,7 +98,11 @@ class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseVi
 
     fun loadData(issues: List<Issue>) {
         Log.i(javaClass.simpleName, issues[0].toString())
+        if (issues.size == 0) {
+            adapter.setEmptyView(LayoutInflater.from(context).inflate(R.layout.empty_view, null, false))
+        }
         adapter.setNewData(issues)
+
     }
 
     override fun onDestroy() {

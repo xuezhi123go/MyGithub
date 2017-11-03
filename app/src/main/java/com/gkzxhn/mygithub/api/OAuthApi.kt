@@ -35,6 +35,19 @@ interface OAuthApi {
                  @Query("sort") sort: String = "full_name",
                  @Query("direction") direction: String = "asc"): Observable<List<Repo>>
 
+    /**
+     * 获取用户的组织列表
+     * @param type 可以是一个all，owner，member。默认：owner
+     * @param sort 可以是一个created，updated，pushed，full_name。默认：full_name
+     * @param direction 可以是一个asc或desc。默认：使用时full_name：asc否则desc
+     */
+    @GET("/users/{username}/repos")
+    fun getUserRepos(
+            @Path("username") username: String,
+            @Query("type") type: String = "owner",
+            @Query("sort") sort: String = "created",
+            @Query("direction") direction: String = "desc"
+    ):Observable<List<Repo>>
 
     /**
      * 得到详细的仓库内容
@@ -143,7 +156,7 @@ interface OAuthApi {
      */
     @GET("repos/{owner}/{repo}/contributors")
     fun contributors(@Path("owner") owner: String,
-                              @Path("repo") repo: String): Observable<ArrayList<User>>
+                              @Path("repo") repo: String): Observable<ArrayList<Owner>>
 
 
     /**

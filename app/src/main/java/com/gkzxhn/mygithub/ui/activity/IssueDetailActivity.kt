@@ -104,7 +104,6 @@ class IssueDetailActivity: BaseActivity(), BaseView {
         adapter.openLoadAnimation()
         rv_issue_detail.layoutManager = LinearLayoutManager(this)
         rv_issue_detail.adapter = adapter
-        adapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
     }
 
     override fun setupComponent() {
@@ -119,7 +118,11 @@ class IssueDetailActivity: BaseActivity(), BaseView {
     override fun getStatusBar()=status_view
 
     fun loadData(comments: List<Comment>){
+        if (comments.size == 0) {
+            adapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
+        }
         adapter.setNewData(comments)
+
     }
 
     fun addComment(comment: Comment) {

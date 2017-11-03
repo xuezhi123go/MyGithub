@@ -73,7 +73,7 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext {
-                    lists: List<User> ->
+                    lists: List<Owner> ->
                     view?.let {
                         it.hideLoading()
                         it.loadData(lists)

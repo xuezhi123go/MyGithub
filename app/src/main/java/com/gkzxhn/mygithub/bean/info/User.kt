@@ -2,6 +2,7 @@ package com.gkzxhn.mygithub.bean.info
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.text.TextUtils
 
 /**
  * Created by 方 on 2017/10/19.
@@ -43,12 +44,12 @@ data class User(
 		val type: String, //User
 		val site_admin: Boolean, //false
 		val name: String, //monalisa octocat
-		val company: String, //GitHub
-		val blog: String, //https://github.com/blog
+		val company: String?, //GitHub
+		val blog: String?, //https://github.com/blog
 		val location: String, //San Francisco
 		val email: String, //octocat@github.com
 		val hireable: Boolean, //false
-		val bio: String, //There once was...
+		val bio: String?, //There once was...
 		val public_repos: Int, //2
 		val public_gists: Int, //1
 		val followers: Int, //20
@@ -61,7 +62,7 @@ data class User(
 		val disk_usage: Int, //10000
 		val collaborators: Int, //8
 		val two_factor_authentication: Boolean, //true
-		val plan: Plan
+		val plan: Plan?
 ) : Parcelable {
 	constructor(source: Parcel) : this(
 			source.readString(),
@@ -123,13 +124,13 @@ data class User(
 		writeString(received_events_url)
 		writeString(type)
 		writeInt((if (site_admin) 1 else 0))
-		writeString(name)
-		writeString(company)
-		writeString(blog)
-		writeString(location)
-		writeString(email)
+		writeString(if (TextUtils.isEmpty(name)) "" else name)
+		writeString(if(TextUtils.isEmpty(company)) "" else company)
+		writeString(if (TextUtils.isEmpty(blog)) "" else blog)
+		writeString(if (TextUtils.isEmpty(location)) "" else location)
+		writeString(if (TextUtils.isEmpty(email)) "" else email)
 		writeInt((if (hireable) 1 else 0))
-		writeString(bio)
+		writeString(if (TextUtils.isEmpty(bio)) "" else bio)
 		writeInt(public_repos)
 		writeInt(public_gists)
 		writeInt(followers)
@@ -142,7 +143,7 @@ data class User(
 		writeInt(disk_usage)
 		writeInt(collaborators)
 		writeInt((if (two_factor_authentication) 1 else 0))
-		writeParcelable(plan, 0)
+		writeParcelable(if (null == plan) Plan("", 0, 0, 0)else plan, 0)
 	}
 
 	companion object {
