@@ -14,7 +14,7 @@ import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.extension.load
-import com.gkzxhn.mygithub.extension.toast
+import com.gkzxhn.mygithub.ui.fragment.ContributorsFragment
 import com.gkzxhn.mygithub.ui.fragment.IssueFragment
 import kotlinx.android.synthetic.main.activity_repo_detail.*
 
@@ -64,6 +64,8 @@ class RepoDetailActivity:BaseActivity(),BaseView {
     private fun setToolBar() {
         setToolBarBack(true)
         toolbar.title = repo.name
+        collapsing.setCollapsedTitleTextColor(R.color.white)
+        collapsing.setExpandedTitleColor(R.color.white)
         iv_avatar_small.load(this, repo.owner.avatar_url, R.drawable.default_avatar)
         iv_avatar_big.load(this, repo.owner.avatar_url, R.drawable.default_avatar)
         setToolbarMenuClickListener(object : Toolbar.OnMenuItemClickListener{
@@ -83,8 +85,10 @@ class RepoDetailActivity:BaseActivity(),BaseView {
 
     fun initFragments(){
         mFragments = arrayListOf()
-        mFragments.add(IssueFragment(repo))
-        mFragments.add(IssueFragment(repo))
+        val contributorsFragment = ContributorsFragment(repo, IntentConstant.CONTRIBUTORS)
+        val forksFragment = ContributorsFragment(repo, IntentConstant.FORKS)
+        mFragments.add(contributorsFragment)
+        mFragments.add(forksFragment)
         mFragments.add(IssueFragment(repo))
 
         vp_repo.adapter = object : FragmentPagerAdapter(supportFragmentManager){

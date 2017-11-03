@@ -27,7 +27,7 @@ import android.os.Parcelable
 data class User(
 		val login: String, //octocat
 		val id: Int, //1
-		val avatar_url: String, //https://github.com/images/error/octocat_happy.gif
+		var avatar_url: String, //https://github.com/images/error/octocat_happy.gif
 		val gravatar_id: String,
 		val url: String, //https://api.github.com/users/octocat
 		val html_url: String, //https://github.com/octocat

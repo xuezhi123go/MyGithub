@@ -7,15 +7,17 @@
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
+        android:background="@color/blue_grey"
         android:layout_width="match_parent"
         android:layout_height="160dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/blue_grey"
             app:contentScrim="@color/blue_grey"
             app:expandedTitleMarginStart="110dp"
+            app:collapsedTitleTextAppearance="@style/Toolbar.TitleText"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <!-- <FrameLayout
@@ -42,6 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/bottom_height"
                 android:layout_marginTop="25dp"
+                app:titleTextAppearance="@style/Toolbar.TitleText"
+                app:titleTextColor="@color/white"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 

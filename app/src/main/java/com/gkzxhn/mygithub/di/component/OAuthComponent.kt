@@ -4,6 +4,7 @@ import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.ui.activity.EditIssueActivity
 import com.gkzxhn.mygithub.ui.activity.IssueDetailActivity
 import com.gkzxhn.mygithub.ui.activity.RepoListActivity
+import com.gkzxhn.mygithub.ui.fragment.ContributorsFragment
 import com.gkzxhn.mygithub.ui.fragment.IssueFragment
 import com.gkzxhn.mygithub.ui.fragment.ProfileFragment
 import com.gkzxhn.mygithub.ui.fragment.StarsFragment
@@ -27,4 +28,6 @@ interface OAuthComponent {
     fun inject(editIssueActivity: EditIssueActivity)
 
     fun inject(repoListActivity: RepoListActivity)
+
+    fun inject(contributorsFragment: ContributorsFragment)
 }

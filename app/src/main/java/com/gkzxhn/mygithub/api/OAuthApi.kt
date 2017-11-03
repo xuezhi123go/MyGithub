@@ -4,6 +4,7 @@ import com.gkzxhn.mygithub.bean.info.*
 import io.reactivex.Observable
 import okhttp3.RequestBody
 import retrofit2.http.*
+import java.util.*
 
 /**
  * Created by 方 on 2017/10/23.
@@ -12,6 +13,13 @@ import retrofit2.http.*
 interface OAuthApi {
 
     /**
+     * 根据用户名获得用户信息
+     */
+    @GET("/users/{username}")
+    fun getUser(@Path("username") username: String) : Observable<User>
+
+    /**
+     * 获得我的仓库列表
      * @param visibility  all，public或private
      * @param affiliation* owner：由经过身份验证的用户拥有的存储库。
      *                     collaborator：作为协作者添加到用户的存储库。
@@ -129,4 +137,21 @@ interface OAuthApi {
     fun getOrgRepos(
             @Path("org")org : String,
             @Query("type") type : String = "all"):Observable<List<Repo>>
+
+    /**
+     * 得到仓库合作者列表
+     */
+    @GET("repos/{owner}/{repo}/contributors")
+    fun contributors(@Path("owner") owner: String,
+                              @Path("repo") repo: String): Observable<ArrayList<User>>
+
+
+    /**
+     * 得到仓库分支列表
+     * @param sort      The sort order. Can be either newest, oldest, or stargazers. Default: newest
+     */
+    @GET("repos/{owner}/{repo}/forks")
+    fun listForks(@Path("owner") owner: String,
+                  @Path("repo") repo: String,
+                  @Query("sort") sort: String = "newest"): Observable<ArrayList<Repo>>
 }

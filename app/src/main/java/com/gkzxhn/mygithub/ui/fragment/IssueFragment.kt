@@ -37,15 +37,14 @@ class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseVi
     }
 
     override fun showLoading() {
-        if (srl_issue.isRefreshing) {
-            return
+        srl_issue?.let {
+            it.isRefreshing = true
         }
-        srl_issue.isRefreshing = true
     }
 
     override fun hideLoading() {
-        if (srl_issue.isRefreshing) {
-            srl_issue.isRefreshing = false
+        srl_issue?.let {
+            it.isRefreshing = false
         }
     }
 
@@ -101,5 +100,10 @@ class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseVi
     fun loadData(issues: List<Issue>) {
         Log.i(javaClass.simpleName, issues[0].toString())
         adapter.setNewData(issues)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i(javaClass.simpleName, "ondestroy")
     }
 }

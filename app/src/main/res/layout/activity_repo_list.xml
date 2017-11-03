@@ -17,6 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_height"
         app:title="My Repository"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:titleTextColor="@color/white"
         android:background="@color/blue_grey">
 
         </android.support.v7.widget.Toolbar>

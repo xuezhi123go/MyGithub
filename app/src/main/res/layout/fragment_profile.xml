@@ -33,6 +33,8 @@
             android:layout_toRightOf="@+id/iv_avatar_small"
             android:layout_centerVertical="true"
             android:layout_marginLeft="28dp"
+            android:textSize="@dimen/sp_16"
+            android:textColor="@color/white"
             android:text="@string/title_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -50,6 +52,7 @@
         <LinearLayout
             android:id="@+id/organization_layout"
             android:layout_width="match_parent"
+            android:background="@color/white"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_10"
             android:orientation="vertical"
@@ -82,6 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_60"
                 android:layout_marginTop="@dimen/dimen_2"
+                android:layout_marginBottom="@dimen/dimen_2"
                 />
 
         </LinearLayout>

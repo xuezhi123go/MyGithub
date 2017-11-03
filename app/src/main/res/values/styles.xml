@@ -19,4 +19,15 @@
         <!--<item name="android:windowBackground">@drawable/splash_screen</item>-->
     </style>
 
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="tv_name">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/user_blue</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>

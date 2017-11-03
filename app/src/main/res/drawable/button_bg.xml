@@ -27,6 +27,7 @@
                 android:color="@color/md_grey_300"/>
             <corners
                 android:radius="0dp"/>
+            <solid android:color="@color/white"/>
         </shape>
     </item>
 </selector>
