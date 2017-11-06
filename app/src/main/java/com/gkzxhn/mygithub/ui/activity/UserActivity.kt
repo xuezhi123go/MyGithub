@@ -76,8 +76,9 @@ class UserActivity : BaseActivity(), BaseView {
     private fun initAppBar() {
         if (data is Owner) {
             login = (data as Owner).login
+            username = login
             iv_avatar_big.load(this, (data as Owner).avatar_url, R.drawable.default_avatar)
-            presenter.getUser(username)
+            presenter.getUser(login)
         }else if (data is User) {
             login = (data as User).login
             username = (data as User).name

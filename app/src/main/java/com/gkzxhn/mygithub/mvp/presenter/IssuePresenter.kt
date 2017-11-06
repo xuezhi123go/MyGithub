@@ -88,31 +88,49 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     Log.e(javaClass.simpleName, e.message)
                 }
                 .observeOn(Schedulers.io())
-                .map {
+                .forEach {
                     t ->
-                    Log.i(javaClass.simpleName, "when map Current thread is " + Thread.currentThread().getName());
-                    t.map { user ->
-                        oAuthApi.getUser(user.login)
-                                .blockingFirst()
+                    Log.i(javaClass.simpleName, "when map observer Current thread is " + Thread.currentThread().getName())
+                    t.forEachIndexed { index,  owner ->
+                    Log.i(javaClass.simpleName, "when map list Current thread is " + Thread.currentThread().getName())
+                        oAuthApi.getUser(owner.login)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe({
+                                    user: User ->
+                                    Log.i(javaClass.simpleName, "get user")
+                                    view?.let {
+                                        it.hideLoading()
+//                                        it.loadData(user)
+                                        it.updateList(index, user)
+                                    }
+                                },
+                                        {
+                                            e ->
+                                            view?.let {
+                                                it.hideLoading()
+                                            }
+                                            Log.e(javaClass.simpleName, e.message)
+                                        })
                     }
                 }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            lists: List<User> ->
-                            view?.let {
-                                it.hideLoading()
-                                it.loadData(lists)
-                            }
-                        },
-                        {
-                            e ->
-                            view?.let {
-                                it.hideLoading()
-                            }
-                            Log.e(javaClass.simpleName, e.message)
-                        }
-                )
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(
+//                        {
+//                            lists: List<User> ->
+//                            Log.i(javaClass.simpleName, "get user list")
+//                            view?.let {
+//                                it.hideLoading()
+//                                it.loadData(lists)
+//                            }
+//                        },
+//                        {
+//                            e ->
+//                            view?.let {
+//                                it.hideLoading()
+//                            }
+//                            Log.e(javaClass.simpleName, e.message)
+//                        }
+//                )
     }
 
     fun getForks(owner : String, repo: String){

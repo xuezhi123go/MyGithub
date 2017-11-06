@@ -1,5 +1,6 @@
 package com.gkzxhn.mygithub.ui.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
@@ -22,6 +23,7 @@ import com.gkzxhn.mygithub.ui.wedgit.SpaceItemDecoration
 import kotlinx.android.synthetic.main.fragment_issue.*
 import javax.inject.Inject
 
+@SuppressLint("ValidFragment")
 /**
  * Created by 方 on 2017/11/2.
  */
@@ -108,11 +110,15 @@ class ContributorsFragment constructor(private val repo: Repo,
     }
 
     fun loadData(lists: List<Any>){
-        if (lists.size == 0) {
-            adapter.setEmptyView(LayoutInflater.from(context).inflate(R.layout.empty_view, null, false))
+        if (lists.isEmpty()) {
+            adapter.emptyView = LayoutInflater.from(context).inflate(R.layout.empty_view, null, false)
         }
         adapter.setNewData(lists)
+    }
 
+    fun updateList(position : Int, data : Any){
+        adapter.data[position] = data
+        adapter.notifyItemChanged(position, data)
     }
 
     override fun onDestroy() {

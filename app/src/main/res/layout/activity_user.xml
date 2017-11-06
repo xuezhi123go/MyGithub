@@ -128,12 +128,10 @@
                 app:layout_collapseMode="pin">
 
                 <TextView
+                    android:visibility="invisible"
                     android:id="@+id/toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="user"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"/>
+                    style="@style/tv_toolbar_title"/>
 
             </android.support.v7.widget.Toolbar>
 

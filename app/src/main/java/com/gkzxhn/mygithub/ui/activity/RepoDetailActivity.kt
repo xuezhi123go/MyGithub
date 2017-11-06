@@ -1,10 +1,12 @@
 package com.gkzxhn.mygithub.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -48,26 +50,43 @@ class RepoDetailActivity:BaseActivity(),BaseView {
         repo = intent.getParcelableExtra<Repo>(IntentConstant.REPO)
 
         appbar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+            Log.i(javaClass.simpleName, "verticalOffset -- : $verticalOffset total -- ${appBarLayout.totalScrollRange}")
             if (verticalOffset == 0) {
                 //完全展开状态
-                iv_avatar_small.visibility = View.INVISIBLE
+                toolbar.navigationIcon = null
+                rl_repo_head.visibility = View.VISIBLE
             } else if (Math.abs(verticalOffset) == appBarLayout.totalScrollRange) {
                 //appBarLayout.getTotalScrollRange() == 100
                 //完全折叠
                 iv_avatar_small.visibility = View.VISIBLE
+                toolbar_title.visibility = View.VISIBLE
+                toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+                rl_repo_head.visibility = View.INVISIBLE
+            }else {
+                iv_avatar_small.visibility = View.INVISIBLE
+                toolbar_title.visibility = View.INVISIBLE
+                rl_repo_head.visibility = View.VISIBLE
+                val alpha = (1 - Math.abs(verticalOffset.toFloat()) / appBarLayout.totalScrollRange) * 255f
+                Log.i(javaClass.simpleName, "alpha : $alpha ~~")
+                rl_repo_head.background.alpha = alpha.toInt()
             }
         }
         setToolBar()
         initFragments()
     }
 
+    @SuppressLint("ResourceAsColor")
     private fun setToolBar() {
         setToolBarBack(true)
-        toolbar.title = repo.name
-        collapsing.setCollapsedTitleTextColor(R.color.white)
-        collapsing.setExpandedTitleColor(R.color.white)
+        toolbar.title = ""
+        toolbar_title.text = repo.name
+        tv_repo_name.text = repo.name
+        tv_code.text = repo.language
+        repo_desc.text = repo.description
+        iv_avatar.load(this, repo.owner.avatar_url, R.drawable.default_avatar)
         iv_avatar_small.load(this, repo.owner.avatar_url, R.drawable.default_avatar)
-        iv_avatar_big.load(this, repo.owner.avatar_url, R.drawable.default_avatar)
+        tv_username.text = repo.owner.login
+        tv_create_time.text = repo.created_at.substring(0, repo.created_at.indexOf("T"))
         setToolbarMenuClickListener(object : Toolbar.OnMenuItemClickListener{
             override fun onMenuItemClick(item: MenuItem?): Boolean {
                 when(item!!.itemId) {
@@ -83,7 +102,7 @@ class RepoDetailActivity:BaseActivity(),BaseView {
         })
     }
 
-    fun initFragments(){
+    private fun initFragments(){
         mFragments = arrayListOf()
         val contributorsFragment = ContributorsFragment(repo, IntentConstant.CONTRIBUTORS)
         val forksFragment = ContributorsFragment(repo, IntentConstant.FORKS)
@@ -110,7 +129,7 @@ class RepoDetailActivity:BaseActivity(),BaseView {
     }*/
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu)
         return true
     }
 }
