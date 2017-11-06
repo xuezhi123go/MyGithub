@@ -76,7 +76,6 @@ class UserActivity : BaseActivity(), BaseView {
     private fun initAppBar() {
         if (data is Owner) {
             login = (data as Owner).login
-            username = (data as Owner).login
             iv_avatar_big.load(this, (data as Owner).avatar_url, R.drawable.default_avatar)
             presenter.getUser(username)
         }else if (data is User) {
@@ -121,7 +120,7 @@ class UserActivity : BaseActivity(), BaseView {
         }
         tv_username.text = if (TextUtils.isEmpty(username)) login else username
         toolbar.title = ""
-        toolbar_title.text = username
+        toolbar_title.text = if (TextUtils.isEmpty(username)) login else username
         appbar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             if (verticalOffset == 0) {
                 //完全展开状态
