@@ -22,6 +22,7 @@
             android:layout_height="match_parent">
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/iv_avatar_small"
             android:layout_centerVertical="true"
             android:layout_width="35dp"
@@ -42,6 +43,8 @@
 
     </android.support.v7.widget.Toolbar>
 
+
+
     <RelativeLayout
         android:id="@+id/fl_profile"
         android:padding="@dimen/dimen_10"
@@ -50,6 +53,45 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/account_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_96"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:layout_marginBottom="@dimen/dimen_10"
+            android:padding="@dimen/dimen_10"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/user_avatar"
+                android:layout_width="@dimen/dimen_64"
+                android:layout_height="@dimen/dimen_64"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_avatar"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/dimen_10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_username"
+                android:layout_marginTop="@dimen/dimen_20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tv_bio"
+                android:layout_marginTop="@dimen/dimen_14"
+                style="@style/tv_bio"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_below="@+id/account_view"
             android:id="@+id/organization_layout"
             android:layout_width="match_parent"
             android:background="@color/white"
@@ -91,7 +133,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/repos_layout"
+            android:id="@+id/setting_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_40"
             android:gravity="center_vertical"
@@ -107,7 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_40"
                 android:gravity="center_vertical"
-                android:text="Repository"/>
+                android:text="Setting"/>
 
         </LinearLayout>
 

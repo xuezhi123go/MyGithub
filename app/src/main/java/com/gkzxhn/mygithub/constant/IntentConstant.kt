@@ -15,4 +15,5 @@ object IntentConstant {
     val CONTRIBUTORS = "contributors"
     val FORKS = "forks"
     val User = "user"
+    val MINE_ACTION = "mine_action"
 }

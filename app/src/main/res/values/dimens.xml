@@ -16,4 +16,7 @@
     <dimen name="dimen_80">80dp</dimen>
     <dimen name="dimen_25">25dp</dimen>
     <dimen name="dimen_30">30dp</dimen>
+    <dimen name="dimen_96">96dp</dimen>
+    <dimen name="dimen_64">64dp</dimen>
+    <dimen name="dimen_14">14dp</dimen>
 </resources>

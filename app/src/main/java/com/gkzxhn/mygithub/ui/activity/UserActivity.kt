@@ -19,6 +19,7 @@ import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.load
+import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.ProfilePresenter
 import com.gkzxhn.mygithub.ui.adapter.RepoListAdapter
 import kotlinx.android.synthetic.main.activity_user.*
@@ -29,7 +30,7 @@ import javax.inject.Inject
  */
 class UserActivity : BaseActivity(), BaseView {
 
-    private lateinit var data: Parcelable
+    private var data: Parcelable? = null
 
     private lateinit var adapter : RepoListAdapter
 
@@ -67,10 +68,21 @@ class UserActivity : BaseActivity(), BaseView {
 
     override fun initView(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_user)
-        data = intent.getParcelableExtra<Parcelable>(IntentConstant.User)
+        val action = intent.action
+        if (action == IntentConstant.MINE_ACTION) {
+            val localUser = presenter.getLocalUser()
+            localUser?.let { data = it }
+        }else {
+            data = intent.getParcelableExtra<Parcelable>(IntentConstant.User)
+        }
         setToolBar()
-        initAppBar()
-        initRecyclerView()
+        if (null == data) {
+            toast("请重新登录...")
+            return
+        }else {
+            initAppBar()
+            initRecyclerView()
+        }
     }
 
     private fun initAppBar() {
@@ -81,7 +93,7 @@ class UserActivity : BaseActivity(), BaseView {
             presenter.getUser(login)
         }else if (data is User) {
             login = (data as User).login
-            username = (data as User).name
+            username = if (TextUtils.isEmpty((data as User).name)) login else (data as User).name
             iv_avatar_big.load(this, (data as User).avatar_url, R.drawable.default_avatar)
             tv_desc.text = (data as User).bio.let {
                 if (!TextUtils.isEmpty(it)) {

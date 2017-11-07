@@ -21,9 +21,11 @@ import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.extension.load
+import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.ProfilePresenter
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
 import com.gkzxhn.mygithub.ui.activity.RepoListActivity
+import com.gkzxhn.mygithub.ui.activity.UserActivity
 import com.gkzxhn.mygithub.ui.adapter.IconListAdapter
 import com.ldoublem.loadingviewlib.view.LVGhost
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -34,6 +36,7 @@ import javax.inject.Inject
  */
 class ProfileFragment : BaseFragment(), BaseView {
 
+    private lateinit var token: String
     private lateinit var iconAdapter: IconListAdapter
     private lateinit var loading: LVGhost
 
@@ -44,8 +47,6 @@ class ProfileFragment : BaseFragment(), BaseView {
     }
 
     override fun showLoading() {
-        organization_layout.visibility = View.GONE
-        repos_layout.visibility = View.GONE
         loading = LVGhost(context)
         val params = FrameLayout.LayoutParams(300f.dp2px().toInt(), 150f.dp2px().toInt(), Gravity.CENTER)
         loading.layoutParams = params
@@ -55,8 +56,6 @@ class ProfileFragment : BaseFragment(), BaseView {
     }
 
     override fun hideLoading() {
-        organization_layout.visibility = View.VISIBLE
-        repos_layout.visibility = View.VISIBLE
         loading.stopAnim()
         fl_profile.removeView(loading)
     }
@@ -79,29 +78,36 @@ class ProfileFragment : BaseFragment(), BaseView {
         if (!TextUtils.isEmpty(url)) {
             iv_avatar_small.load(context, url, R.drawable.default_avatar)
         }
+        token = SharedPreConstant.USER_SP.getSharedPreference()
+                .getString(SharedPreConstant.ACCESS_TOKEN, "")
+        if (TextUtils.isEmpty(token)) {
+//            fl_to_login.visibility = View.VISIBLE
+            rv_organization.visibility = View.GONE
+            tv_username.text = "您还未登录,请登录..."
+
+        } else {
+//            fl_to_login.visibility = View.GONE
+            rv_organization.visibility = View.VISIBLE
+            getNewData()
+        }
 
         setOrgRecyclerView()
         setClickListener()
 
-        val token = SharedPreConstant.USER_SP.getSharedPreference()
-                .getString(SharedPreConstant.ACCESS_TOKEN, "")
-        if (TextUtils.isEmpty(token)) {
-            fl_to_login.visibility = View.VISIBLE
-            organization_layout.visibility = View.GONE
-            repos_layout.visibility = View.GONE
-        } else {
-            fl_to_login.visibility = View.GONE
-            organization_layout.visibility = View.VISIBLE
-            repos_layout.visibility = View.VISIBLE
-            getNewData()
-        }
     }
 
     private fun setClickListener() {
-        repos_layout.setOnClickListener {
-            val intent = Intent(context, RepoListActivity::class.java)
-            intent.action = IntentConstant.MY_REPOS
-            startActivity(intent)
+        account_view.setOnClickListener{
+            if (TextUtils.isEmpty(token)) {
+                startActivity(Intent(context, LoginActivity::class.java))
+            }else {
+                val intent = Intent(context, UserActivity::class.java)
+                intent.action = IntentConstant.MINE_ACTION
+                startActivity(intent)
+            }
+        }
+        setting_layout.setOnClickListener {
+            context.toast("进入设置")
         }
     }
 
@@ -122,9 +128,16 @@ class ProfileFragment : BaseFragment(), BaseView {
     }
 
     fun getNewData() {
-        fl_to_login.visibility = View.GONE
-        iv_avatar_small.load(context, SharedPreConstant.USER_SP.getSharedPreference()
+        token = SharedPreConstant.USER_SP.getSharedPreference()
+                .getString(SharedPreConstant.ACCESS_TOKEN, "")
+//        fl_to_login.visibility = View.GONE
+        rv_organization.visibility = View.VISIBLE
+        user_avatar.load(context, SharedPreConstant.USER_SP.getSharedPreference()
                 .getString(SharedPreConstant.AVATAR_URL, ""), R.drawable.default_avatar)
+        tv_username.text = SharedPreConstant.USER_SP.getSharedPreference()
+                .getString(SharedPreConstant.USER_NAME, "")
+        tv_bio.text = SharedPreConstant.USER_SP.getSharedPreference()
+                .getString(SharedPreConstant.USER_BIO, "")
         presenter.loadUserData(SharedPreConstant.USER_SP.getSharedPreference()
                 .getString(SharedPreConstant.USER_NAME, ""))
     }
