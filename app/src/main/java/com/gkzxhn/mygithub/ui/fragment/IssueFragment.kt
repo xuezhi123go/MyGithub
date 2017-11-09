@@ -1,5 +1,6 @@
 package com.gkzxhn.mygithub.ui.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -15,12 +16,14 @@ import com.gkzxhn.mygithub.bean.info.Issue
 import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
+import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.IssuePresenter
 import com.gkzxhn.mygithub.ui.activity.IssueDetailActivity
 import com.gkzxhn.mygithub.ui.adapter.IssueAdapter
 import kotlinx.android.synthetic.main.fragment_issue.*
 import javax.inject.Inject
 
+@SuppressLint("ValidFragment")
 /**
  * Created by 方 on 2017/10/25.
  */
@@ -99,6 +102,7 @@ class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseVi
     fun loadData(issues: List<Issue>) {
         Log.i(javaClass.simpleName, issues[0].toString())
         if (issues.size == 0) {
+            context.toast("空空如也~")
             adapter.setEmptyView(LayoutInflater.from(context).inflate(R.layout.empty_view, null, false))
         }
         adapter.setNewData(issues)

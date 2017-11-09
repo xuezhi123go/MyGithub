@@ -19,6 +19,7 @@ import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.load
+import com.gkzxhn.mygithub.extension.loadBlur
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.ProfilePresenter
 import com.gkzxhn.mygithub.ui.adapter.RepoListAdapter
@@ -86,15 +87,16 @@ class UserActivity : BaseActivity(), BaseView {
     }
 
     private fun initAppBar() {
+        var avatar_url = ""
         if (data is Owner) {
             login = (data as Owner).login
             username = login
-            iv_avatar_big.load(this, (data as Owner).avatar_url, R.drawable.default_avatar)
+            avatar_url = (data as Owner).avatar_url
             presenter.getUser(login)
         }else if (data is User) {
             login = (data as User).login
             username = if (TextUtils.isEmpty((data as User).name)) login else (data as User).name
-            iv_avatar_big.load(this, (data as User).avatar_url, R.drawable.default_avatar)
+            avatar_url = (data as User).avatar_url
             tv_desc.text = (data as User).bio.let {
                 if (!TextUtils.isEmpty(it)) {
                     return@let it
@@ -131,6 +133,8 @@ class UserActivity : BaseActivity(), BaseView {
                 }
             }
         }
+        iv_avatar_big.load(this, avatar_url, R.drawable.default_avatar)
+        iv_user_header.loadBlur(this, avatar_url)
         tv_username.text = if (TextUtils.isEmpty(username)) login else username
         toolbar.title = ""
         toolbar_title.text = if (TextUtils.isEmpty(username)) login else username

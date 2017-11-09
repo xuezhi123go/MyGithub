@@ -8,14 +8,15 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/blue_grey">
+        android:background="@color/blue_grey"
+        android:layout_height="wrap_content">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:background="@color/repo_header"
             app:titleEnabled="false">
 
             <RelativeLayout
@@ -129,6 +130,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
+                android:background="@android:color/transparent"
                 android:layout_height="@dimen/bottom_height"
                 android:layout_marginTop="25dp"
                 app:layout_collapseMode="pin"

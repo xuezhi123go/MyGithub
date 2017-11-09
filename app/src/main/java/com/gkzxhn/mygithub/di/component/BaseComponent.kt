@@ -4,6 +4,7 @@ import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.di.module.AuthModule
 import com.gkzxhn.mygithub.di.module.BaseModule
 import com.gkzxhn.mygithub.di.module.OAuthModule
+import com.gkzxhn.mygithub.di.module.TrendingModule
 import dagger.Component
 import javax.inject.Singleton
 
@@ -18,6 +19,8 @@ interface BaseComponent {
     fun plus(authModule: AuthModule): AuthComponent
 
     fun plus(oAuthModule: OAuthModule):OAuthComponent
+
+    fun plus(trendingModule: TrendingModule): TrendingComponent
 
     fun inject(app: App)
 }

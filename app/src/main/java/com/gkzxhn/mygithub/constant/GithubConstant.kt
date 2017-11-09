@@ -15,4 +15,5 @@ object GithubConstant {
 
     val AUTHOR_NAME = "FangforFun"
     val BASE_URL = "https://api.github.com/"
+    val Trending_URL = "https://trendings.herokuapp.com/"
 }

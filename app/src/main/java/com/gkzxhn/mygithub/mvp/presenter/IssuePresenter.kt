@@ -81,11 +81,20 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 }
                 .doOnError {
                     e ->
-                    view?.let {
-                        it.context.toast("加载失败")
-                        it.hideLoading()
-                    }
                     Log.e(javaClass.simpleName, e.message)
+                        view?.let { it.hideLoading()
+                    if (e is NullPointerException)
+                        //空仓库
+                        else
+                        it.context.toast("加载失败")
+                    }
+                }
+                .onErrorReturn {
+                    e ->
+                    Log.e(javaClass.simpleName, e.message)
+                    val list = arrayListOf<Owner>()
+                    view.loadData(list)
+                    list
                 }
                 .observeOn(Schedulers.io())
                 .forEach {
@@ -94,6 +103,7 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     t.forEachIndexed { index,  owner ->
                     Log.i(javaClass.simpleName, "when map list Current thread is " + Thread.currentThread().getName())
                         oAuthApi.getUser(owner.login)
+                                .bindToLifecycle(view)
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe({
                                     user: User ->

@@ -12,6 +12,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.gkzxhn.mygithub.di.module.GlideApp
+import jp.wasabeef.glide.transformations.BlurTransformation
 
 fun ImageView.load(context: Context, url: String) {
     GlideApp.with(context)
@@ -21,27 +22,38 @@ fun ImageView.load(context: Context, url: String) {
             .into(this)
 }
 
+fun ImageView.loadBlur(context: Context, url: String) {
+    GlideApp.with(context)
+            .load(url)
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3)))
+            .into(this)
+}
+
 fun ImageView.load(context: Context, url: String, errorRes: Int) {
     GlideApp.with(context)
             .load(url)
             .transition(withCrossFade())
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .apply(RequestOptions.circleCropTransform())
-            .listener(object : RequestListener<Drawable> {
-                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                    return false
-                }
-
-                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                    GlideApp.with(context)
-                            .load(errorRes)
-                            .transition(withCrossFade())
-                            .apply(RequestOptions.circleCropTransform())
-                            .into(this@load)
-                    return true
-                }
-
-            })
+            .error(errorRes)
+//            .listener(object : RequestListener<Drawable> {
+//                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+//                    return false
+//                }
+//
+//                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+//                    GlideApp.with(context)
+//                            .load(errorRes)
+//                            .transition(withCrossFade())
+//                            .apply(RequestOptions.circleCropTransform())
+//                            .into(this@load)
+//                    Log.e(javaClass.simpleName, "current thread is ${Thread.currentThread().name} ; exception is ${e!!.message}")
+//                    this@load.setImageResource(errorRes)
+//                    return false
+//                }
+//
+//            })
             .into(this)
 }
 

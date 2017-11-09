@@ -167,4 +167,26 @@ interface OAuthApi {
     fun listForks(@Path("owner") owner: String,
                   @Path("repo") repo: String,
                   @Query("sort") sort: String = "newest"): Observable<ArrayList<Repo>>
+
+    /**
+     * 通过各种标准搜索用户,每页最多返回100个结果
+     * @param q 各种搜索条件
+     * @param sort 排序字段。可能是followers，repositories或joined。默认值：结果按最佳匹配排序。
+     * @param order sort提供参数的排序顺序。其中之一asc或desc。默认：desc
+     */
+    @GET("/search/users")
+    fun searchUsers(@Query("q") condition: String,
+                    @Query("sort") sort: String = "followers",
+                    @Query("order") order: String = "desc") : Observable<SearchUserResult>
+
+    /**
+     * 搜索仓库
+     * @param q 各种搜索条件
+     * @param sort 排序字段。可能是stars，forks或updated。默认值：结果按最佳匹配排序。
+     * @param order sort提供参数的排序顺序。其中之一asc或desc。默认：desc
+     */
+    @GET("/search/repositories")
+    fun searchRepos(@Query("q") condition: String,
+                    @Query("sort") sort: String = "stars",
+                    @Query("order") order: String = "desc") : Observable<SearchRepoResult>
 }

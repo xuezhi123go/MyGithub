@@ -18,10 +18,17 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
+            <ImageView
+                android:id="@+id/iv_user_header"
+                android:scaleType="centerCrop"
+                android:src="@drawable/nav_header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
-                android:background="@drawable/nav_header"
+                android:background="@android:color/transparent"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 app:layout_collapseMode="parallax">
@@ -43,6 +50,7 @@
 
                 <TextView
                     android:id="@+id/tv_desc"
+                    android:maxLines="1"
                     style="@style/tv_user_detail"
                     android:layout_marginBottom="@dimen/dimen_8"
                     android:text="I have nothing to say"/>

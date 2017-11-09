@@ -55,6 +55,7 @@ class RepoDetailActivity:BaseActivity(),BaseView {
                 //完全展开状态
                 toolbar.navigationIcon = null
                 rl_repo_head.visibility = View.VISIBLE
+                rl_repo_head.background.alpha = 255
             } else if (Math.abs(verticalOffset) == appBarLayout.totalScrollRange) {
                 //appBarLayout.getTotalScrollRange() == 100
                 //完全折叠
@@ -117,6 +118,7 @@ class RepoDetailActivity:BaseActivity(),BaseView {
 
             override fun getPageTitle(position: Int): CharSequence = mTabs[position]
         }
+        vp_repo.offscreenPageLimit = 3
         tb_repo.setupWithViewPager(vp_repo)
     }
 

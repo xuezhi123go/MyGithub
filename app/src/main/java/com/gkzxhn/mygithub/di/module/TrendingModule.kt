@@ -5,13 +5,13 @@ import dagger.Module
 import dagger.Provides
 
 /**
- * Created by 方 on 2017/10/19.
+ * Created by 方 on 2017/11/9.
  */
 
 @Module
-class AuthModule(private val mView: BaseView){
+class TrendingModule constructor(private val mView: BaseView){
 
-
-    @Provides fun getView() = mView
+    @Provides
+    fun getView() = mView
 
 }

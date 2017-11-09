@@ -72,6 +72,7 @@ dependencies {
     //glide
     compile dependencies.glide
     kapt dependencies.glide_kapt
+    compile dependencies.glide_transformations
     //rxpermission2
     compile dependencies.rxPermissions2
     compile 'com.ldoublem.loadingview:loadingviewlib:1.0'
