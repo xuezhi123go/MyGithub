@@ -95,43 +95,8 @@ class UserActivity : BaseActivity(), BaseView {
             presenter.getUser(login)
         }else if (data is User) {
             login = (data as User).login
-            username = if (TextUtils.isEmpty((data as User).name)) login else (data as User).name
             avatar_url = (data as User).avatar_url
-            tv_desc.text = (data as User).bio.let {
-                if (!TextUtils.isEmpty(it)) {
-                    return@let it
-                }else {
-                    return@let "nothing to say"
-                }
-            }
-            tv_business.text = (data as User).company.let {
-                if (!TextUtils.isEmpty(it)) {
-                    return@let it
-                }else {
-                    return@let "unknow"
-                }
-            }
-            tv_email.text = (data as User).email.let {
-                if (!TextUtils.isEmpty(it)) {
-                    return@let it
-                }else {
-                    return@let "unknow"
-                }
-            }
-            tv_place.text = (data as User).location.let {
-                if (!TextUtils.isEmpty(it)) {
-                    return@let it
-                }else {
-                    return@let "unknow"
-                }
-            }
-            tv_rss_feed.text = (data as User).blog.let {
-                if (!TextUtils.isEmpty(it)) {
-                    return@let it
-                }else {
-                    return@let "unknow"
-                }
-            }
+            updateAppbar()
         }
         iv_avatar_big.load(this, avatar_url, R.drawable.default_avatar)
         iv_user_header.loadBlur(this, avatar_url)
@@ -147,6 +112,45 @@ class UserActivity : BaseActivity(), BaseView {
                 toolbar_title.visibility = View.VISIBLE
             }else {
                 toolbar_title.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun updateAppbar() {
+        username = if (TextUtils.isEmpty((data as User).name)) login else (data as User).name
+        tv_desc.text = (data as User).bio.let {
+            if (!TextUtils.isEmpty(it)) {
+                return@let it
+            } else {
+                return@let "nothing to say"
+            }
+        }
+        tv_business.text = (data as User).company.let {
+            if (!TextUtils.isEmpty(it)) {
+                return@let it
+            } else {
+                return@let "unknow"
+            }
+        }
+        tv_email.text = (data as User).email.let {
+            if (!TextUtils.isEmpty(it)) {
+                return@let it
+            } else {
+                return@let "unknow"
+            }
+        }
+        tv_place.text = (data as User).location.let {
+            if (!TextUtils.isEmpty(it)) {
+                return@let it
+            } else {
+                return@let "unknow"
+            }
+        }
+        tv_rss_feed.text = (data as User).blog.let {
+            if (!TextUtils.isEmpty(it)) {
+                return@let it
+            } else {
+                return@let "unknow"
             }
         }
     }
@@ -188,7 +192,7 @@ class UserActivity : BaseActivity(), BaseView {
 
     fun loadData(user : User){
         data = user
-        initAppBar()
+        updateAppbar()
     }
 
     fun loadRepos(repos : List<Repo>){

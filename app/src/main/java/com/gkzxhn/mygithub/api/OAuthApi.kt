@@ -3,6 +3,8 @@ package com.gkzxhn.mygithub.api
 import com.gkzxhn.mygithub.bean.info.*
 import io.reactivex.Observable
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.*
 import java.util.*
 
@@ -189,4 +191,65 @@ interface OAuthApi {
     fun searchRepos(@Query("q") condition: String,
                     @Query("sort") sort: String = "stars",
                     @Query("order") order: String = "desc") : Observable<SearchRepoResult>
+
+    /**
+     * 有星status : 204
+     * 没星status : 404
+     */
+    @GET("/user/starred/{owner}/{repo}")
+    fun checkIfStarred(@Path("owner")owner: String,
+                       @Path("repo") repo: String) : Observable<Response<ResponseBody>>
+
+    /**
+     * star仓库
+     */
+    @Headers("Content-Length: 0")
+    @PUT("/user/starred/{owner}/{repo}")
+    fun starRepo(@Path("owner") owner: String
+                 , @Path("repo") repo: String): Observable<Response<ResponseBody>>
+
+    /**
+     * unStar仓库
+     */
+    @DELETE("/user/starred/{owner}/{repo}")
+    fun unstarRepo(@Path("owner") owner: String
+                   , @Path("repo") repo: String): Observable<Response<ResponseBody>>
+
+    /**
+     * 获取readme
+     */
+    @Headers("Cache-Control: public, max-age=3600")
+    @GET("repos/{owner}/{name}/readme")
+    fun readme(@Path("owner") owner: String, @Path("name") repo: String): Observable<Content>
+
+    @GET("/users/{user}/following")
+    fun getUserFollowing(@Path("user") user: String): Observable<ArrayList<User>>
+
+    @GET("/users/{user}/followers")
+    fun getUserFollowers(@Path("user") user: String): Observable<ArrayList<User>>
+
+    @GET("/user/following")
+    fun getMyFollowing(): Observable<ArrayList<User>>
+
+    @GET("/user/followers")
+    fun getMyFollowers(): Observable<ArrayList<User>>
+
+    /**
+     * 关注用户
+     */
+    @Headers("Content-Length: 0")
+    @PUT("/user/following/{username}")
+    fun followUser(@Path("username") username: String): Observable<Response<ResponseBody>>
+
+    /**
+     * 取消关注用户
+     */
+    @DELETE("/user/following/{username}")
+    fun unFollowUser(@Path("username") username: String): Observable<Response<ResponseBody>>
+
+    /**
+     * 检查是否关注用户
+     */
+    @GET("/user/following/{username}")
+    fun checkIfFollowUser(@Path("username") username: String): Observable<Response<ResponseBody>>
 }

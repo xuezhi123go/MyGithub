@@ -13,12 +13,16 @@ import android.view.View
 import com.gkzxhn.balabala.base.BaseActivity
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
+import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.constant.IntentConstant
+import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.load
+import com.gkzxhn.mygithub.mvp.presenter.RepoDetailPresenter
 import com.gkzxhn.mygithub.ui.fragment.ContributorsFragment
 import com.gkzxhn.mygithub.ui.fragment.IssueFragment
 import kotlinx.android.synthetic.main.activity_repo_detail.*
+import javax.inject.Inject
 
 /**
  * Created by 方 on 2017/10/25.
@@ -28,6 +32,9 @@ class RepoDetailActivity:BaseActivity(),BaseView {
     val mTabs = listOf<String>("contributors", "forks", "issues")
     private lateinit var mFragments: ArrayList<Fragment>
     private lateinit var repo : Repo
+    private var isStarred = false
+
+    @Inject lateinit var presenter : RepoDetailPresenter
 
     override fun launchActivity(intent: Intent) {
 
@@ -43,6 +50,13 @@ class RepoDetailActivity:BaseActivity(),BaseView {
     }
 
     override fun killMyself() {
+    }
+
+    override fun setupComponent() {
+        App.getInstance()
+                .baseComponent
+                .plus(OAuthModule(this))
+                .inject(this)
     }
 
     override fun initView(savedInstanceState: Bundle?) {
@@ -74,6 +88,18 @@ class RepoDetailActivity:BaseActivity(),BaseView {
         }
         setToolBar()
         initFragments()
+        setOnclick()
+    }
+
+    private fun setOnclick(){
+        tv_stars.setOnClickListener {
+            if (isStarred) {
+                presenter.unStarred(repo.owner.login, repo.name)
+            }else {
+                presenter.starRepo(repo.owner.login, repo.name)
+            }
+        }
+
     }
 
     @SuppressLint("ResourceAsColor")
@@ -88,6 +114,8 @@ class RepoDetailActivity:BaseActivity(),BaseView {
         iv_avatar_small.load(this, repo.owner.avatar_url, R.drawable.default_avatar)
         tv_username.text = repo.owner.login
         tv_create_time.text = repo.created_at.substring(0, repo.created_at.indexOf("T"))
+        presenter.checkIfStarred(repo.owner.login, repo.name)
+
         setToolbarMenuClickListener(object : Toolbar.OnMenuItemClickListener{
             override fun onMenuItemClick(item: MenuItem?): Boolean {
                 when(item!!.itemId) {
@@ -133,5 +161,17 @@ class RepoDetailActivity:BaseActivity(),BaseView {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu)
         return true
+    }
+
+    fun starred(){
+        isStarred = true
+        tv_stars.text = "starred"
+        tv_stars.setBackgroundColor(resources.getColor(R.color.yellow))
+    }
+
+    fun unStarred(){
+        isStarred = false
+        tv_stars.text = "unStarred"
+        tv_stars.setBackgroundColor(resources.getColor(R.color.blue_grey))
     }
 }

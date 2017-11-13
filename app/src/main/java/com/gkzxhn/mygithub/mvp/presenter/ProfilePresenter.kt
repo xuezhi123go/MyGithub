@@ -97,4 +97,74 @@ class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
             return null
         }
     }
+
+
+    /**
+     * 检查是否关注该用户
+     */
+    fun checkIfFollowIng(username: String){
+        oAuthApi.checkIfFollowUser(username)
+                .bindToLifecycle(view as UserActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    t ->
+                    //TODO
+                    Log.i(javaClass.simpleName, t.message())
+                    if (t.code() == 204) {
+
+                    }else{
+
+                    }
+                },{
+                    e ->
+                    Log.i(javaClass.simpleName, e.message)
+                })
+    }
+
+    /**
+     * 关注用户
+     */
+    fun followUser(username: String) {
+        oAuthApi.followUser(username)
+                .bindToLifecycle(view as UserActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    t ->
+                    //TODO
+                    Log.i(javaClass.simpleName, t.message())
+                    if (t.code() == 204) {
+
+                    }else {
+
+                    }
+                }, {
+                    e ->
+                    Log.e(javaClass.simpleName, e.message)
+                })
+    }
+
+    /**
+     * 取消关注用户
+     */
+    fun unFollowUser(username: String) {
+        oAuthApi.unFollowUser(username)
+                .bindToLifecycle(view as UserActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    t ->
+                    //TODO
+                    Log.i(javaClass.simpleName, t.message())
+                    if (t.code() == 204) {
+
+                    }else {
+
+                    }
+                }, {
+                    e ->
+                    Log.e(javaClass.simpleName, e.message)
+                })
+    }
 }

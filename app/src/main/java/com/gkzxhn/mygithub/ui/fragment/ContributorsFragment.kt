@@ -19,7 +19,7 @@ import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.mvp.presenter.IssuePresenter
 import com.gkzxhn.mygithub.ui.activity.UserActivity
 import com.gkzxhn.mygithub.ui.adapter.UserListAdapter
-import com.gkzxhn.mygithub.ui.wedgit.SpaceItemDecoration
+import com.gkzxhn.mygithub.ui.wedgit.RecycleViewDivider
 import kotlinx.android.synthetic.main.fragment_issue.*
 import javax.inject.Inject
 
@@ -56,7 +56,8 @@ class ContributorsFragment constructor(private val repo: Repo,
         adapter.openLoadAnimation()
         rv_issue.layoutManager = LinearLayoutManager(context)
         rv_issue.adapter = adapter
-        rv_issue.addItemDecoration(SpaceItemDecoration(2f, adapter.data.size))
+        rv_issue.addItemDecoration(RecycleViewDivider(context, LinearLayoutManager.HORIZONTAL,2,
+                App.getInstance().resources.getColor(R.color.gray_back)))
         adapter.setOnItemClickListener {
             adapter, view, position ->
             val user = adapter.data[position] as Parcelable

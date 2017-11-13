@@ -1,10 +1,7 @@
 package com.gkzxhn.mygithub.di.component
 
 import com.gkzxhn.mygithub.di.module.OAuthModule
-import com.gkzxhn.mygithub.ui.activity.EditIssueActivity
-import com.gkzxhn.mygithub.ui.activity.IssueDetailActivity
-import com.gkzxhn.mygithub.ui.activity.RepoListActivity
-import com.gkzxhn.mygithub.ui.activity.UserActivity
+import com.gkzxhn.mygithub.ui.activity.*
 import com.gkzxhn.mygithub.ui.fragment.*
 import dagger.Subcomponent
 
@@ -32,4 +29,6 @@ interface OAuthComponent {
     fun inject(userActivity: UserActivity)
 
     fun inject(homeFragment: HomeFragment)
+
+    fun inject(repoDetailActivity: RepoDetailActivity)
 }

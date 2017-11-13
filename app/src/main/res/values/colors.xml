@@ -16,5 +16,6 @@
     <color name="user_blue">#971052ec</color>
     <color name="red">#e81414</color>
     <color name="repo_header">#88edc69b</color>
+    <color name="yellow">#88fcfc00</color>
 
 </resources>
