@@ -3,7 +3,10 @@ package com.gkzxhn.mygithub.api
 import com.gkzxhn.mygithub.bean.info.*
 import io.reactivex.Observable
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.*
+import java.util.*
 
 /**
  * Created by 方 on 2017/10/23.
@@ -12,6 +15,13 @@ import retrofit2.http.*
 interface OAuthApi {
 
     /**
+     * 根据用户名获得用户信息
+     */
+    @GET("/users/{username}")
+    fun getUser(@Path("username") username: String) : Observable<User>
+
+    /**
+     * 获得我的仓库列表
      * @param visibility  all，public或private
      * @param affiliation* owner：由经过身份验证的用户拥有的存储库。
      *                     collaborator：作为协作者添加到用户的存储库。
@@ -21,12 +31,25 @@ interface OAuthApi {
      * @param direction    asc或desc
      */
     @GET("/user/repos")
-    fun getRepos(@Query("visibility")visibility :String = "all",
-                 @Query("affiliation")affiliation :String = "owner,collaborator,organization_member",
+    fun getRepos(@Query("visibility") visibility: String = "all",
+                 @Query("affiliation") affiliation: String = "owner,collaborator,organization_member",
 //                 @Query("type")type :String = "all",
-                 @Query("sort")sort :String = "full_name",
-                 @Query("direction")direction :String = "asc") : Observable<List<Repo>>
+                 @Query("sort") sort: String = "full_name",
+                 @Query("direction") direction: String = "asc"): Observable<List<Repo>>
 
+    /**
+     * 获取用户的组织列表
+     * @param type 可以是一个all，owner，member。默认：owner
+     * @param sort 可以是一个created，updated，pushed，full_name。默认：full_name
+     * @param direction 可以是一个asc或desc。默认：使用时full_name：asc否则desc
+     */
+    @GET("/users/{username}/repos")
+    fun getUserRepos(
+            @Path("username") username: String,
+            @Query("type") type: String = "owner",
+            @Query("sort") sort: String = "created",
+            @Query("direction") direction: String = "desc"
+    ):Observable<List<Repo>>
 
     /**
      * 得到详细的仓库内容
@@ -49,7 +72,7 @@ interface OAuthApi {
     @GET("/repos/{owner}/{repo}/issues")
     fun getIssues(@Path("owner") owner: String, @Path("repo") repo: String,
 //                  @Query("milestone")milestone :String = "none",
-                  @Query("state")state :String = "all",
+                  @Query("state") state: String = "all",
 //                  @Query("assignee")assignee :String = "none",
 //                  @Query("creator")creator :String = "none",
 //                  @Query("mentioned")mentioned :String = "none",
@@ -69,12 +92,12 @@ interface OAuthApi {
 
     @GET("/user/starred")
     fun getMyStars(
-                  @Query("sort")sort :String = "created",
-                  @Query("direction")direction :String = "desc"
-                  /*@Query("since")since :String = "none"*/): Observable<List<Starred>>
+            @Query("sort") sort: String = "created",
+            @Query("direction") direction: String = "desc"
+            /*@Query("since")since :String = "none"*/): Observable<List<Starred>>
 
     /**
-     * 得到问题评论列表
+     * 得到issue评论列表
      */
     @GET("/repos/{owner}/{repo}/issues/{number}/comments")
     fun getComments(@Path("owner") owner: String,
@@ -88,4 +111,145 @@ interface OAuthApi {
     fun postIssue(@Path("owner") owner: String,
                   @Path("repo") repo: String,
                   @Body requestBody: RequestBody): Observable<PostIssueResponse>
+
+    /**
+     * 提交issue评论
+     */
+    @POST("/repos/{owner}/{repo}/issues/{number}/comments")
+    fun postIssueComment(@Path("owner") owner: String,
+                         @Path("repo") repo: String,
+                         @Path("number") number: Int,
+                         @Body requestBody: RequestBody): Observable<Comment>
+
+
+    /**
+     * 获取您的组织列表
+     */
+    @GET("/user/orgs")
+    fun getOrgs():Observable<List<Organization>>
+
+    /**
+     * 获取用户的组织列表
+     */
+    @GET("/users/{username}/orgs")
+    fun getUserOrgs(
+            @Path("username") username: String
+    ):Observable<List<Organization>>
+
+    /**
+     * 得到一个组织
+     */
+    @GET("/orgs/{org}")
+    fun getOrg(
+            @Path("org") org: String
+    ):Observable<Organization>
+
+    /**
+     * 获取组织仓库列表
+     * @param 可以是一个all，public，private，forks，sources，member。默认：all
+     */
+    @GET("/orgs/{org}/repos")
+    fun getOrgRepos(
+            @Path("org")org : String,
+            @Query("type") type : String = "all"):Observable<List<Repo>>
+
+    /**
+     * 得到仓库合作者列表
+     */
+    @GET("repos/{owner}/{repo}/contributors")
+    fun contributors(@Path("owner") owner: String,
+                              @Path("repo") repo: String): Observable<ArrayList<Owner>>
+
+
+    /**
+     * 得到仓库分支列表
+     * @param sort      The sort order. Can be either newest, oldest, or stargazers. Default: newest
+     */
+    @GET("repos/{owner}/{repo}/forks")
+    fun listForks(@Path("owner") owner: String,
+                  @Path("repo") repo: String,
+                  @Query("sort") sort: String = "newest"): Observable<ArrayList<Repo>>
+
+    /**
+     * 通过各种标准搜索用户,每页最多返回100个结果
+     * @param q 各种搜索条件
+     * @param sort 排序字段。可能是followers，repositories或joined。默认值：结果按最佳匹配排序。
+     * @param order sort提供参数的排序顺序。其中之一asc或desc。默认：desc
+     */
+    @GET("/search/users")
+    fun searchUsers(@Query("q") condition: String,
+                    @Query("sort") sort: String = "followers",
+                    @Query("order") order: String = "desc") : Observable<SearchUserResult>
+
+    /**
+     * 搜索仓库
+     * @param q 各种搜索条件
+     * @param sort 排序字段。可能是stars，forks或updated。默认值：结果按最佳匹配排序。
+     * @param order sort提供参数的排序顺序。其中之一asc或desc。默认：desc
+     */
+    @GET("/search/repositories")
+    fun searchRepos(@Query("q") condition: String,
+                    @Query("sort") sort: String = "stars",
+                    @Query("order") order: String = "desc") : Observable<SearchRepoResult>
+
+    /**
+     * 有星status : 204
+     * 没星status : 404
+     */
+    @GET("/user/starred/{owner}/{repo}")
+    fun checkIfStarred(@Path("owner")owner: String,
+                       @Path("repo") repo: String) : Observable<Response<ResponseBody>>
+
+    /**
+     * star仓库
+     */
+    @Headers("Content-Length: 0")
+    @PUT("/user/starred/{owner}/{repo}")
+    fun starRepo(@Path("owner") owner: String
+                 , @Path("repo") repo: String): Observable<Response<ResponseBody>>
+
+    /**
+     * unStar仓库
+     */
+    @DELETE("/user/starred/{owner}/{repo}")
+    fun unstarRepo(@Path("owner") owner: String
+                   , @Path("repo") repo: String): Observable<Response<ResponseBody>>
+
+    /**
+     * 获取readme
+     */
+    @Headers("Cache-Control: public, max-age=3600")
+    @GET("repos/{owner}/{name}/readme")
+    fun readme(@Path("owner") owner: String, @Path("name") repo: String): Observable<Content>
+
+    @GET("/users/{user}/following")
+    fun getUserFollowing(@Path("user") user: String): Observable<ArrayList<User>>
+
+    @GET("/users/{user}/followers")
+    fun getUserFollowers(@Path("user") user: String): Observable<ArrayList<User>>
+
+    @GET("/user/following")
+    fun getMyFollowing(): Observable<ArrayList<User>>
+
+    @GET("/user/followers")
+    fun getMyFollowers(): Observable<ArrayList<User>>
+
+    /**
+     * 关注用户
+     */
+    @Headers("Content-Length: 0")
+    @PUT("/user/following/{username}")
+    fun followUser(@Path("username") username: String): Observable<Response<ResponseBody>>
+
+    /**
+     * 取消关注用户
+     */
+    @DELETE("/user/following/{username}")
+    fun unFollowUser(@Path("username") username: String): Observable<Response<ResponseBody>>
+
+    /**
+     * 检查是否关注用户
+     */
+    @GET("/user/following/{username}")
+    fun checkIfFollowUser(@Path("username") username: String): Observable<Response<ResponseBody>>
 }

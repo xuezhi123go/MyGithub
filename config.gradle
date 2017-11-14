@@ -40,6 +40,7 @@ ext {
             rxLifecycle_kotlin      : "com.trello.rxlifecycle2:rxlifecycle-kotlin:2.1.0",
             //RxPermissions
             rxPermissions           : "com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar",
+            rxPermissions2           : 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar',
             // json
             gson                    : "com.google.code.gson:gson:$gsonLibVersion",
             // Http
@@ -54,6 +55,8 @@ ext {
             glide                   : "com.github.bumptech.glide:glide:$glideVersion",
             //glide kotlin
             glide_kapt              : "com.github.bumptech.glide:compiler:$glideVersion",
+            //glide transformations
+            glide_transformations   : "jp.wasabeef:glide-transformations:3.0.1",
 
             // support
             supportAppCompat        : "com.android.support:appcompat-v7:$supportLibVersion",
@@ -77,5 +80,6 @@ ext {
             baseRecyclerView        : 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.21',
             banner                  : 'com.bigkoo:convenientbanner:2.0.5',
             jsoup                   : 'org.jsoup:jsoup:1.10.3'
+
     ]
 }

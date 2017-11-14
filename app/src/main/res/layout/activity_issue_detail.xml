@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:id="@+id/ll_issue_detail"
               android:layout_width="match_parent"
@@ -7,12 +8,16 @@
 
     <View
         android:id="@+id/status_view"
+        android:background="@color/blue_grey"
         android:layout_width="match_parent"
         android:layout_height="25dp"/>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+        android:background="@color/blue_grey"
         android:layout_width="match_parent"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:titleTextColor="@color/white"
         android:layout_height="@dimen/bottom_height">
 
     </android.support.v7.widget.Toolbar>

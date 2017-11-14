@@ -1,6 +1,7 @@
 package com.gkzxhn.mygithub.di.module
 
 import android.content.Context
+import com.gkzxhn.mygithub.api.TrendingApi
 import com.gkzxhn.mygithub.constant.GithubConstant
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
 import com.google.gson.Gson
@@ -31,13 +32,13 @@ class BaseModule(private val context: Context) {
 
     @Singleton
     @Provides
+    @Named("cache_client")
     fun provideOkhttp(): OkHttpClient {
         val cacheSize = 1024 * 1024 * 10L
         val cacheDir = File(context.cacheDir, "http")
         val cache = Cache(cacheDir, cacheSize)
         return OkHttpClient.Builder()
                 .cache(cache)
-//                .addInterceptor(interceptor)
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .build()
@@ -45,14 +46,18 @@ class BaseModule(private val context: Context) {
 
     @Provides
     @Singleton
-    @Named("auth")
-    fun provideRetrofit(client: OkHttpClient, gson: Gson) =
+    @Named("trending")
+    fun provideRetrofit(@Named("cache_client")client: OkHttpClient, gson: Gson) =
             Retrofit.Builder()
                     .client(client)
-                    .baseUrl(GithubConstant.BASE_URL)
+                    .baseUrl(GithubConstant.Trending_URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                     .build()
+
+    @Provides
+    @Singleton
+    fun provideTrendingApi(@Named("trending") retrofit : Retrofit) = retrofit.create(TrendingApi::class.java)
 
     @Provides
     @Singleton

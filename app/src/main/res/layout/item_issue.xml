@@ -2,56 +2,69 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginLeft="2dp"
-    android:layout_marginRight="2dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
     android:layout_marginTop="10dp"
     android:background="#fff"
     android:foreground="?attr/selectableItemBackground"
     android:orientation="vertical"
-    app:cardCornerRadius="2dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    app:cardCornerRadius="2dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="10dp"
+        android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        android:layout_height="wrap_content">
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="10dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <RelativeLayout
             android:id="@+id/ll_issue_title"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_issue"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:textSize="18sp"
-            android:text="issue"
-            android:textColor="@android:color/black"
-            android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tv_issue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="200dp"
+                android:text="issue"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/tv_is_open"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tv_issue"
+                android:layout_marginLeft="@dimen/dimen_5"
+                android:layout_toRightOf="@id/tv_issue"
+                android:background="@color/green"
+                android:padding="2dp"
+                android:text="issue"
+                android:textColor="@android:color/white"
+                android:textSize="10sp"/>
+
 
             <TextView
                 android:id="@+id/tv_issue_name"
-                android:layout_width="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/primary_text"
+                android:layout_alignBottom="@id/tv_issue"
+                android:layout_alignParentRight="true"
                 android:text="name"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+                style="@style/tv_name"/>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_issue_body"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/ll_issue_title"
             android:layout_margin="4dp"
-            android:textSize="14sp"
-            android:layout_height="wrap_content"/>
+            android:textSize="14sp"/>
     </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+</android.support.v7.widget.CardView>

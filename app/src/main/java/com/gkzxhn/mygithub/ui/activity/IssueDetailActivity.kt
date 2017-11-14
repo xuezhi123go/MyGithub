@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
+import android.view.LayoutInflater
 import android.widget.RelativeLayout
 import com.gkzxhn.balabala.base.BaseActivity
 import com.gkzxhn.balabala.mvp.contract.BaseView
@@ -34,6 +35,8 @@ class IssueDetailActivity: BaseActivity(), BaseView {
 
     @Inject
     lateinit var presenter: IssueDetailPresenter
+
+    private lateinit var repoName : String
 
     override fun launchActivity(intent: Intent) {
 
@@ -66,13 +69,19 @@ class IssueDetailActivity: BaseActivity(), BaseView {
         setContentView(R.layout.activity_issue_detail)
 
         val name = intent.getStringExtra(IntentConstant.NAME)
-        val repo = intent.getStringExtra(IntentConstant.REPO)
+        repoName = intent.getStringExtra(IntentConstant.REPO)
         val number = intent.getIntExtra(IntentConstant.ISSUE_NUM, 0)
 
+        setToolBar()
         initRecyclerView()
         initReplyView()
 
-        presenter.getComments(name, repo, number)
+        presenter.getComments(name, repoName, number)
+    }
+
+    private fun setToolBar() {
+        toolbar.title = repoName
+        setToolBarBack(true)
     }
 
     private fun initReplyView() {
@@ -84,7 +93,7 @@ class IssueDetailActivity: BaseActivity(), BaseView {
                     toast("您还未输入任何内容")
                     return@liveCommentEdit
                 }else{
-
+                    presenter.postComment(comment)
                 }
             })
         }
@@ -92,6 +101,7 @@ class IssueDetailActivity: BaseActivity(), BaseView {
 
     private fun initRecyclerView() {
         adapter = IssueDetailAdapter(null)
+        adapter.openLoadAnimation()
         rv_issue_detail.layoutManager = LinearLayoutManager(this)
         rv_issue_detail.adapter = adapter
     }
@@ -108,6 +118,14 @@ class IssueDetailActivity: BaseActivity(), BaseView {
     override fun getStatusBar()=status_view
 
     fun loadData(comments: List<Comment>){
+        if (comments.size == 0) {
+            adapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
+        }
         adapter.setNewData(comments)
+
+    }
+
+    fun addComment(comment: Comment) {
+        adapter.addData(0, comment)
     }
 }

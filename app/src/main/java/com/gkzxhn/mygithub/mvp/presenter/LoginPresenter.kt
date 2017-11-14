@@ -1,6 +1,7 @@
 package com.gkzxhn.mygithub.mvp.presenter
 
 import android.content.Intent
+import android.text.TextUtils
 import android.util.Log
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.api.AccountApi
@@ -16,6 +17,7 @@ import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
+import com.google.gson.Gson
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,7 +30,8 @@ import javax.inject.Inject
  */
 
 class LoginPresenter @Inject constructor(private val rxBus: RxBus,
-                                         private val view: BaseView) {
+                                         private val view: BaseView,
+                                         private val gson: Gson) {
 
     val TAG = javaClass.simpleName
 
@@ -62,7 +65,14 @@ class LoginPresenter @Inject constructor(private val rxBus: RxBus,
                     view.hideLoading()
                     val intent = Intent()
                     val avatar_url = user!!.avatar_url
-                    val name = user.login
+                    val user_bio = user.bio
+                    val name = user.name.let {
+                        if (TextUtils.isEmpty(it)) {
+                            return@let user.login
+                        }else {
+                            return@let user.name
+                        }
+                    }
                     intent.putExtra(IntentConstant.AVATAR, avatar_url)
                     intent.putExtra(IntentConstant.NAME, name)
 
@@ -70,11 +80,9 @@ class LoginPresenter @Inject constructor(private val rxBus: RxBus,
                             .getSharedPreference()
                             .edit {
                                 putString(SharedPreConstant.USER_NAME, name)
-                            }
-                    SharedPreConstant.USER_SP
-                            .getSharedPreference()
-                            .edit {
                                 putString(SharedPreConstant.AVATAR_URL, avatar_url)
+                                putString(SharedPreConstant.USER_BIO, user_bio)
+                                putString(SharedPreConstant.USER_JSON, gson.toJson(user))
                             }
 //                    (view as LoginActivity).setResult(view.RESULT_OK, intent)
                     rxBus.post(user)

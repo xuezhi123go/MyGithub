@@ -52,6 +52,9 @@ abstract class BaseActivity: RxAppCompatActivity() {
 
     private var canBack = false
 
+    /**
+     * 设置ToolBar是否带返回键
+     */
     fun setToolBarBack(canBack : Boolean){
         this.canBack = canBack
     }
@@ -62,8 +65,8 @@ abstract class BaseActivity: RxAppCompatActivity() {
         }
     }
 
+    // 获得状态栏高度
     fun getStatusHeight(activity: Activity): Int {
-        // 获得状态栏高度
         val resourceId = activity.resources.getIdentifier("status_bar_height", "dimen", "android")
         val statusBarHeight = activity.resources.getDimensionPixelSize(resourceId)
         return statusBarHeight
