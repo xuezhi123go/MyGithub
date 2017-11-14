@@ -15,8 +15,9 @@ data class TrendingItem(
 		val user: String, //google
 		val user_link: String, //https://github.com/google
 		val full_name: String, //(Google)
-		val repo: String, //tipsy/javalin
 		val developer_avatar: String, //https://avatars0.githubusercontent.com/u/1342004?s=96&v=4
+
+		val repo: String, //tipsy/javalin
 		val repo_link: String, //https://github.com/tipsy/javalin
 		val desc: String, //A Simple REST API Library for Java/Kotlin
 		val lang: String, //Java

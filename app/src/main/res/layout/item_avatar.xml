@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+                android:paddingLeft="@dimen/dimen_5"
+                android:paddingRight="@dimen/dimen_5"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="@dimen/dimen_59"
+        android:src="@drawable/default_avatar"
+        android:layout_height="@dimen/dimen_59"
+        android:scaleType="centerCrop"/>
+    
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="@dimen/dimen_59"
+        android:maxLines="2"
+        android:text="username"
+        android:textSize="10sp"
+        android:textColor="@color/text_black"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

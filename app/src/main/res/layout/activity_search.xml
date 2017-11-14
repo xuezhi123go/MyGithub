@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:background="@color/background"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/status_view"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:background="@color/blue_grey"/>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        app:contentInsetStart="0dp"
+        android:layout_height="@dimen/bottom_height"
+        android:background="@color/blue_grey">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:src="@drawable/ic_arrow_back"
+                android:padding="@dimen/dimen_10"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
+
+        <RelativeLayout
+            android:background="@drawable/search_bg"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="36dp">
+
+            <ImageView
+                android:id="@+id/iv_search"
+                android:layout_margin="@dimen/dimen_5"
+                android:src="@android:drawable/ic_menu_search"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_toRightOf="@id/iv_search"
+            android:background="@null"
+            android:gravity="start|center_vertical"
+            android:hint="搜你想搜的"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/gray_back"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"/>
+
+        </RelativeLayout>
+
+            <TextView
+                android:id="@+id/ll_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_5"
+                android:layout_marginRight="@dimen/dimen_5"
+                android:text="@string/search_cn"
+                android:textColor="@color/gray_back"/>
+
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+
+
+</LinearLayout>

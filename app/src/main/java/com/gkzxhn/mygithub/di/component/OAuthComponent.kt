@@ -31,4 +31,6 @@ interface OAuthComponent {
     fun inject(homeFragment: HomeFragment)
 
     fun inject(repoDetailActivity: RepoDetailActivity)
+
+    fun inject(searchActivity: SearchActivity)
 }

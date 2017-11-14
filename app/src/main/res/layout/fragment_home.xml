@@ -1,8 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:background="@color/background"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <View
+        android:id="@+id/status_view"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:background="@color/blue_grey"/>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        app:contentInsetStart="0dp"
+        android:layout_height="@dimen/bottom_height"
+        android:background="@color/blue_grey">
+
+            <LinearLayout
+                android:id="@+id/ll_search"
+                android:orientation="horizontal"
+                android:background="@drawable/search_bg"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/dimen_14"
+                android:layout_marginRight="@dimen/dimen_14"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_height="28dp">
+            <ImageView
+                android:src="@drawable/search"
+                android:layout_marginRight="@dimen/dimen_2"
+                android:layout_gravity="center_vertical"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_marginEnd="@dimen/dimen_2"/>
+        <TextView
+            android:id="@+id/tv_search"
+            android:text="@string/search"
+            android:padding="@dimen/dimen_2"
+            android:textColor="@color/gray_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+    </FrameLayout>
+
+    <RelativeLayout
+        style="@style/rl_home_item">
+
+        <TextView
+            android:id="@+id/tv_home_item"
+            android:text="@string/trending_repositories_this_week"
+            style="@style/tv_home_item_title"/>
+
+        <TextView
+            android:id="@+id/tv_see_all1"
+            android:layout_toLeftOf="@+id/iv_right_arrow1"
+            android:layout_toStartOf="@+id/iv_right_arrow1"
+            android:text="See all"
+            style="@style/tv_see_all"/>
+
+        <ImageView
+            android:id="@+id/iv_right_arrow1"
+            android:layout_alignBottom="@+id/tv_see_all1"
+            android:src="@drawable/right_arrow"
+            style="@style/iv_right_arrow"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_repo_week"
+            android:layout_below="@+id/tv_home_item"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_back"/>
+
+    <RelativeLayout
+        style="@style/rl_home_item">
+
+        <TextView
+            android:id="@+id/tv_pop_repo"
+            android:text="@string/popular_repositories"
+            style="@style/tv_home_item_title"/>
+
+        <TextView
+            android:id="@+id/tv_see_all2"
+            android:layout_toLeftOf="@+id/iv_right_arrow2"
+            android:layout_toStartOf="@+id/iv_right_arrow2"
+            android:text="See all"
+            style="@style/tv_see_all"/>
+
+        <ImageView
+            android:id="@+id/iv_right_arrow2"
+            android:src="@drawable/right_arrow"
+            style="@style/iv_right_arrow"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_pop_repo"
+            android:layout_below="@+id/tv_pop_repo"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_back"/>
+
+    <RelativeLayout
+        style="@style/rl_home_item">
+
+        <TextView
+            android:id="@+id/tv_popular_users"
+            android:text="@string/popular_users"
+            style="@style/tv_home_item_title"/>
+
+        <TextView
+            android:id="@+id/tv_see_all3"
+            android:layout_toLeftOf="@+id/iv_right_arrow3"
+            android:layout_toStartOf="@+id/iv_right_arrow3"
+            android:text="See all"
+            style="@style/tv_see_all"/>
+
+        <ImageView
+            android:id="@+id/iv_right_arrow3"
+            android:src="@drawable/right_arrow"
+            style="@style/iv_right_arrow"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_pop_users"
+            android:layout_below="@+id/tv_popular_users"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 </LinearLayout>

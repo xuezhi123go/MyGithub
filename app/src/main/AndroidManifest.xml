@@ -34,6 +34,7 @@
         <activity android:name=".ui.activity.EditIssueActivity"/>
         <activity android:name=".ui.activity.RepoListActivity"/>
         <activity android:name=".ui.activity.UserActivity"/>
+        <activity android:name=".ui.activity.SearchActivity"/>
 
         <activity android:name ="com.iflytek.autoupdate.IFlytekUpdateDialog"/>
         <service android:name="com.iflytek.autoupdate.IFlytekDownloadService"/>

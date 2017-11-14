@@ -17,5 +17,6 @@
     <color name="red">#e81414</color>
     <color name="repo_header">#88edc69b</color>
     <color name="yellow">#88fcfc00</color>
+    <color name="text_black">#333333</color>
 
 </resources>
