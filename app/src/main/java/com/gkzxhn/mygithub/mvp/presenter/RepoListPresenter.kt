@@ -3,6 +3,7 @@ package com.gkzxhn.mygithub.mvp.presenter
 import android.util.Log
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.api.OAuthApi
+import com.gkzxhn.mygithub.api.TrendingApi
 import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.ui.activity.RepoListActivity
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
@@ -14,6 +15,7 @@ import javax.inject.Inject
  * Created by 方 on 2017/10/27.
  */
 class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
+                                            private val trendingApi: TrendingApi,
                                            private val view : BaseView) {
 
     /**
@@ -55,6 +57,23 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     Log.i(javaClass.simpleName, t.get(0).toString())
                 },{
 
+                    e ->
+                    Log.e(javaClass.simpleName, e.message)
+                })
+    }
+
+    fun getTrendingRepo(){
+        view.showLoading()
+        trendingApi.getTrendingRepos(since = "weekly")
+                .bindToLifecycle(view as RepoListActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {result ->
+                            Log.i(javaClass.simpleName, result.toString())
+                            view.hideLoading()
+                            view.loadData(result.items)
+                        }, {
                     e ->
                     Log.e(javaClass.simpleName, e.message)
                 })

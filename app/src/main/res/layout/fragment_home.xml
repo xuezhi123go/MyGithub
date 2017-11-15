@@ -62,19 +62,22 @@
             android:text="@string/trending_repositories_this_week"
             style="@style/tv_home_item_title"/>
 
+
+        <LinearLayout
+            android:id="@+id/ll_see_all1"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/tv_see_all1"
-            android:layout_toLeftOf="@+id/iv_right_arrow1"
-            android:layout_toStartOf="@+id/iv_right_arrow1"
             android:text="See all"
             style="@style/tv_see_all"/>
 
         <ImageView
-            android:id="@+id/iv_right_arrow1"
-            android:layout_alignBottom="@+id/tv_see_all1"
             android:src="@drawable/right_arrow"
             style="@style/iv_right_arrow"/>
 
+        </LinearLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_repo_week"
             android:layout_below="@+id/tv_home_item"
@@ -98,6 +101,12 @@
             android:text="@string/popular_repositories"
             style="@style/tv_home_item_title"/>
 
+        <LinearLayout
+            android:id="@+id/ll_see_all2"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <TextView
             android:id="@+id/tv_see_all2"
             android:layout_toLeftOf="@+id/iv_right_arrow2"
@@ -109,6 +118,7 @@
             android:id="@+id/iv_right_arrow2"
             android:src="@drawable/right_arrow"
             style="@style/iv_right_arrow"/>
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_pop_repo"
@@ -133,6 +143,12 @@
             android:text="@string/popular_users"
             style="@style/tv_home_item_title"/>
 
+        <LinearLayout
+            android:id="@+id/ll_see_all3"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <TextView
             android:id="@+id/tv_see_all3"
             android:layout_toLeftOf="@+id/iv_right_arrow3"
@@ -145,6 +161,7 @@
             android:src="@drawable/right_arrow"
             style="@style/iv_right_arrow"/>
 
+        </LinearLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_pop_users"
             android:layout_below="@+id/tv_popular_users"

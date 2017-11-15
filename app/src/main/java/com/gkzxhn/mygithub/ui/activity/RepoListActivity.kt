@@ -2,8 +2,10 @@ package com.gkzxhn.mygithub.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import com.gkzxhn.balabala.base.BaseActivity
@@ -11,6 +13,7 @@ import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.info.Repo
+import com.gkzxhn.mygithub.bean.info.TrendingItem
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
@@ -60,6 +63,10 @@ class RepoListActivity :BaseActivity(), BaseView {
 
     override fun initView(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_repo_list)
+        setToolBar()
+        setReposRecyclerView()
+
+
         action = intent.action
         when(action) {
             IntentConstant.MY_REPOS -> {
@@ -72,10 +79,15 @@ class RepoListActivity :BaseActivity(), BaseView {
                 toolbar.title = org
                 presenter.loadOrgRepos(org)
             }
+            IntentConstant.TRENDING_REPO -> {
+                val list = intent.getParcelableArrayListExtra<TrendingItem>(IntentConstant.REPO_ENTITIES)
+                if (list.size > 0) {
+                    repoListAdapter.setNewData(list as List<Parcelable>?)
+                }else {
+                    presenter.getTrendingRepo()
+                }
+            }
         }
-
-        setToolBar()
-        setReposRecyclerView()
     }
 
     private fun setToolBar() {
@@ -103,17 +115,25 @@ class RepoListActivity :BaseActivity(), BaseView {
         repoListAdapter.openLoadAnimation()
         repoListAdapter.setOnItemClickListener { adapter, view, position ->
 
-            val repo = adapter.data[position] as Repo
-            val intent = Intent(this, RepoDetailActivity::class.java)
-            val mBundle = Bundle()
-            mBundle.putParcelable(IntentConstant.REPO, repo)
-            intent.putExtras(mBundle)
-            startActivity(intent)
+            val data = adapter.data[position]
+            if (data is Repo) {
+                val intent = Intent(this, RepoDetailActivity::class.java)
+                val mBundle = Bundle()
+                mBundle.putParcelable(IntentConstant.REPO, data)
+                intent.putExtras(mBundle)
+                startActivity(intent)
+            }else if(data is TrendingItem) {
+
+            }
         }
         rv_repo_list.adapter = repoListAdapter
     }
 
-    fun loadData(lists: List<Repo>) {
-        repoListAdapter.setNewData(lists)
+    fun loadData(lists: List<Parcelable>) {
+        if (lists.size == 0) {
+            repoListAdapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
+        } else {
+            repoListAdapter.setNewData(lists)
+        }
     }
 }

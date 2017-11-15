@@ -13,9 +13,12 @@ import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.entity.Icon2Name
 import com.gkzxhn.mygithub.bean.info.SearchUserResult
+import com.gkzxhn.mygithub.bean.info.TrendingItem
 import com.gkzxhn.mygithub.bean.info.TrendingResults
+import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.mvp.presenter.HomePresenter
+import com.gkzxhn.mygithub.ui.activity.RepoListActivity
 import com.gkzxhn.mygithub.ui.activity.SearchActivity
 import com.gkzxhn.mygithub.ui.adapter.AvatarListAdapter
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -25,6 +28,8 @@ import javax.inject.Inject
  * Created by 方 on 2017/10/19.
  */
 class HomeFragment : BaseFragment(), BaseView{
+
+    private var trendingRepoList = arrayListOf<TrendingItem>()
 
     private lateinit var repoWeekAdapter : AvatarListAdapter
     private lateinit var popUsersAdapter : AvatarListAdapter
@@ -75,6 +80,15 @@ class HomeFragment : BaseFragment(), BaseView{
         ll_search.setOnClickListener {
             startActivity(Intent(context, SearchActivity::class.java))
         }
+
+        ll_see_all1.setOnClickListener{
+            val data = Bundle()
+            data.putParcelableArrayList(IntentConstant.REPO_ENTITIES, trendingRepoList)
+            val intent = Intent(context, RepoListActivity::class.java)
+            intent.putExtras(data)
+            intent.action = IntentConstant.TRENDING_REPO
+            startActivity(intent)
+        }
     }
 
     override fun getStatusBar(): View? {
@@ -98,6 +112,7 @@ class HomeFragment : BaseFragment(), BaseView{
     }
 
     fun loadRepoWeek(result: TrendingResults){
+        trendingRepoList = result.items as ArrayList<TrendingItem>
         val list = result.items
                 .map { trendingItem ->
                     return@map Icon2Name(trendingItem.avatars[0].replace("s=40", "s=80"),
