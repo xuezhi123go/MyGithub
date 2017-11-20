@@ -60,7 +60,9 @@ class RepoDetailActivity:BaseActivity(),BaseView {
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+
         setContentView(R.layout.activity_repo_detail)
+
         repo = intent.getParcelableExtra<Repo>(IntentConstant.REPO)
 
         appbar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->

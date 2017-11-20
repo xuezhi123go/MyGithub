@@ -18,7 +18,7 @@ interface OAuthApi {
      * 根据用户名获得用户信息
      */
     @GET("/users/{username}")
-    fun getUser(@Path("username") username: String) : Observable<User>
+    fun getUser(@Path("username") username: String): Observable<User>
 
     /**
      * 获得我的仓库列表
@@ -49,7 +49,7 @@ interface OAuthApi {
             @Query("type") type: String = "owner",
             @Query("sort") sort: String = "created",
             @Query("direction") direction: String = "desc"
-    ):Observable<List<Repo>>
+    ): Observable<List<Repo>>
 
     /**
      * 得到详细的仓库内容
@@ -90,6 +90,9 @@ interface OAuthApi {
             : Observable<List<Starred>>
 
 
+    /**
+     * 得到我的Stars
+     */
     @GET("/user/starred")
     fun getMyStars(
             @Query("sort") sort: String = "created",
@@ -126,7 +129,7 @@ interface OAuthApi {
      * 获取您的组织列表
      */
     @GET("/user/orgs")
-    fun getOrgs():Observable<List<Organization>>
+    fun getOrgs(): Observable<List<Organization>>
 
     /**
      * 获取用户的组织列表
@@ -134,7 +137,7 @@ interface OAuthApi {
     @GET("/users/{username}/orgs")
     fun getUserOrgs(
             @Path("username") username: String
-    ):Observable<List<Organization>>
+    ): Observable<List<Organization>>
 
     /**
      * 得到一个组织
@@ -142,7 +145,7 @@ interface OAuthApi {
     @GET("/orgs/{org}")
     fun getOrg(
             @Path("org") org: String
-    ):Observable<Organization>
+    ): Observable<Organization>
 
     /**
      * 获取组织仓库列表
@@ -150,15 +153,15 @@ interface OAuthApi {
      */
     @GET("/orgs/{org}/repos")
     fun getOrgRepos(
-            @Path("org")org : String,
-            @Query("type") type : String = "all"):Observable<List<Repo>>
+            @Path("org") org: String,
+            @Query("type") type: String = "all"): Observable<List<Repo>>
 
     /**
      * 得到仓库合作者列表
      */
     @GET("repos/{owner}/{repo}/contributors")
     fun contributors(@Path("owner") owner: String,
-                              @Path("repo") repo: String): Observable<ArrayList<Owner>>
+                     @Path("repo") repo: String): Observable<ArrayList<Owner>>
 
 
     /**
@@ -179,7 +182,7 @@ interface OAuthApi {
     @GET("/search/users")
     fun searchUsers(@Query("q") condition: String,
                     @Query("sort") sort: String = "followers",
-                    @Query("order") order: String = "desc") : Observable<SearchUserResult>
+                    @Query("order") order: String = "desc"): Observable<SearchUserResult>
 
     /**
      * 搜索仓库
@@ -190,15 +193,15 @@ interface OAuthApi {
     @GET("/search/repositories")
     fun searchRepos(@Query("q") condition: String,
                     @Query("sort") sort: String = "stars",
-                    @Query("order") order: String = "desc") : Observable<SearchRepoResult>
+                    @Query("order") order: String = "desc"): Observable<SearchRepoResult>
 
     /**
      * 有星status : 204
      * 没星status : 404
      */
     @GET("/user/starred/{owner}/{repo}")
-    fun checkIfStarred(@Path("owner")owner: String,
-                       @Path("repo") repo: String) : Observable<Response<ResponseBody>>
+    fun checkIfStarred(@Path("owner") owner: String,
+                       @Path("repo") repo: String): Observable<Response<ResponseBody>>
 
     /**
      * star仓库
@@ -252,4 +255,34 @@ interface OAuthApi {
      */
     @GET("/user/following/{username}")
     fun checkIfFollowUser(@Path("username") username: String): Observable<Response<ResponseBody>>
+
+
+    /**
+     * 列出你的通知
+     * @param all 如果是true,显示标记为已读的通知，默认是false
+     * @param participating 如果是true,只显示用户直接参与或提及的通知,默认是false
+     * @param since 只显示在给定时间后更新的通知。这是 ISO 8601 格式的时间戳:YYYY-MM-DDTHH:MM:SSZ，默认是Time.now
+     * @param before 只显示在给定时间之前更新的通知。这是 ISO 8601 格式的时间戳:YYYY-MM-DDTHH:MM:SSZ
+     */
+    @GET("/notifications")
+    fun getNotifications(
+            @Query("all") all: Boolean = false,
+            @Query("participating") participating: Boolean = false,
+            @Query("since") since: String,
+            @Query("before") before: String
+    ): Observable<List<Notifications>>
+
+
+    /**
+     * 在存储库中列出你的通知
+     */
+    @GET("/repos/{owner}/{repo}/notifications")
+    fun getNotificationsInRepository(
+            @Path("owner") owner: String,
+            @Path("repo") repo: String,
+            @Query("all") all: Boolean = false,
+            @Query("participating") participating: Boolean = false,
+            @Query("since") since: String,
+            @Query("before") before: String
+    ):Observable<List<Notifications>>
 }

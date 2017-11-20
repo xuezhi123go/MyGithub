@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="bottom_height">50dp</dimen>
+    <dimen name="toolbar_height">65dp</dimen>
     <dimen name="tab_height">46dp</dimen>
     <dimen name="item_margin">8dp</dimen>
     <dimen name="dimen_16">16dp</dimen>
@@ -11,6 +12,9 @@
     <dimen name="dimen_60">60dp</dimen>
     <dimen name="dimen_2">2dp</dimen>
     <dimen name="dimen_8">8dp</dimen>
+    <dimen name="dimen_15">15dp</dimen>
+    <dimen name="dimen_47">47dp</dimen>
+    <dimen name="dimen_18">18dp</dimen>
     <dimen name="dimen_5">5dp</dimen>
     <dimen name="dimen_50">50dp</dimen>
     <dimen name="dimen_80">80dp</dimen>

@@ -24,6 +24,7 @@ class StarsPresenter @Inject constructor(private val oAuthApi: OAuthApi,
         view.showLoading()
         oAuthApi.getMyStars()
                 .bindToLifecycle(view as StarsFragment)
+                //.bindToLifecycle(view as NotificationsFragment)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

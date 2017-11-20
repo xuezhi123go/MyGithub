@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:id="@+id/ll_notification_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_state_icon"
+            android:layout_width="@dimen/dimen_18"
+            android:layout_height="@dimen/dimen_18"
+            android:layout_marginBottom="@dimen/dimen_8"
+            android:layout_marginLeft="@dimen/dimen_47"
+            android:layout_marginTop="@dimen/dimen_8"
+            android:src="@drawable/stared_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_8"
+            android:paddingLeft="@dimen/dimen_8"
+            android:text="date" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="@dimen/dimen_47"
+        android:layout_height="@dimen/dimen_47"
+        android:layout_below="@+id/ll_notification_state"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dimen_15"
+        android:src="@drawable/default_avatar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_47"
+        android:layout_below="@+id/ll_notification_state"
+        android:layout_marginLeft="@dimen/dimen_8"
+        android:layout_marginRight="@dimen/dimen_8"
+        android:layout_toLeftOf="@+id/tv_follow"
+        android:layout_toRightOf="@+id/iv_avatar"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_new_data_notification"
+            style="@style/tv_name"
+            android:layout_marginLeft="@dimen/dimen_8"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="2342342352jkljjkljglj" />
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_old_data_notification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ajglkjfgjgjakljgkajgajgjagja"
+        android:layout_below="@+id/iv_avatar"
+        android:paddingLeft="15dp"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:src="@color/gray_line"
+        android:layout_marginTop="@dimen/dimen_8"
+        android:layout_below="@+id/tv_old_data_notification"
+        android:layout_marginLeft="@dimen/dimen_15"/>
+</RelativeLayout>
