@@ -4,6 +4,7 @@ import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 /**
  * Created by Xuezhi on 2017/11/16.
  */
@@ -16,6 +17,7 @@ object Utils {
         //var formatter = SimpleDateFormat("YYYY-MM-DDTHH:MM:SSZ")
         var curDate = Date(System.currentTimeMillis())
         //var str = formatter.format(curDate)
+
         return curDate
     }
 
@@ -23,11 +25,11 @@ object Utils {
      * 格式化获取到的时间
      */
     fun getFormatTime(date: Date): String? {
-        var dateStr = SimpleDateFormat("yyyy-MM-dd").format(date)
-        var timeStr = SimpleDateFormat("HH:mm:ss").format(date)
-        var str = dateStr + "T" + timeStr + "Z"
-        Log.i(javaClass.simpleName,str)
-        return str
+
+        var time = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(date)
+        time = time.substring(0, 22) + ":" + time.substring(22)
+        Log.i(javaClass.simpleName, time)
+        return time
     }
 
     /**
@@ -39,5 +41,4 @@ object Utils {
         var lastMonth = ca.time
         return lastMonth
     }
-
 }

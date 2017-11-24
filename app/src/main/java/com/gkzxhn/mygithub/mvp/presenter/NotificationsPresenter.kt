@@ -25,7 +25,7 @@ class NotificationsPresenter @Inject constructor(private val oAuthApi: OAuthApi,
         view.showLoading()
         Log.e(javaClass.simpleName, "showLoading")
         oAuthApi//.getNotificationsInRepository(owner, repo,
-                .getNotifications(//false, false,
+                .getNotifications(true, false,
                         since = Utils.getFormatTime(Utils.getDateBeforeOneMonth(-1)!!)!!,
                         before = Utils.getFormatTime(Utils.getTiem())!!)
                 .bindToLifecycle(view as NotificationsFragment)
