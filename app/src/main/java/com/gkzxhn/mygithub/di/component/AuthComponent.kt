@@ -10,9 +10,11 @@ import dagger.Subcomponent
  */
 
 @Subcomponent(modules = arrayOf(AuthModule::class))
+
 interface AuthComponent {
 
     fun inject(loginActivity: LoginActivity)
 
     fun inject(mainActivity: MainActivity)
+
 }

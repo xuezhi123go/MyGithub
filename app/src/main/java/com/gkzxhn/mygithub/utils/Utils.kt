@@ -14,18 +14,14 @@ object Utils {
      * 获取当前系统时间
      */
     fun getTiem(): Date {
-        //var formatter = SimpleDateFormat("YYYY-MM-DDTHH:MM:SSZ")
         var curDate = Date(System.currentTimeMillis())
-        //var str = formatter.format(curDate)
-
         return curDate
     }
 
     /**
-     * 格式化获取到的时间
+     * 把获取到的时间格式化成ISO8601形式
      */
     fun getFormatTime(date: Date): String? {
-
         var time = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(date)
         time = time.substring(0, 22) + ":" + time.substring(22)
         Log.i(javaClass.simpleName, time)
