@@ -19,6 +19,7 @@ abstract class BaseFragment :RxFragment(){
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = initView(inflater, container, savedInstanceState)
         setupComponent()
+        isInit = true
         return view
     }
 
@@ -34,31 +35,31 @@ abstract class BaseFragment :RxFragment(){
 
     override fun onResume() {
         Log.i(javaClass.simpleName, "onResume : $userVisibleHint")
-        if (userVisibleHint) {
+        if (userVisibleHint && isFirst) {
             onVisible()
-        }else {
-            isFirst = true
+            isFirst = false
         }
         super.onResume()
     }
 
-    override fun onPause() {
-        Log.i(javaClass.simpleName, "onPause : $userVisibleHint")
-        super.onPause()
+    override fun onDestroy() {
+        isInit = false
+        super.onDestroy()
     }
 
-    private var isFirst = false
+    private var isFirst = true
+    private var isInit = false
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         Log.i(javaClass.simpleName, "setUserVisibleHint : ${isVisibleToUser}")
         super.setUserVisibleHint(isVisibleToUser)
-        if (userVisibleHint && isFirst) {
+        if (userVisibleHint && isInit && isFirst) {
             isFirst = false
             onVisible()
         }
     }
 
-    open fun onVisible(){
+    open protected fun onVisible(){
         Log.i(javaClass.simpleName, "onVisible")
     }
 
