@@ -15,14 +15,18 @@ class SearchPresenter @Inject constructor(private val view: BaseView,
                                           private val oAuthApi: OAuthApi) {
 
     fun searchRepos(string: String){
+        view.showLoading()
         oAuthApi.searchRepos(string)
                 .bindToLifecycle(view as SearchActivity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     t ->
+                    view.hideLoading()
+                    view.initFragment(t.items)
                 },{
                     e ->
+                    view.hideLoading()
                 })
     }
 

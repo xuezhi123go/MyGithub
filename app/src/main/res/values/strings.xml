@@ -22,4 +22,5 @@
     <string name="trending_repositories_this_week">仓库周榜</string>
     <string name="popular_repositories">仓库流行榜</string>
     <string name="popular_users">大牛榜</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

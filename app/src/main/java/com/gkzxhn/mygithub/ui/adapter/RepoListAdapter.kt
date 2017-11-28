@@ -6,6 +6,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.bean.info.Repo
+import com.gkzxhn.mygithub.bean.info.RepoItem
 import com.gkzxhn.mygithub.bean.info.TrendingItem
 
 /**
@@ -39,6 +40,18 @@ class RepoListAdapter(datas: List<Parcelable>?) : BaseQuickAdapter<Parcelable, B
             })
             helper.setText(R.id.tv_star, item.stars)
             helper.setText(R.id.tv_fork, item.forks)
+        }else if (item is RepoItem) {
+            helper!!.setText(R.id.tv_name, item.full_name)
+            helper.setText(R.id.tv_desc, item.description)
+            helper.setText(R.id.tv_language, item.language.let {
+                if (TextUtils.isEmpty(it)) {
+                    return@let "unknown"
+                } else {
+                    return@let it
+                }
+            })
+            helper.setText(R.id.tv_star, item.stargazers_count)
+            helper.setText(R.id.tv_fork, item.forks_count)
         }
     }
 

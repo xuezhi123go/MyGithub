@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,8 +28,38 @@ abstract class BaseFragment :RxFragment(){
         super.onViewCreated(view, savedInstanceState)
         initStatusBar()
         initToolBar()
-
         initContentView()
+        Log.i(javaClass.simpleName, "onViewCreated : $userVisibleHint")
+    }
+
+    override fun onResume() {
+        Log.i(javaClass.simpleName, "onResume : $userVisibleHint")
+        if (userVisibleHint) {
+            onVisible()
+        }else {
+            isFirst = true
+        }
+        super.onResume()
+    }
+
+    override fun onPause() {
+        Log.i(javaClass.simpleName, "onPause : $userVisibleHint")
+        super.onPause()
+    }
+
+    private var isFirst = false
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        Log.i(javaClass.simpleName, "setUserVisibleHint : ${isVisibleToUser}")
+        super.setUserVisibleHint(isVisibleToUser)
+        if (userVisibleHint && isFirst) {
+            isFirst = false
+            onVisible()
+        }
+    }
+
+    open fun onVisible(){
+        Log.i(javaClass.simpleName, "onVisible")
     }
 
     /**

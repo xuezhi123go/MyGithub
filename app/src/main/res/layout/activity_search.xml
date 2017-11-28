@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:orientation="vertical"
+             android:background="@color/background"
+             android:id="@+id/fl_search"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
-              android:background="@color/background"
+              android:id="@+id/ll_search"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
@@ -53,23 +61,39 @@
             android:gravity="start|center_vertical"
             android:hint="搜你想搜的"
             android:textSize="@dimen/sp_14"
-            android:textColor="@color/gray_back"
+            android:textColor="@color/text_black"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="36dp"/>
 
         </RelativeLayout>
 
             <TextView
-                android:id="@+id/ll_search"
+                android:id="@+id/tv_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_5"
                 android:layout_marginRight="@dimen/dimen_5"
                 android:text="@string/search_cn"
-                android:textColor="@color/gray_back"/>
+                android:textColor="@color/white"/>
 
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tb_search"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_height">
 
+    </android.support.design.widget.TabLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
 </LinearLayout>
+
+</FrameLayout>

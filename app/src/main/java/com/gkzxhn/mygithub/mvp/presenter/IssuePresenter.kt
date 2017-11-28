@@ -5,6 +5,7 @@ import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.api.OAuthApi
 import com.gkzxhn.mygithub.bean.info.Owner
 import com.gkzxhn.mygithub.bean.info.PostIssueResponse
+import com.gkzxhn.mygithub.bean.info.SearchUserResult
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.ui.fragment.ContributorsFragment
@@ -97,21 +98,24 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     list
                 }
                 .observeOn(Schedulers.io())
-                .forEach {
+                .subscribe {
                     t ->
                     Log.i(javaClass.simpleName, "when map observer Current thread is " + Thread.currentThread().getName())
                     t.forEachIndexed { index,  owner ->
                     Log.i(javaClass.simpleName, "when map list Current thread is " + Thread.currentThread().getName())
+                        if (view.isLoading) {
+                            return@subscribe
+                        }
                         oAuthApi.getUser(owner.login)
                                 .bindToLifecycle(view)
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe({
                                     user: User ->
                                     Log.i(javaClass.simpleName, "get user")
-                                    view?.let {
-                                        it.hideLoading()
-//                                        it.loadData(user)
-                                        it.updateList(index, user)
+                                    if (!view.isLoading) {
+                                        view?.let {
+                                            it.updateList(index, user)
+                                        }
                                     }
                                 },
                                         {
@@ -123,24 +127,6 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                                         })
                     }
                 }
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(
-//                        {
-//                            lists: List<User> ->
-//                            Log.i(javaClass.simpleName, "get user list")
-//                            view?.let {
-//                                it.hideLoading()
-//                                it.loadData(lists)
-//                            }
-//                        },
-//                        {
-//                            e ->
-//                            view?.let {
-//                                it.hideLoading()
-//                            }
-//                            Log.e(javaClass.simpleName, e.message)
-//                        }
-//                )
     }
 
     fun getForks(owner : String, repo: String){
@@ -168,37 +154,118 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 }
                 .doOnError {
                     e ->
-                    view?.let {
-                        it.context.toast("加载失败")
-                        it.hideLoading()
-                    }
                     Log.e(javaClass.simpleName, e.message)
+                    view?.let { it.hideLoading()
+                        if (e is NullPointerException)
+                        //空仓库
+                        else
+                            it.context.toast("加载失败")
+                    }
+                }
+                .onErrorReturn {
+                    e ->
+                    Log.e(javaClass.simpleName, e.message)
+                    val list = arrayListOf<Owner>()
+                    view.loadData(list)
+                    list
                 }
                 .observeOn(Schedulers.io())
-                .map {
+                .subscribe {
                     t ->
-                    Log.i(javaClass.simpleName, "when map Current thread is " + Thread.currentThread().getName());
-                    t.map {
-                        owner ->
+                    Log.i(javaClass.simpleName, "when map observer Current thread is " + Thread.currentThread().getName())
+                    t.forEachIndexed { index,  owner ->
+                        Log.i(javaClass.simpleName, "when map list Current thread is " + Thread.currentThread().getName())
+                        if (view.isLoading) {
+                            return@subscribe
+                        }
                         oAuthApi.getUser(owner.login)
-                                .blockingFirst()
+                                .bindToLifecycle(view)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe({
+                                    user: User ->
+                                    Log.i(javaClass.simpleName, "get user")
+                                    if (!view.isLoading) {
+                                        view?.let {
+                                            it.hideLoading()
+                                            it.updateList(index, user)
+                                        }
+                                    }
+                                },
+                                        {
+                                            e ->
+                                            view?.let {
+                                                it.hideLoading()
+                                            }
+                                            Log.e(javaClass.simpleName, e.message)
+                                        })
                     }
                 }
+    }
+
+    fun searchUsers(string : String) {
+        view.showLoading()
+        oAuthApi.searchUsers(string)
+                .bindToLifecycle(view as ContributorsFragment)
+                .subscribeOn(Schedulers.io())
+                .map {
+                    t: SearchUserResult ->
+                    return@map t.items
+                }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            users ->
-                            view?.let {
-                                it.loadData(users)
-                            }
-                        },
-                        {
-                            e ->
-                            view?.let {
-                                it.hideLoading()
-                            }
-                            Log.e(javaClass.simpleName, e.message)
+                .doOnNext {
+                    owners: List<Owner> ->
+                    view?.let {
+                        it.hideLoading()
+                        it.loadData(owners)
+                    }
+                }
+                .doOnError {
+                    e ->
+                    Log.e(javaClass.simpleName, e.message)
+                    view?.let { it.hideLoading()
+                        if (e is NullPointerException)
+                        //空仓库
+                        else
+                            it.context.toast("加载失败")
+                    }
+                }
+                .onErrorReturn {
+                    e ->
+                    Log.e(javaClass.simpleName, e.message)
+                    val list = arrayListOf<Owner>()
+                    view.loadData(list)
+                    list
+                }
+                .observeOn(Schedulers.io())
+                .subscribe {
+                    t ->
+                    Log.i(javaClass.simpleName, "when map observer Current thread is " + Thread.currentThread().getName())
+                    t.forEachIndexed { index,  owner ->
+                        Log.i(javaClass.simpleName, "when map list Current thread is " + Thread.currentThread().getName())
+                        if (view.isLoading) {
+                            return@subscribe
                         }
-                )
+                        oAuthApi.getUser(owner.login)
+                                .bindToLifecycle(view)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe({
+                                    user: User ->
+                                    Log.i(javaClass.simpleName, "get user")
+                                    if (!view.isLoading) {
+                                        view?.let {
+                                            it.hideLoading()
+                                            it.updateList(index, user)
+                                        }
+                                    }
+                                },
+                                        {
+                                            e ->
+                                            view?.let {
+                                                it.hideLoading()
+                                            }
+                                            Log.e(javaClass.simpleName, e.message)
+                                        })
+                    }
+                }
     }
 }

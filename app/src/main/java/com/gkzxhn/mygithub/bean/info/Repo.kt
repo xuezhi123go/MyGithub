@@ -242,73 +242,76 @@ data class Repo(
 }
 
 data class Owner(
-		val login: String, //FangforFun
-		val id: Int, //23162290
-		val avatar_url: String, //https://avatars2.githubusercontent.com/u/23162290?v=4
-		val gravatar_id: String,
-		val url: String, //https://api.github.com/users/FangforFun
-		val html_url: String, //https://github.com/FangforFun
-		val followers_url: String, //https://api.github.com/users/FangforFun/followers
-		val following_url: String, //https://api.github.com/users/FangforFun/following{/other_user}
-		val gists_url: String, //https://api.github.com/users/FangforFun/gists{/gist_id}
-		val starred_url: String, //https://api.github.com/users/FangforFun/starred{/owner}{/repo}
-		val subscriptions_url: String, //https://api.github.com/users/FangforFun/subscriptions
-		val organizations_url: String, //https://api.github.com/users/FangforFun/orgs
-		val repos_url: String, //https://api.github.com/users/FangforFun/repos
-		val events_url: String, //https://api.github.com/users/FangforFun/events{/privacy}
-		val received_events_url: String, //https://api.github.com/users/FangforFun/received_events
-		val type: String, //User
-		val site_admin: Boolean //false
+        val login: String, //FangforFun
+        val id: Int, //23162290
+        val avatar_url: String, //https://avatars2.githubusercontent.com/u/23162290?v=4
+        val gravatar_id: String,
+        val url: String, //https://api.github.com/users/FangforFun
+        val html_url: String, //https://github.com/FangforFun
+        val followers_url: String, //https://api.github.com/users/FangforFun/followers
+        val following_url: String, //https://api.github.com/users/FangforFun/following{/other_user}
+        val gists_url: String, //https://api.github.com/users/FangforFun/gists{/gist_id}
+        val starred_url: String, //https://api.github.com/users/FangforFun/starred{/owner}{/repo}
+        val subscriptions_url: String, //https://api.github.com/users/FangforFun/subscriptions
+        val organizations_url: String, //https://api.github.com/users/FangforFun/orgs
+        val repos_url: String, //https://api.github.com/users/FangforFun/repos
+        val events_url: String, //https://api.github.com/users/FangforFun/events{/privacy}
+        val received_events_url: String, //https://api.github.com/users/FangforFun/received_events
+        val type: String, //User
+        val site_admin: Boolean, //false
+        val score: Float //1
 ) : Parcelable {
-	constructor(source: Parcel) : this(
-			source.readString(),
-			source.readInt(),
-			source.readString(),
-			source.readString(),
-			source.readString(),
-			source.readString(),
-			source.readString(),
-			source.readString(),
-			source.readString(),
-			source.readString(),
-			source.readString(),
-			source.readString(),
-			source.readString(),
-			source.readString(),
-			source.readString(),
-			source.readString(),
-			1 == source.readInt()
-	)
+    constructor(source: Parcel) : this(
+            source.readString(),
+            source.readInt(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            source.readString(),
+            1 == source.readInt(),
+            source.readFloat()
+    )
 
-	override fun describeContents() = 0
+    override fun describeContents() = 0
 
-	override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-		writeString(login)
-		writeInt(id)
-		writeString(avatar_url)
-		writeString(gravatar_id)
-		writeString(url)
-		writeString(html_url)
-		writeString(followers_url)
-		writeString(following_url)
-		writeString(gists_url)
-		writeString(starred_url)
-		writeString(subscriptions_url)
-		writeString(organizations_url)
-		writeString(repos_url)
-		writeString(events_url)
-		writeString(received_events_url)
-		writeString(type)
-		writeInt((if (site_admin) 1 else 0))
-	}
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeString(login)
+        writeInt(id)
+        writeString(avatar_url)
+        writeString(gravatar_id)
+        writeString(url)
+        writeString(html_url)
+        writeString(followers_url)
+        writeString(following_url)
+        writeString(gists_url)
+        writeString(starred_url)
+        writeString(subscriptions_url)
+        writeString(organizations_url)
+        writeString(repos_url)
+        writeString(events_url)
+        writeString(received_events_url)
+        writeString(type)
+        writeInt((if (site_admin) 1 else 0))
+        writeFloat(score)
+    }
 
-	companion object {
-		@JvmField
-		val CREATOR: Parcelable.Creator<Owner> = object : Parcelable.Creator<Owner> {
-			override fun createFromParcel(source: Parcel): Owner = Owner(source)
-			override fun newArray(size: Int): Array<Owner?> = arrayOfNulls(size)
-		}
-	}
+    companion object {
+        @JvmField
+        val CREATOR: Parcelable.Creator<Owner> = object : Parcelable.Creator<Owner> {
+            override fun createFromParcel(source: Parcel): Owner = Owner(source)
+            override fun newArray(size: Int): Array<Owner?> = arrayOfNulls(size)
+        }
+    }
 }
 
 data class Permissions(
