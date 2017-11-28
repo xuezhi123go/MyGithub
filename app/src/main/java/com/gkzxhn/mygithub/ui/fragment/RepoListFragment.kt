@@ -11,7 +11,6 @@ import com.gkzxhn.balabala.base.BaseFragment
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.bean.info.Repo
-import com.gkzxhn.mygithub.bean.info.TrendingItem
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.mvp.presenter.RepoListPresenter
 import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
@@ -78,8 +77,6 @@ class RepoListFragment (private val list: List<Repo>) : BaseView, BaseFragment()
                 mBundle.putParcelable(IntentConstant.REPO, data)
                 intent.putExtras(mBundle)
                 startActivity(intent)
-            }else if(data is TrendingItem) {
-
             }
         }
         rv_repo_list.adapter = repoListAdapter

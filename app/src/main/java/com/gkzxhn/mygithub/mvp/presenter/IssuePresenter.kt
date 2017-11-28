@@ -239,33 +239,35 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .observeOn(Schedulers.io())
                 .subscribe {
                     t ->
-                    Log.i(javaClass.simpleName, "when map observer Current thread is " + Thread.currentThread().getName())
-                    t.forEachIndexed { index,  owner ->
-                        Log.i(javaClass.simpleName, "when map list Current thread is " + Thread.currentThread().getName())
-                        if (view.isLoading) {
-                            return@subscribe
-                        }
-                        oAuthApi.getUser(owner.login)
-                                .bindToLifecycle(view)
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe({
-                                    user: User ->
-                                    Log.i(javaClass.simpleName, "get user")
-                                    if (!view.isLoading) {
-                                        view?.let {
-                                            it.hideLoading()
-                                            it.updateList(index, user)
-                                        }
-                                    }
-                                },
-                                        {
-                                            e ->
-                                            view?.let {
-                                                it.hideLoading()
-                                            }
-                                            Log.e(javaClass.simpleName, e.message)
-                                        })
-                    }
+                    getUserBio(t, view)
                 }
+    }
+
+    private fun getUserBio(t: ArrayList<Owner>, view: ContributorsFragment) {
+        Log.i(javaClass.simpleName, "when map observer Current thread is " + Thread.currentThread().getName())
+        t.forEachIndexed { index, owner ->
+            Log.i(javaClass.simpleName, "when map list Current thread is " + Thread.currentThread().getName())
+            if (view.isLoading) {
+                return
+            }
+            oAuthApi.getUser(owner.login)
+                    .bindToLifecycle(view)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ user: User ->
+                        Log.i(javaClass.simpleName, "get user")
+                        if (!view.isLoading) {
+                            view?.let {
+                                it.hideLoading()
+                                it.updateList(index, user)
+                            }
+                        }
+                    },
+                            { e ->
+                                view?.let {
+                                    it.hideLoading()
+                                }
+                                Log.e(javaClass.simpleName, e.message)
+                            })
+        }
     }
 }

@@ -10,7 +10,7 @@ import android.os.Parcelable
 data class SearchUserResult(
 		val total_count: Int, //39
 		val incomplete_results: Boolean, //false
-		val items: List<Owner>
+		val items: ArrayList<Owner>
 )
 
 data class Item(

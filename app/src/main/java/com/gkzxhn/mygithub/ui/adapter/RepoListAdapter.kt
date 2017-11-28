@@ -5,9 +5,9 @@ import android.text.TextUtils
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.gkzxhn.mygithub.R
+import com.gkzxhn.mygithub.bean.info.ItemBean
 import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.bean.info.RepoItem
-import com.gkzxhn.mygithub.bean.info.TrendingItem
 
 /**
  * Created by 方 on 2017/10/24.
@@ -28,7 +28,7 @@ class RepoListAdapter(datas: List<Parcelable>?) : BaseQuickAdapter<Parcelable, B
             })
             helper.setText(R.id.tv_star, item.stargazers_count.toString())
             helper.setText(R.id.tv_fork, item.forks_count.toString())
-        }else if (item is TrendingItem) {
+        }else if (item is ItemBean) {
             helper!!.setText(R.id.tv_name, item.repo)
             helper.setText(R.id.tv_desc, item.desc)
             helper.setText(R.id.tv_language, item.lang.let {
