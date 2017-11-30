@@ -15,6 +15,7 @@ import com.gkzxhn.mygithub.di.module.GlideApp
 import jp.wasabeef.glide.transformations.BlurTransformation
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
+
 fun ImageView.load(context: Context, url: String) {
     GlideApp.with(context)
             .load(url)
@@ -107,7 +108,7 @@ fun ImageView.load(context: Context, url: String, completeCallback: () -> Unit) 
             .dontAnimate()
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .onlyRetrieveFromCache(true)
-            .listener(object: RequestListener<Drawable> {
+            .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                     completeCallback()
                     return false
@@ -120,3 +121,13 @@ fun ImageView.load(context: Context, url: String, completeCallback: () -> Unit) 
             })
             .into(this)
 }
+fun ImageView.load(context: Context,id:Int){
+    GlideApp.with(context)
+            .load(id)
+            .dontAnimate()
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .into(this)
+
+}
+
+

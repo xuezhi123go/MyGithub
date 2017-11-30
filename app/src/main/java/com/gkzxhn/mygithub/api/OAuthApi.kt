@@ -285,4 +285,9 @@ interface OAuthApi {
             @Query("since") since: String,
             @Query("before") before: String
     ):Observable<List<Notifications>>
+
+    @GET("/users/{username}/received_events")
+    fun getEventsThatAUserHasReceived(
+    @Path("username") username: String
+    ):Observable<List<Event>>
 }

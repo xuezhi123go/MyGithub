@@ -20,10 +20,10 @@ import javax.inject.Inject
 /**
  * Created by 方 on 2017/10/19.
  */
-class LoginActivity :BaseActivity(), BaseView{
+class LoginActivity : BaseActivity(), BaseView {
 
     @Inject lateinit var presenter: LoginPresenter
-    private lateinit var loading : LVGhost
+    private lateinit var loading: LVGhost
 
     val RESULT_OK = 1
 
@@ -67,7 +67,8 @@ class LoginActivity :BaseActivity(), BaseView{
             val password = password.text.toString().trim()
             if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
                 presenter.login(username, password)
-            }else {
+
+            } else {
                 toast("请输入用户名和密码")
             }
         }

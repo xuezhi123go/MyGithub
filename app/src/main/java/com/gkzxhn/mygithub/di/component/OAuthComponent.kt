@@ -34,5 +34,7 @@ interface OAuthComponent {
 
     fun inject(repoDetailActivity: RepoDetailActivity)
 
+    fun inject(eventFragment: EventFragment)
+
     fun inject(searchActivity: SearchActivity)
 }

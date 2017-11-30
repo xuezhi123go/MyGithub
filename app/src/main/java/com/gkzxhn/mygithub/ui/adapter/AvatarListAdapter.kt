@@ -11,6 +11,7 @@ import com.gkzxhn.mygithub.extension.loadRoundConner
  * Created by 方 on 2017/10/27.
  */
 class AvatarListAdapter(datas : ArrayList<Icon2Name>?) : BaseQuickAdapter<Icon2Name, BaseViewHolder>(R.layout.item_avatar, datas) {
+
     override fun convert(helper: BaseViewHolder?, item: Icon2Name?) {
         helper!!.getView<ImageView>(R.id.iv_avatar)
                 .let { it.loadRoundConner(it.context, item!!.avatarUrl) }
