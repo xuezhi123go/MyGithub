@@ -18,6 +18,8 @@ interface OAuthComponent {
 
     fun inject(starsFragment: StarsFragment)
 
+    fun inject(notificationsFragment: NotificationsFragment)
+
     fun inject(issueDetailActivity: IssueDetailActivity)
 
     fun inject(editIssueActivity: EditIssueActivity)
