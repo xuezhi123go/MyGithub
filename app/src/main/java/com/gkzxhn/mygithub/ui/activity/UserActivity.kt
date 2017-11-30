@@ -13,6 +13,7 @@ import com.gkzxhn.balabala.base.BaseActivity
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
+import com.gkzxhn.mygithub.bean.entity.Icon2Name
 import com.gkzxhn.mygithub.bean.info.Owner
 import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.bean.info.User
@@ -96,7 +97,13 @@ class UserActivity : BaseActivity(), BaseView {
         }else if (data is User) {
             login = (data as User).login
             avatar_url = (data as User).avatar_url
+            username = if (TextUtils.isEmpty((data as User).name)) login else (data as User).name
             updateAppbar()
+        }else if (data is Icon2Name) {
+            login = (data as Icon2Name).name
+            username = login
+            avatar_url = (data as Icon2Name).avatarUrl
+            presenter.getUser(login)
         }
         iv_avatar_big.load(this, avatar_url, R.drawable.default_avatar)
         iv_user_header.loadBlur(this, avatar_url)
@@ -117,7 +124,6 @@ class UserActivity : BaseActivity(), BaseView {
     }
 
     private fun updateAppbar() {
-        username = if (TextUtils.isEmpty((data as User).name)) login else (data as User).name
         tv_desc.text = (data as User).bio.let {
             if (!TextUtils.isEmpty(it)) {
                 return@let it

@@ -30,4 +30,5 @@ interface BaseView {
      * 杀死自己
      */
     fun killMyself()
+
 }

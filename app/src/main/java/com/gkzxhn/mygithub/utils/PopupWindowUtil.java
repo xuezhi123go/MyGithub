@@ -1,5 +1,6 @@
 package com.gkzxhn.mygithub.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
@@ -19,6 +20,8 @@ import com.gkzxhn.mygithub.ui.wedgit.BackEditText;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.widget.PopupWindow.INPUT_METHOD_NEEDED;
+
 /**
  * Created by 方 on 2017/8/3.
  */
@@ -31,6 +34,7 @@ public class PopupWindowUtil {
     public static BackEditText popup_live_comment_edit;
     public static TextView popup_live_comment_send;
 
+    @SuppressLint("WrongConstant")
     public static void liveCommentEdit(final Activity context, View view, final LiveCommentResult commentResult) {
         liveCommentResult = commentResult;
         if (commentView == null) {
@@ -48,7 +52,7 @@ public class PopupWindowUtil {
         // 设置背景，这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景
         commentPopup.setBackgroundDrawable(new BitmapDrawable());
         //必须加这两行，不然不会显示在键盘上方
-        commentPopup.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
+        commentPopup.setSoftInputMode(INPUT_METHOD_NEEDED);
         commentPopup.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         // PopupWindow的显示及位置设置
         commentPopup.showAtLocation(view, Gravity.BOTTOM, 0, 0);
@@ -103,12 +107,12 @@ public class PopupWindowUtil {
         }, 200);
     }
 
-    private static void hideSoftInput(Activity context, IBinder windowToken) {
+    public static void hideSoftInput(Activity context, IBinder windowToken) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(windowToken, InputMethodManager.HIDE_IMPLICIT_ONLY); //强制隐藏键盘
     }
 
-    private static void showKeyboard(Activity context, EditText popup_live_comment_edit) {
+    public static void showKeyboard(Activity context, EditText popup_live_comment_edit) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(popup_live_comment_edit, InputMethodManager.SHOW_IMPLICIT);
     }

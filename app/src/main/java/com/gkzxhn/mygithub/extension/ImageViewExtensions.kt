@@ -13,6 +13,7 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.gkzxhn.mygithub.di.module.GlideApp
 import jp.wasabeef.glide.transformations.BlurTransformation
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 
 fun ImageView.load(context: Context, url: String) {
     GlideApp.with(context)
@@ -27,6 +28,15 @@ fun ImageView.loadBlur(context: Context, url: String) {
             .load(url)
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3)))
+            .into(this)
+}
+
+fun ImageView.loadRoundConner(context: Context, url: String) {
+    GlideApp.with(context)
+            .load(url)
+            .transition(withCrossFade())
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(16, 0)))
             .into(this)
 }
 

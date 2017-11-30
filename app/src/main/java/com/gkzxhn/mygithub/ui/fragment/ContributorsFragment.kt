@@ -27,13 +27,15 @@ import javax.inject.Inject
 /**
  * Created by 方 on 2017/11/2.
  */
-class ContributorsFragment constructor(private val repo: Repo,
-                                       private val type : String) : BaseView, BaseFragment() {
+class ContributorsFragment constructor(private val repo: Repo?,
+                                       private val type : String,
+                                       private val q: String = "") : BaseView, BaseFragment() {
 
     @Inject lateinit var presenter:IssuePresenter
+    var isLoading: Boolean = false
 
-    private lateinit var owner : String
-    private lateinit var repoName: String
+    private var owner : String? = null
+    private var repoName: String? = null
 
     private lateinit var adapter: UserListAdapter
 
@@ -48,6 +50,9 @@ class ContributorsFragment constructor(private val repo: Repo,
 
         initRecyclerView()
 
+    }
+
+    override fun onVisible() {
         getNewData()
     }
 
@@ -73,12 +78,14 @@ class ContributorsFragment constructor(private val repo: Repo,
     }
 
     private fun getNewData() {
-        owner = repo.owner.login
-        repoName = repo.name
+        owner = repo?.let {  return@let it.owner.login}
+        repoName = repo?.let {  return@let it.name}
         if (type.equals(IntentConstant.CONTRIBUTORS)) {
-            presenter.getContributors(owner, repoName)
+            presenter.getContributors(owner!!, repoName!!)
         }else if(type.equals(IntentConstant.FORKS)) {
-            presenter.getForks(owner, repoName)
+            presenter.getForks(owner!!, repoName!!)
+        }else if(type.equals(IntentConstant.USERS)){
+            presenter.searchUsers(q)
         }
     }
 
@@ -91,12 +98,14 @@ class ContributorsFragment constructor(private val repo: Repo,
     }
 
     override fun showLoading() {
+        isLoading = true
         srl_issue?.let {
             it.isRefreshing = true
         }
     }
 
     override fun hideLoading() {
+        isLoading = false
         srl_issue?.let {
             it.isRefreshing = false
         }
@@ -126,4 +135,5 @@ class ContributorsFragment constructor(private val repo: Repo,
         super.onDestroy()
         Log.i(javaClass.simpleName, "ondestroy")
     }
+
 }

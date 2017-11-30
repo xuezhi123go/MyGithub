@@ -25,6 +25,7 @@ class HomePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .subscribe(
                         {result ->
                     Log.i(javaClass.simpleName, result.toString())
+                            mView.loadPopUsers(result)
                 }, {
                     e ->
                     Log.e(javaClass.simpleName, e.message)
@@ -67,6 +68,7 @@ class HomePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .subscribe(
                         {result ->
                             Log.i(javaClass.simpleName, result.toString())
+                            mView.loadRepoWeek(result)
                         }, {
                     e ->
                     Log.e(javaClass.simpleName, e.message)

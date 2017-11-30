@@ -4,6 +4,7 @@ import android.widget.ImageView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.gkzxhn.mygithub.R
+import com.gkzxhn.mygithub.bean.entity.Icon2Name
 import com.gkzxhn.mygithub.bean.info.Owner
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.extension.load
@@ -23,6 +24,10 @@ class UserListAdapter(datas : List<Any>?) : BaseQuickAdapter<Any, BaseViewHolder
             helper!!.setText(R.id.tv_username, item.login)
             helper.getView<ImageView>(R.id.iv_avatar)
                     .let { it.load(it.context, item.avatar_url, R.drawable.default_avatar) }
+        }else if (item is Icon2Name) {
+            helper!!.setText(R.id.tv_username, item.name)
+            helper.getView<ImageView>(R.id.iv_avatar)
+                    .let { it.load(it.context, item.avatarUrl, R.drawable.default_avatar) }
         }
     }
 }
