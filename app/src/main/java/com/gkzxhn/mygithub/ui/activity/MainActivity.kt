@@ -24,8 +24,8 @@ import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.MainPresenter
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
+import com.gkzxhn.mygithub.ui.fragment.EventFragment
 import com.gkzxhn.mygithub.ui.fragment.HomeFragment
-import com.gkzxhn.mygithub.ui.fragment.NotificationsFragment
 import com.gkzxhn.mygithub.ui.fragment.ProfileFragment
 import com.tbruyelle.rxpermissions2.Permission
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -81,12 +81,11 @@ class MainActivity : BaseActivity(), BaseView {
         RxPermissions(this)
                 .requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.READ_EXTERNAL_STORAGE)
-                .subscribe({
-                    permission: Permission ->
+                .subscribe({ permission: Permission ->
                     if (permission.granted) {
                         // 用户已经同意该权限
                         Log.d(javaClass.simpleName, permission.name + " is granted.")
-                        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                             //7.0以上该SDK会权限异常
                             mainPresenter.initAutoUpdate()
                         }
@@ -203,7 +202,7 @@ class MainActivity : BaseActivity(), BaseView {
     private fun initFragments() {
         mFragments = ArrayList()
         mFragments.add(HomeFragment())
-        mFragments.add(NotificationsFragment())
+        mFragments.add(EventFragment())
         mFragments.add(ProfileFragment())
     }
 

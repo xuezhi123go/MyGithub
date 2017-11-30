@@ -27,7 +27,9 @@ class NotificationsPresenter @Inject constructor(private val oAuthApi: OAuthApi,
         oAuthApi//.getNotificationsInRepository(owner, repo,
                 .getNotifications(true, false,
                         since = Utils.getFormatTime(Utils.getDateBeforeOneMonth(-1)!!)!!,
-                        before = Utils.getFormatTime(Utils.getTiem())!!)
+                        before = Utils.getFormatTime(Utils.getTiem())!!
+                        //since = "abc",before = "bcd"
+                )
                 .bindToLifecycle(view as NotificationsFragment)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -39,10 +41,15 @@ class NotificationsPresenter @Inject constructor(private val oAuthApi: OAuthApi,
 
                         Log.i(javaClass.simpleName, "notifications = " + notifications.toString())
 
+                        Log.i(javaClass.simpleName, "since = " + Utils.getFormatTime(Utils.getDateBeforeOneMonth(-1)!!)!!)
+                        Log.i(javaClass.simpleName, "before = " + Utils.getFormatTime(Utils.getTiem())!!)
+
                         view.loadData(notifications)
 
                         //view.loadData()
                     } else {
+                        Log.i(javaClass.simpleName, "since = " + Utils.getFormatTime(Utils.getDateBeforeOneMonth(-1)!!)!!)
+                        Log.i(javaClass.simpleName, "before = " + Utils.getFormatTime(Utils.getTiem())!!)
                         Log.i(javaClass.simpleName, "notificationgs = " + notifications.toString())
                         Log.i(javaClass.simpleName, "没有notifications数据")
                         view.context.toast("没有消息数据")
