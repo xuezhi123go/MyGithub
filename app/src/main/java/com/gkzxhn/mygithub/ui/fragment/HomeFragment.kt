@@ -123,14 +123,22 @@ class HomeFragment : BaseFragment(), BaseView{
     }
 
     fun loadRepoWeek(result: TrendingResults){
-        trendingRepoList = result.items.items as ArrayList<ItemBean>
-        val list = result.items.items
+        trendingRepoList = result.items as ArrayList<ItemBean>
+        val list = result.items
                 .map { trendingItem ->
                     return@map Icon2Name(trendingItem.avatars[0].replace("s=40", "s=80"),
                             trendingItem.repo.let { return@let it.substring(it.indexOf("/") + 1) },
                             "repo")
                 }
         repoWeekAdapter.setNewData(list)
+        repoWeekAdapter.setOnItemClickListener { adapter, view, position ->
+            val user = adapter.data[position] as Parcelable
+            val intent = Intent(context, UserActivity::class.java)
+            val bundle = Bundle()
+            bundle.putParcelable(IntentConstant.User, user)
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
     }
 
     fun loadPopUsers(result: SearchUserResult) {

@@ -10,8 +10,8 @@ import android.os.Parcelable
 
 data class TrendingResults(
 		val count: Int, //3
-		val items: Items,
-		val msg: String //suc
+        val items: List<ItemBean>,
+        val msg: String //suc
 )
 
 data class Items(
