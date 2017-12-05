@@ -74,7 +74,7 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                         {result ->
                             Log.i(javaClass.simpleName, result.toString())
                             view.hideLoading()
-                            view.loadData(result.items.items)
+                            view.loadData(result.items)
                         }, {
                     e ->
                     Log.e(javaClass.simpleName, e.message)

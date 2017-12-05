@@ -140,6 +140,8 @@ class RepoListActivity :BaseActivity(), BaseView {
                 mBundle.putParcelable(IntentConstant.REPO, data)
                 intent.putExtras(mBundle)
                 startActivity(intent)
+            }else if (data is ItemBean) {
+
             }
         }
         rv_repo_list.adapter = repoListAdapter
