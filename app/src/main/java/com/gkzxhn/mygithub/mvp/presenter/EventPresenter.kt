@@ -34,7 +34,7 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     {view.context.toast("没有数据")}
                 }, {e ->
                     Log.e(javaClass.simpleName, e.message)
-                    view.context.toast("网络错误")})
+                    view.context.toast("请先登录")})
     }
     fun subscribe() {
         rxBus.toFlowable(Event::class.java)

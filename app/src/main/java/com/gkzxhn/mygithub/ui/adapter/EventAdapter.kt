@@ -32,7 +32,8 @@ class EventAdapter(datas: List<Event>?) : BaseQuickAdapter<Event, BaseViewHolder
         } else {
             did = "*等我改*"
             helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
-            TODO()//这里有几种不同的event判断，还没理清。
+            //TODO("not implemented")//这里有几种不同的event判断，还没理清。
+            //这个todo会造成程序崩溃。。。
         }
 
         helper!!.setText(R.id.tv_new_date_notification, toNow)
