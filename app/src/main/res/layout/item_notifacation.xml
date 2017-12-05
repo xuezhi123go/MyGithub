@@ -13,10 +13,10 @@
 
         <ImageView
             android:id="@+id/iv_state_icon"
-            android:layout_width="@dimen/dimen_20"
-            android:layout_height="@dimen/dimen_20"
-            android:layout_marginBottom="@dimen/dimen_5"
-            android:layout_marginLeft="@dimen/dimen_42"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="22dp"
             android:layout_marginTop="@dimen/dimen_8"
             android:src="@drawable/stared_icon" />
 
@@ -27,24 +27,24 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_8"
             android:paddingLeft="@dimen/dimen_8"
-            android:textSize="@dimen/sp_14"
-            android:text="date" />
+            android:text="date"
+            android:textSize="@dimen/sp_12" />
 
     </LinearLayout>
 
     <ImageView
         android:id="@+id/iv_avatar"
-        android:layout_width="@dimen/dimen_47"
-        android:layout_height="@dimen/dimen_47"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:layout_below="@+id/ll_notification_state"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/dimen_15" />
+        android:layout_marginLeft="7dp" />
     <!--android:src="@drawable/default_avatar" -->
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_47"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/ll_notification_state"
         android:layout_marginLeft="@dimen/dimen_8"
         android:layout_marginRight="@dimen/dimen_8"
@@ -55,12 +55,11 @@
 
         <TextView
             android:id="@+id/tv_new_data_notification"
-            style="@style/tv_name"
-            android:textSize="@dimen/sp_14"
-            android:layout_marginLeft="@dimen/dimen_8"
-            android:text="2342342352jkljjkljglj" />
-        <!--android:gravity="center"-->
-        <!--android:maxLines="1"-->
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2342342352jkljjkljglj"
+            android:textColor="@color/user_blue"
+            android:textSize="@dimen/sp_12" />
     </LinearLayout>
 
     <TextView
@@ -68,14 +67,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/iv_avatar"
-        android:paddingLeft="15dp"
-        />
+        android:paddingLeft="7dp" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_below="@+id/tv_old_data_notification"
-        android:layout_marginLeft="@dimen/dimen_15"
-        android:layout_marginTop="@dimen/dimen_2"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="1dp"
         android:src="@color/gray_back" />
 </RelativeLayout>
