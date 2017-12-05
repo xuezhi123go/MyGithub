@@ -3,6 +3,7 @@ package com.gkzxhn.mygithub.ui.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Gravity
@@ -72,7 +73,7 @@ class EventFragment : BaseFragment(), BaseView {
             getNewData()
         }
         adapter = EventAdapter(null)
-        rv_notifications.layoutManager = LinearLayoutManager(context)
+        rv_notifications.layoutManager = LinearLayoutManager(context) as RecyclerView.LayoutManager?
         rv_notifications.adapter = adapter
         presenter.subscribe()
         getNewData()
