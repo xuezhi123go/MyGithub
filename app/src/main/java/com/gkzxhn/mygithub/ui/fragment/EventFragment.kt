@@ -58,6 +58,7 @@ class EventFragment : BaseFragment(), BaseView {
         }
         loading.stopAnim()
         fl_notifications.removeView(loading)
+
     }
 
     override fun showMessage() {

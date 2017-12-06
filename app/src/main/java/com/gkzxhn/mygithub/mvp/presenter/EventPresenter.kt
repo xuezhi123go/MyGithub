@@ -1,15 +1,17 @@
 package com.gkzxhn.mygithub.mvp.presenter
 
 import android.util.Log
+import android.view.View
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.api.OAuthApi
-import com.gkzxhn.mygithub.bean.info.Event
+import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.ui.fragment.EventFragment
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_notifications.*
 import javax.inject.Inject
 
 /**
@@ -27,20 +29,34 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate { view.hideLoading() }
                 .subscribe({ evnet ->
-                    if (evnet.size > 0){
+                    if (evnet.size > 0) {
                         view.loadData(evnet)
-                        Log.i(javaClass.simpleName,"event = "+evnet[2])
-                    }else
-                    {view.context.toast("没有数据")}
-                }, {e ->
+                        Log.i(javaClass.simpleName, "event = " + evnet[2])
+                        view.tv_notifications_login.visibility = View.GONE
+                    } else {
+                        view.context.toast("没有数据")
+                    }
+                }, { e ->
                     Log.e(javaClass.simpleName, e.message)
-                    view.context.toast("请先登录")})
+                    view.context.toast("请先登录")
+                    view.tv_notifications_login.visibility = View.VISIBLE
+                })
     }
-    fun subscribe() {
+
+    /*fun subscribe() {
         rxBus.toFlowable(Event::class.java)
                 .bindToLifecycle(view as EventFragment)
                 .subscribe(
                         { event: Event? ->
+                            view.getNewData()
+                        }
+                )
+    }*/
+    fun subscribe() {
+        rxBus.toFlowable(User::class.java)
+                .bindToLifecycle(view as EventFragment)
+                .subscribe(
+                        { user: User? ->
                             view.getNewData()
                         }
                 )
