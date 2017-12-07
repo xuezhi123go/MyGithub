@@ -31,7 +31,7 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .subscribe({ evnet ->
                     if (evnet.size > 0) {
                         view.loadData(evnet)
-                        Log.i(javaClass.simpleName, "event = " + evnet[2])
+                        Log.i(javaClass.simpleName, "event = " + evnet)
                         view.tv_notifications_login.visibility = View.GONE
                     } else {
                         view.context.toast("没有数据")
@@ -61,4 +61,21 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                         }
                 )
     }
+
+    fun getRepoDetail(owner: String, repo: String) {
+
+        oAuthApi.get(owner, repo)
+                .bindToLifecycle(view as EventFragment)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ repo ->
+
+                    view.toRepoDetailActivity(repo)
+
+                }, { e ->
+                    Log.i(javaClass.simpleName, e.message)
+                })
+
+    }
+
 }

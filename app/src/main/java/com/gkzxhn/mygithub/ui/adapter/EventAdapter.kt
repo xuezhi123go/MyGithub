@@ -23,12 +23,18 @@ class EventAdapter(datas: List<Event>?) : BaseQuickAdapter<Event, BaseViewHolder
 
         var toNow = getDiffTime(creatTiem)
 
-        if (item!!.type.equals("PushEvent")) {
+        if ("PushEvent".equals(item!!.type)) {
             did = " pushed to "
             helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
             helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.push_icon) }
-        } else if (item!!.type.equals("")) {
-
+        } else if ("WatchEvent".equals(item!!.type)) {
+            did = " Watched "
+            helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
+            helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.push_icon) }
+        } else if ("MemberEvent".equals(item!!.type)) {
+            did = " created the "
+            helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
+            helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.stared_icon) }
         } else {
             did = "*等我改*"
             helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)

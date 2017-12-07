@@ -32,14 +32,14 @@ import javax.inject.Inject
 /**
  * Created by 方 on 2017/10/27.
  */
-class RepoListActivity :BaseActivity(), BaseView {
+class RepoListActivity : BaseActivity(), BaseView {
 
     private lateinit var repoListAdapter: RepoListAdapter
     private lateinit var userListAdapter: UserListAdapter
-    private lateinit var action : String
+    private lateinit var action: String
     private lateinit var loading: LVGhost
 
-    @Inject lateinit var presenter : RepoListPresenter
+    @Inject lateinit var presenter: RepoListPresenter
 
     override fun launchActivity(intent: Intent) {
 
@@ -72,7 +72,7 @@ class RepoListActivity :BaseActivity(), BaseView {
         setToolBar()
 
         action = intent.action
-        when(action) {
+        when (action) {
             IntentConstant.MY_REPOS -> {
                 toolbar.title = SharedPreConstant.USER_SP.getSharedPreference()
                         .getString(SharedPreConstant.USER_NAME, "")
@@ -91,7 +91,7 @@ class RepoListActivity :BaseActivity(), BaseView {
                 setReposRecyclerView()
                 if (list.size > 0) {
                     repoListAdapter.setNewData(list as List<Parcelable>?)
-                }else {
+                } else {
                     presenter.getTrendingRepo()
                 }
             }
@@ -102,7 +102,7 @@ class RepoListActivity :BaseActivity(), BaseView {
                 if (list.size > 0) {
                     userListAdapter.setNewData(list as List<Parcelable>?)
                     presenter.getUserBio(list, this)
-                }else {
+                } else {
                     presenter.getPopularUser()
                 }
             }
@@ -123,7 +123,7 @@ class RepoListActivity :BaseActivity(), BaseView {
             startActivity(intent)
         }
         rv_repo_list.adapter = userListAdapter
-        rv_repo_list.addItemDecoration(RecycleViewDivider(this, LinearLayoutManager.HORIZONTAL,2,
+        rv_repo_list.addItemDecoration(RecycleViewDivider(this, LinearLayoutManager.HORIZONTAL, 2,
                 App.getInstance().resources.getColor(R.color.gray_back)))
     }
 
@@ -140,7 +140,7 @@ class RepoListActivity :BaseActivity(), BaseView {
                 mBundle.putParcelable(IntentConstant.REPO, data)
                 intent.putExtras(mBundle)
                 startActivity(intent)
-            }else if (data is ItemBean) {
+            } else if (data is ItemBean) {
 
             }
         }
@@ -157,15 +157,14 @@ class RepoListActivity :BaseActivity(), BaseView {
 
     fun loadPopUsers(result: SearchUserResult) {
         val list = result.items
-                .map {
-                    item ->
+                .map { item ->
                     return@map Icon2Name(item.avatar_url, item.login, "user")
                 }
         userListAdapter.setNewData(list)
         presenter.getUserBio(list, this)
     }
 
-    fun updateList(position : Int, data : Any){
+    fun updateList(position: Int, data: Any) {
         userListAdapter.data[position] = data
         userListAdapter.notifyItemChanged(position, data)
     }
