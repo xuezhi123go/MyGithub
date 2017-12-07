@@ -29,13 +29,13 @@ import javax.inject.Inject
 /**
  * Created by 方 on 2017/10/19.
  */
-class HomeFragment : BaseFragment(), BaseView{
+class HomeFragment : BaseFragment(), BaseView {
 
     private var trendingRepoList = arrayListOf<ItemBean>()
 
-    private lateinit var repoWeekAdapter : AvatarListAdapter
-    private lateinit var popUsersAdapter : AvatarListAdapter
-    @Inject lateinit var presenter : HomePresenter
+    private lateinit var repoWeekAdapter: AvatarListAdapter
+    private lateinit var popUsersAdapter: AvatarListAdapter
+    @Inject lateinit var presenter: HomePresenter
 
     override fun launchActivity(intent: Intent) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -83,7 +83,7 @@ class HomeFragment : BaseFragment(), BaseView{
             startActivity(Intent(context, SearchActivity::class.java))
         }
 
-        ll_see_all1.setOnClickListener{
+        ll_see_all1.setOnClickListener {
             val data = Bundle()
             data.putParcelableArrayList(IntentConstant.REPO_ENTITIES, trendingRepoList)
             val intent = Intent(context, RepoListActivity::class.java)
@@ -92,7 +92,7 @@ class HomeFragment : BaseFragment(), BaseView{
             startActivity(intent)
         }
 
-        ll_see_all3.setOnClickListener{
+        ll_see_all3.setOnClickListener {
             val data = Bundle()
             data.putParcelableArrayList(IntentConstant.USERS, popUsersAdapter.data as ArrayList)
             val intent = Intent(context, RepoListActivity::class.java)
@@ -122,7 +122,7 @@ class HomeFragment : BaseFragment(), BaseView{
         return inflater!!.inflate(R.layout.fragment_home, container, false)
     }
 
-    fun loadRepoWeek(result: TrendingResults){
+    fun loadRepoWeek(result: TrendingResults) {
         trendingRepoList = result.items as ArrayList<ItemBean>
         val list = result.items
                 .map { trendingItem ->
@@ -143,13 +143,11 @@ class HomeFragment : BaseFragment(), BaseView{
 
     fun loadPopUsers(result: SearchUserResult) {
         val list = result.items
-                .map {
-                    item ->
+                .map { item ->
                     return@map Icon2Name(item.avatar_url, item.login, "user")
                 }
         popUsersAdapter.setNewData(list)
-        popUsersAdapter.setOnItemClickListener {
-            adapter, view, position ->
+        popUsersAdapter.setOnItemClickListener { adapter, view, position ->
             val user = adapter.data[position] as Parcelable
             val intent = Intent(context, UserActivity::class.java)
             val bundle = Bundle()

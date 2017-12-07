@@ -33,7 +33,7 @@ interface OAuthApi {
     @GET("/user/repos")
     fun getRepos(@Query("visibility") visibility: String = "all",
                  @Query("affiliation") affiliation: String = "owner,collaborator,organization_member",
-//                 @Query("type")type :String = "all",
+//               @Query("type")type :String = "all",
                  @Query("sort") sort: String = "full_name",
                  @Query("direction") direction: String = "asc"): Observable<List<Repo>>
 
@@ -284,10 +284,10 @@ interface OAuthApi {
             @Query("participating") participating: Boolean = false,
             @Query("since") since: String,
             @Query("before") before: String
-    ):Observable<List<Notifications>>
+    ): Observable<List<Notifications>>
 
     @GET("/users/{username}/received_events")
     fun getEventsThatAUserHasReceived(
-    @Path("username") username: String
-    ):Observable<List<Event>>
+            @Path("username") username: String
+    ): Observable<List<Event>>
 }

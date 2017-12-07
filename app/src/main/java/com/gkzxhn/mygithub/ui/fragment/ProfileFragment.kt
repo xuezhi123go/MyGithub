@@ -97,10 +97,10 @@ class ProfileFragment : BaseFragment(), BaseView {
     }
 
     private fun setClickListener() {
-        account_view.setOnClickListener{
+        account_view.setOnClickListener {
             if (TextUtils.isEmpty(token)) {
                 startActivity(Intent(context, LoginActivity::class.java))
-            }else {
+            } else {
                 val intent = Intent(context, UserActivity::class.java)
                 intent.action = IntentConstant.MINE_ACTION
                 startActivity(intent)
@@ -118,6 +118,7 @@ class ProfileFragment : BaseFragment(), BaseView {
         rv_organization.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         iconAdapter = IconListAdapter(null)
         iconAdapter.setOnItemClickListener { adapter, view, position ->
+
             val org = (adapter.data[position] as Organization).login
             val intent = Intent(context, RepoListActivity::class.java)
             intent.action = IntentConstant.ORG_REPOS
@@ -161,7 +162,7 @@ class ProfileFragment : BaseFragment(), BaseView {
                 .inject(this)
     }
 
-    fun loadData(orgs: List<Organization>){
+    fun loadData(orgs: List<Organization>) {
         iconAdapter.setNewData(orgs)
     }
 }

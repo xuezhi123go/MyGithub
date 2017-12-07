@@ -3,7 +3,6 @@ package com.gkzxhn.mygithub.ui.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Gravity
@@ -16,11 +15,14 @@ import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.info.Event
+import com.gkzxhn.mygithub.bean.info.Repo
+import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.mvp.presenter.EventPresenter
+import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
 import com.gkzxhn.mygithub.ui.adapter.EventAdapter
 import com.ldoublem.loadingviewlib.view.LVGhost
 import kotlinx.android.synthetic.main.fragment_notifications.*
@@ -32,7 +34,7 @@ import javax.inject.Inject
 class EventFragment : BaseFragment(), BaseView {
 
     private lateinit var loading: LVGhost
-    private lateinit var event:Event
+    private lateinit var event: Event
 
     @Inject
     lateinit var presenter: EventPresenter
@@ -70,14 +72,23 @@ class EventFragment : BaseFragment(), BaseView {
     }
 
     override fun initContentView() {
+        presenter.subscribe()
         srl_notifications.setOnRefreshListener {
             getNewData()
         }
-        adapter = EventAdapter(null)
-        rv_notifications.layoutManager = LinearLayoutManager(context) as RecyclerView.LayoutManager?
-        rv_notifications.adapter = adapter
-        presenter.subscribe()
         getNewData()
+
+        adapter = EventAdapter(null)
+        rv_notifications.layoutManager = LinearLayoutManager(context)
+        adapter.setOnItemClickListener { adapter, view, position ->
+
+            var name = (adapter.data[position] as Event).repo.name.split("/")
+            var owenr = name[0]
+            var repo = name[1]
+            presenter.getRepoDetail(owenr, repo)
+        }
+        rv_notifications.adapter = adapter
+
     }
 
     override fun getStatusBar(): View? {
@@ -112,5 +123,14 @@ class EventFragment : BaseFragment(), BaseView {
                 .getSharedPreference()
                 .getString(SharedPreConstant.USER_NAME, "")
         )
+
+    }
+
+    fun toRepoDetailActivity(repo: Repo) {
+        val intent = Intent(context, RepoDetailActivity::class.java)
+        val mBundle = Bundle()
+        mBundle.putParcelable(IntentConstant.REPO, repo)
+        intent.putExtras(mBundle)
+        startActivity(intent)
     }
 }
