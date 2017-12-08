@@ -7,7 +7,8 @@
     <View
         android:id="@+id/status_view_notifications"
         android:layout_width="match_parent"
-        android:layout_height="26dp" />
+        android:layout_height="26dp"
+        android:background="@color/toolBar"/>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_notifications"
