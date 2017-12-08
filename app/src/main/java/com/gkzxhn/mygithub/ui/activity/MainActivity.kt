@@ -179,6 +179,7 @@ class MainActivity : BaseActivity(), BaseView {
                             .hide(mFragments[0])
                             .hide(mFragments[2])
                             .commit()
+                    hideRedPoint()
                     return@setOnNavigationItemSelectedListener true
                 }
                 navigation_profile -> {
