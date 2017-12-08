@@ -33,10 +33,12 @@
                     app:menu="@menu/navigation">
 
                     <ImageView
+                        android:id="@+id/iv_red_point"
                         android:layout_width="10dp"
                         android:layout_height="10dp"
                         android:layout_marginLeft="200dp"
-                        android:src="@drawable/red_point"></ImageView>
+                        android:src="@drawable/red_point"
+                        android:visibility="gone"></ImageView>
                 </android.support.design.widget.BottomNavigationView>
             </LinearLayout>
 

@@ -21,9 +21,11 @@ import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.getSharedPreference
+import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.EventPresenter
 import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
 import com.gkzxhn.mygithub.ui.adapter.EventAdapter
+import com.gkzxhn.mygithub.utils.SPUtil
 import com.ldoublem.loadingviewlib.view.LVGhost
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import javax.inject.Inject
@@ -73,9 +75,11 @@ class EventFragment : BaseFragment(), BaseView {
 
     override fun initContentView() {
         presenter.subscribe()
+
         srl_notifications.setOnRefreshListener {
             getNewData()
         }
+
         getNewData()
 
         adapter = EventAdapter(null)
@@ -114,8 +118,8 @@ class EventFragment : BaseFragment(), BaseView {
     }
 
     fun loadData(event: List<Event>) {
-        Log.i(javaClass.simpleName, event[0].toString())
         adapter.setNewData(event)
+        Log.i(javaClass.simpleName, event[0].toString())
     }
 
     fun getNewData() {
@@ -132,5 +136,12 @@ class EventFragment : BaseFragment(), BaseView {
         mBundle.putParcelable(IntentConstant.REPO, repo)
         intent.putExtras(mBundle)
         startActivity(intent)
+    }
+
+    fun test1(){
+        var old = SPUtil.get(context,"event","")
+        if (!"a".equals(old)){
+            context.toast("空了")
+        }
     }
 }

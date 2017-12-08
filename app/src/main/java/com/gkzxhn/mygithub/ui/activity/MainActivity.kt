@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.gkzxhn.balabala.base.BaseActivity
@@ -78,6 +79,7 @@ class MainActivity : BaseActivity(), BaseView {
         setDrawer()
 
         mainPresenter.subscribe()
+
         RxPermissions(this)
                 .requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -177,6 +179,7 @@ class MainActivity : BaseActivity(), BaseView {
                             .hide(mFragments[0])
                             .hide(mFragments[2])
                             .commit()
+                    hideRedPoint()
                     return@setOnNavigationItemSelectedListener true
                 }
                 navigation_profile -> {
@@ -234,4 +237,20 @@ class MainActivity : BaseActivity(), BaseView {
                     back = 0
                 }
     }
+
+    /**
+     * 隐藏小红点
+     */
+    fun hideRedPoint() {
+        iv_red_point.visibility = View.GONE
+    }
+
+    /**
+     * 显示小红点
+     */
+    fun showRedPoint() {
+        iv_red_point.visibility = View.VISIBLE
+
+    }
+
 }
