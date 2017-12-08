@@ -3,6 +3,7 @@ package com.gkzxhn.mygithub.mvp.presenter
 import android.util.Log
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.balabala.ui.activity.MainActivity
+import com.gkzxhn.mygithub.bean.info.Event
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.utils.AppUtils
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
@@ -15,23 +16,33 @@ import javax.inject.Inject
 /**
  * Created by 方 on 2017/10/24.
  */
-class MainPresenter @Inject constructor(private val rxBus: RxBus, private val view: BaseView){
+class MainPresenter @Inject constructor(private val rxBus: RxBus, private val view: BaseView) {
 
-    fun subscribe(){
+    fun subscribe() {
         rxBus.toFlowable(User::class.java)
                 .bindToLifecycle(view as MainActivity)
                 .subscribe(
-                        {user: User? ->
+                        { user: User? ->
                             view.toLogin(user!!)
                         }
                 )
+        rxBus.toFlowable(Event::class.java)
+                .bindToLifecycle(view as MainActivity)
+                .subscribe({ event: Event? ->
+                    Log.i(javaClass.simpleName, "小红点的消息")
+
+                    view.showRedPoint()
+                })
     }
 
+    fun SendMessage(){
+        rxBus.post(GetNews("拉取消息数据"))
+    }
 
     //初始化自动更新对象
-    private lateinit var updManager : IFlytekUpdate
+    private lateinit var updManager: IFlytekUpdate
 
-    fun initAutoUpdate(){
+    fun initAutoUpdate() {
         updManager = IFlytekUpdate.getInstance(view as MainActivity)
         //开启调试模式，默认不开启
 //        updManager.setDebugMode(true)
@@ -43,17 +54,19 @@ class MainPresenter @Inject constructor(private val rxBus: RxBus, private val vi
         updManager.setParameter(UpdateConstants.EXTRA_STYLE, UpdateConstants.UPDATE_UI_DIALOG)
 //        updManager.setParameter(UpdateConstants.EXTRA_STYLE, UpdateConstants.UPDATE_UI_NITIFICATION);
         // 启动自动更新
-        updManager.autoUpdate(view,  { errorCode, updateInfo ->
+        updManager.autoUpdate(view, { errorCode, updateInfo ->
             Log.i(javaClass.simpleName, "errorCode $errorCode")
-            if(errorCode == UpdateErrorCode.OK && updateInfo!= null) {
+            if (errorCode == UpdateErrorCode.OK && updateInfo != null) {
                 Log.i(javaClass.simpleName, "updateInfo Url ${updateInfo.downloadUrl}")
                 Log.i(javaClass.simpleName, "updateInfo Version ${updateInfo.updateVersionCode}")
                 val versionCode = AppUtils.getVersionCode(view)
-                if(updateInfo.updateVersionCode == versionCode.toString()) {
+                if (updateInfo.updateVersionCode == versionCode.toString()) {
                     return@autoUpdate
                 }
                 updManager.showUpdateInfo(view, updateInfo)
             }
         })
     }
+
+    internal inner class GetNews(var info: String)
 }

@@ -7,6 +7,7 @@ import com.gkzxhn.mygithub.api.OAuthApi
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.ui.fragment.EventFragment
+import com.gkzxhn.mygithub.utils.SPUtil
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                                          private val view: BaseView,
                                          private val rxBus: RxBus) {
+
     fun getEvents(username: String) {
         view.showLoading()
         oAuthApi.getEventsThatAUserHasReceived(username)
@@ -28,30 +30,27 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate { view.hideLoading() }
-                .subscribe({ evnet ->
-                    if (evnet.size > 0) {
-                        view.loadData(evnet)
-                        Log.i(javaClass.simpleName, "event = " + evnet)
+                .subscribe({ event ->
+                    if (event.size > 0) {
+                        view.loadData(event)
+
+                        if (!event.toString().equals(SPUtil.get(view.context, "event", ""))) {
+                            rxBus.post(event[0])
+                            SPUtil.put(view.context, "event", event.toString())
+                        }
+
+                        Log.i(javaClass.simpleName, "event = " + event)
                         view.tv_notifications_login.visibility = View.GONE
                     } else {
                         view.context.toast("没有数据")
                     }
                 }, { e ->
-                    Log.e(javaClass.simpleName, e.message)
+                    Log.e(javaClass.simpleName, "e = " + e.message)
                     view.context.toast("请先登录")
                     view.tv_notifications_login.visibility = View.VISIBLE
                 })
     }
 
-    /*fun subscribe() {
-        rxBus.toFlowable(Event::class.java)
-                .bindToLifecycle(view as EventFragment)
-                .subscribe(
-                        { event: Event? ->
-                            view.getNewData()
-                        }
-                )
-    }*/
     fun subscribe() {
         rxBus.toFlowable(User::class.java)
                 .bindToLifecycle(view as EventFragment)
@@ -60,6 +59,11 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                             view.getNewData()
                         }
                 )
+        rxBus.toFlowable(MainPresenter.GetNews::class.java)
+                .bindToLifecycle(view as EventFragment)
+                .subscribe({ t: MainPresenter.GetNews ->
+                    view.getNewData()
+                })
     }
 
     fun getRepoDetail(owner: String, repo: String) {
