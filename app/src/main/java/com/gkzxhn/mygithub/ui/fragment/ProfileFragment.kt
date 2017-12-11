@@ -21,10 +21,10 @@ import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.extension.load
-import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.ProfilePresenter
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
 import com.gkzxhn.mygithub.ui.activity.RepoListActivity
+import com.gkzxhn.mygithub.ui.activity.SettingActivity
 import com.gkzxhn.mygithub.ui.activity.UserActivity
 import com.gkzxhn.mygithub.ui.adapter.IconListAdapter
 import com.ldoublem.loadingviewlib.view.LVGhost
@@ -107,7 +107,9 @@ class ProfileFragment : BaseFragment(), BaseView {
             }
         }
         setting_layout.setOnClickListener {
-            context.toast("进入设置")
+            var intent = Intent(context,SettingActivity::class.java)
+            startActivity(intent)
+            //context.toast("进入设置")
         }
     }
 

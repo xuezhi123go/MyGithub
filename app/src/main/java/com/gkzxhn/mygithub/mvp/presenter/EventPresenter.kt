@@ -59,11 +59,7 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                             view.getNewData()
                         }
                 )
-        rxBus.toFlowable(MainPresenter.GetNews::class.java)
-                .bindToLifecycle(view as EventFragment)
-                .subscribe({ t: MainPresenter.GetNews ->
-                    view.getNewData()
-                })
+
     }
 
     fun getRepoDetail(owner: String, repo: String) {
