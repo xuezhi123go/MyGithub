@@ -3,6 +3,7 @@ package com.gkzxhn.mygithub.mvp.presenter
 import android.util.Log
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.balabala.ui.activity.MainActivity
+import com.gkzxhn.mygithub.bean.entity.FinishMain
 import com.gkzxhn.mygithub.bean.info.Event
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.utils.AppUtils
@@ -33,11 +34,13 @@ class MainPresenter @Inject constructor(private val rxBus: RxBus, private val vi
 
                     view.showRedPoint()
                 })
+        rxBus.toFlowable(FinishMain::class.java)
+                .subscribe({
+                    view.finish()
+                }
+                )
     }
 
-    fun SendMessage(){
-        rxBus.post(GetNews("拉取消息数据"))
-    }
 
     //初始化自动更新对象
     private lateinit var updManager: IFlytekUpdate
@@ -68,5 +71,4 @@ class MainPresenter @Inject constructor(private val rxBus: RxBus, private val vi
         })
     }
 
-    internal inner class GetNews(var info: String)
 }

@@ -74,6 +74,7 @@ class EventFragment : BaseFragment(), BaseView {
     }
 
     override fun initContentView() {
+
         presenter.subscribe()
 
         srl_notifications.setOnRefreshListener {
@@ -123,11 +124,9 @@ class EventFragment : BaseFragment(), BaseView {
     }
 
     fun getNewData() {
-        presenter.getEvents(SharedPreConstant.USER_SP
-                .getSharedPreference()
-                .getString(SharedPreConstant.USER_NAME, "")
-        )
-
+        var string:String = SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, "")
+        Log.i(javaClass.simpleName,"USER_NAME = "+string)
+        presenter.getEvents(SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, ""))
     }
 
     fun toRepoDetailActivity(repo: Repo) {
@@ -138,9 +137,9 @@ class EventFragment : BaseFragment(), BaseView {
         startActivity(intent)
     }
 
-    fun test1(){
-        var old = SPUtil.get(context,"event","")
-        if (!"a".equals(old)){
+    fun test1() {
+        var old = SPUtil.get(context, "event", "")
+        if (!"a".equals(old)) {
             context.toast("空了")
         }
     }
