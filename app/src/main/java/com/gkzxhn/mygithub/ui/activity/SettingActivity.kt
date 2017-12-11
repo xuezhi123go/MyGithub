@@ -5,11 +5,20 @@ import android.os.Bundle
 import com.gkzxhn.balabala.base.BaseActivity
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
+import com.gkzxhn.mygithub.constant.SharedPreConstant
+import com.gkzxhn.mygithub.extension.edit
+import com.gkzxhn.mygithub.extension.getSharedPreference
+import com.gkzxhn.mygithub.mvp.presenter.SettingPresenter
+import kotlinx.android.synthetic.main.activity_setting.*
+import javax.inject.Inject
 
 /**
  * Created by Xuezhi on 2017/12/8.
  */
 class SettingActivity : BaseActivity(), BaseView {
+
+    @Inject lateinit var settingPresenter:SettingPresenter
+
     override fun launchActivity(intent: Intent) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -34,8 +43,24 @@ class SettingActivity : BaseActivity(), BaseView {
 
         setContentView(R.layout.activity_setting)
 
+        setClickListener()
+    }
 
+    private fun setClickListener() {
 
+        tv_logout.setOnClickListener{
+            SharedPreConstant.USER_SP.getSharedPreference()
+                    .edit {
+                        remove(SharedPreConstant.ACCESS_TOKEN)
+                        //remove(SharedPreConstant.USER_NAME)
+                        putString(SharedPreConstant.USER_NAME,"")
+                    }
+            intent = Intent(this,LoginActivity::class.java)
+            startActivity(intent)
+            //settingPresenter.sentMessage()
+            finish()
+        }
 
     }
+
 }

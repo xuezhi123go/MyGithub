@@ -32,6 +32,8 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .doAfterTerminate { view.hideLoading() }
                 .subscribe({ event ->
                     if (event.size > 0) {
+                        view.tv_notifications_login.visibility = View.GONE
+                        view.srl_notifications.visibility = View.VISIBLE
                         view.loadData(event)
 
                         if (!event.toString().equals(SPUtil.get(view.context, "event", ""))) {
@@ -48,6 +50,7 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     Log.e(javaClass.simpleName, "e = " + e.message)
                     view.context.toast("请先登录")
                     view.tv_notifications_login.visibility = View.VISIBLE
+                    view.srl_notifications.visibility = View.GONE
                 })
     }
 
