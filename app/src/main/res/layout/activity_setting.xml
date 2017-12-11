@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/status_view"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:background="@color/blue_grey" />
+
+    <Toolbar
+        android:id="@+id/tb_setting"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_height"
+        android:background="@color/blue_grey">
+
+        <TextView
+            android:id="@+id/tv_setting_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="28dp"
+            android:layout_toRightOf="@+id/iv_avatar_small"
+            android:text="@string/title_setting"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16" />
+    </Toolbar>
+
+    <LinearLayout
+        android:id="@+id/setting_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_setting"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dimen_10"
+        android:paddingRight="@dimen/dimen_10">
+
+        <TextView
+            android:paddingLeft="@dimen/dimen_5"
+            android:id="@+id/tv_change_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:text="修改头像" />
+
+        <TextView
+            android:paddingLeft="@dimen/dimen_5"
+            android:id="@+id/tv_change_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:text="修改名字" />
+        <TextView
+            android:paddingLeft="@dimen/dimen_5"
+            android:id="@+id/tv_history"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:text="历史记录" />
+        <TextView
+            android:paddingLeft="@dimen/dimen_5"
+            android:id="@+id/tv_logout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:text="注销" />
+
+    </LinearLayout>
+
+</LinearLayout>
