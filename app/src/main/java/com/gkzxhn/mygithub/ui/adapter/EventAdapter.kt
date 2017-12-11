@@ -28,11 +28,11 @@ class EventAdapter(datas: List<Event>?) : BaseQuickAdapter<Event, BaseViewHolder
             helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
             helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.push_icon) }
         } else if ("WatchEvent".equals(item!!.type)) {
-            did = " Watched "
+            did = " Starred "
             helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
             helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.push_icon) }
         } else if ("MemberEvent".equals(item!!.type)) {
-            did = " created the "
+            did = " added member to "
             helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
             helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.stared_icon) }
         } else {
