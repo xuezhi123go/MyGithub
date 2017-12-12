@@ -21,7 +21,9 @@ import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.base64Decode
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.load
+import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.RepoDetailPresenter
+import com.ldoublem.loadingviewlib.view.LVNews
 import kotlinx.android.synthetic.main.activity_repo_detail.*
 import javax.inject.Inject
 
@@ -34,9 +36,11 @@ class RepoDetailActivity:BaseActivity(),BaseView {
 
     val mTabs = listOf<String>("contributors", "forks", "issues")
     private lateinit var mFragments: ArrayList<Fragment>
-    private lateinit var repo : Repo
+    private var repo : Repo? = null
     private var isStarred = false
     private var isWatched = false
+
+    private lateinit var loading: LVNews
 
     @Inject lateinit var presenter : RepoDetailPresenter
 
@@ -68,8 +72,23 @@ class RepoDetailActivity:BaseActivity(),BaseView {
         setContentView(R.layout.activity_repo_detail)
 
         repo = intent.getParcelableExtra<Repo>(IntentConstant.REPO)
-        stars_count = repo.stargazers_count
-        watchers_count = repo.watchers_count
+        setToolBarBack(true)
+        toolbar.title = ""
+        if (repo == null) {
+            val fullName = intent.getStringExtra(IntentConstant.FULL_NAME)
+            val list = fullName.split("/")
+            if(list.size > 1)
+                presenter.getRepoDetail(list[0], list[1])
+            else
+                toast("请求错误,请重试")
+        }else {
+            initViewWithData()
+        }
+    }
+
+    private fun initViewWithData() {
+        stars_count = repo!!.stargazers_count
+        watchers_count = repo!!.watchers_count
 
         appbar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             Log.i(javaClass.simpleName, "verticalOffset -- : $verticalOffset total -- ${appBarLayout.totalScrollRange}")
@@ -83,20 +102,20 @@ class RepoDetailActivity:BaseActivity(),BaseView {
                 toolbar_title.visibility = View.VISIBLE
                 toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
                 rl_repo_head.visibility = View.INVISIBLE
-            }else {
+            } else {
                 iv_avatar_small.visibility = View.INVISIBLE
                 toolbar_title.visibility = View.INVISIBLE
                 rl_repo_head.visibility = View.VISIBLE
-//                val alpha = (1 - Math.abs(verticalOffset.toFloat()) / appBarLayout.totalScrollRange) * 255f
-//                Log.i(javaClass.simpleName, "alpha : $alpha ~~")
-//                rl_repo_head.background.alpha = alpha.toInt()
+    //                val alpha = (1 - Math.abs(verticalOffset.toFloat()) / appBarLayout.totalScrollRange) * 255f
+    //                Log.i(javaClass.simpleName, "alpha : $alpha ~~")
+    //                rl_repo_head.background.alpha = alpha.toInt()
             }
         }
         setToolBar()
         setBaseData()
-        presenter.getReadme(repo.owner.login, repo.name)
-        presenter.checkIfStarred(repo.owner.login, repo.name)
-        presenter.checkIfWatched(repo.owner.login, repo.name)
+        presenter.getReadme(repo!!.owner.login, repo!!.name)
+        presenter.checkIfStarred(repo!!.owner.login, repo!!.name)
+        presenter.checkIfWatched(repo!!.owner.login, repo!!.name)
         setOnclick()
     }
 
@@ -106,11 +125,11 @@ class RepoDetailActivity:BaseActivity(),BaseView {
     private fun setBaseData() {
         tv_watch.setText(watchers_count.toString())
         tv_stars.setText(stars_count.toString())
-        tv_forks.setText(repo.forks_count.toString())
-        repo_desc.text = repo.description
-        tv_update_time.text = repo.updated_at.substring(0, repo.created_at.indexOf("T"))
+        tv_forks.setText(repo!!.forks_count.toString())
+        repo_desc.text = repo!!.description
+        tv_update_time.text = repo!!.updated_at.substring(0, repo!!.created_at.indexOf("T"))
 
-        if (repo.fork) {
+        if (repo!!.fork) {
             iv_fork.setImageResource(R.drawable.fork_selected)
         }else {
             iv_fork.setImageResource(R.drawable.fork_normal)
@@ -120,17 +139,17 @@ class RepoDetailActivity:BaseActivity(),BaseView {
     private fun setOnclick(){
         ll_watch.setOnClickListener{
             if (isWatched) {
-                presenter.unwatchRepo(repo.owner.login, repo.name)
+                presenter.unwatchRepo(repo!!.owner.login, repo!!.name)
             }else {
-                presenter.watchRepo(repo.owner.login, repo.name)
+                presenter.watchRepo(repo!!.owner.login, repo!!.name)
             }
         }
 
         ll_stars.setOnClickListener {
             if (isStarred) {
-                presenter.unStarred(repo.owner.login, repo.name)
+                presenter.unStarred(repo!!.owner.login, repo!!.name)
             }else {
-                presenter.starRepo(repo.owner.login, repo.name)
+                presenter.starRepo(repo!!.owner.login, repo!!.name)
             }
         }
 
@@ -145,22 +164,20 @@ class RepoDetailActivity:BaseActivity(),BaseView {
 
     @SuppressLint("ResourceAsColor")
     private fun setToolBar() {
-        setToolBarBack(true)
-        toolbar.title = ""
-        toolbar_title.text = repo.name
-        tv_repo_name.text = repo.name
-        tv_code.text = repo.language
-        iv_avatar.load(this, repo.owner.avatar_url, R.drawable.default_avatar)
-        iv_avatar_small.load(this, repo.owner.avatar_url, R.drawable.default_avatar)
-        tv_username.text = repo.owner.login
+        toolbar_title.text = repo!!.name
+        tv_repo_name.text = repo!!.name
+        tv_code.text = repo!!.language
+        iv_avatar.load(this, repo!!.owner.avatar_url, R.drawable.default_avatar)
+        iv_avatar_small.load(this, repo!!.owner.avatar_url, R.drawable.default_avatar)
+        tv_username.text = repo!!.owner.login
 
         setToolbarMenuClickListener(object : Toolbar.OnMenuItemClickListener{
             override fun onMenuItemClick(item: MenuItem?): Boolean {
                 when(item!!.itemId) {
                     R.id.toolbar_add_issue -> {
                         val intent = Intent(this@RepoDetailActivity, EditIssueActivity::class.java)
-                        intent.putExtra(IntentConstant.NAME, repo.owner.login)
-                        intent.putExtra(IntentConstant.REPO, repo.name)
+                        intent.putExtra(IntentConstant.NAME, repo!!.owner.login)
+                        intent.putExtra(IntentConstant.REPO, repo!!.name)
                         startActivity(intent)
                     }
                 }
@@ -245,5 +262,10 @@ class RepoDetailActivity:BaseActivity(),BaseView {
 
     fun updateWatch(add : Boolean) {
         tv_watch.text = (if (add) ++watchers_count else --watchers_count).toString()
+    }
+
+    fun initViewByData(repo: Repo) {
+        this.repo = repo
+        initViewWithData()
     }
 }

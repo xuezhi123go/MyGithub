@@ -155,4 +155,20 @@ class RepoDetailPresenter @Inject constructor(private val mView : BaseView,
                     Log.e(javaClass.simpleName, e.message)
                 })
     }
+
+    fun getRepoDetail(owner: String, repo: String) {
+        (mView as RepoDetailActivity).showLoading()
+        oAuthApi.get(owner, repo)
+                .bindToLifecycle(mView)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ repo ->
+                    mView.hideLoading()
+                    mView.initViewByData(repo)
+
+                }, { e ->
+                    Log.i(javaClass.simpleName, e.message)
+                })
+
+    }
 }

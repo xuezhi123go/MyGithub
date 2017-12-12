@@ -139,11 +139,9 @@ class HomeFragment : BaseFragment(), BaseView {
                 }
         repoWeekAdapter.setNewData(list)
         repoWeekAdapter.setOnItemClickListener { adapter, view, position ->
-            val user = adapter.data[position] as Parcelable
-            val intent = Intent(context, UserActivity::class.java)
-            val bundle = Bundle()
-            bundle.putParcelable(IntentConstant.User, user)
-            intent.putExtras(bundle)
+            val fullName = result.items[position].repo
+            val intent = Intent(context, RepoDetailActivity::class.java)
+            intent.putExtra(IntentConstant.FULL_NAME, fullName)
             startActivity(intent)
         }
     }
