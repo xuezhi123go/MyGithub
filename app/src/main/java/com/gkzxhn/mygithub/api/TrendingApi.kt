@@ -4,6 +4,7 @@ import com.gkzxhn.mygithub.bean.info.TrendingResults
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
+import java.util.*
 
 /**
  * Created by 方 on 2017/11/9.
@@ -20,4 +21,7 @@ interface TrendingApi {
     @GET("/developer")
     fun getTrendingUsers(@Query("lang") language : String = "",
                          @Query("since") since: String) : Observable<TrendingResults>
+
+    @GET("/lang")
+    fun getTrendingLang() : Observable<Objects>
 }

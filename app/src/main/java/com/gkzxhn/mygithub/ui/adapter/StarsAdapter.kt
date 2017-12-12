@@ -10,7 +10,7 @@ import com.gkzxhn.mygithub.bean.info.Starred
  */
 class StarsAdapter(datas: List<Starred>?) : BaseQuickAdapter<Starred, BaseViewHolder>(R.layout.item_stars, datas) {
     override fun convert(helper: BaseViewHolder?, item: Starred?) {
-        helper!!.setText(R.id.tv_stars, item!!.full_name)
+        helper!!.setText(R.id.iv_stars, item!!.full_name)
         helper.setText(R.id.tv_stars_body, item.description)
     }
 }

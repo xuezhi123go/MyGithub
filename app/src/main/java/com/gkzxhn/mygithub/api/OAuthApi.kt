@@ -196,6 +196,29 @@ interface OAuthApi {
                     @Query("order") order: String = "desc"): Observable<SearchRepoResult>
 
     /**
+     * 已订阅status : 204
+     * 未订阅status : 404
+     */
+    @GET("/user/subscriptions/{owner}/{repo}")
+    fun checkIfWatched(@Path("owner") owner: String,
+                       @Path("repo") repo: String): Observable<Response<ResponseBody>>
+
+    /**
+     * watch仓库
+     */
+    @Headers("Content-Length: 0")
+    @PUT("/user/subscriptions/{owner}/{repo}")
+    fun watchRepo(@Path("owner") owner: String
+                 , @Path("repo") repo: String): Observable<Response<ResponseBody>>
+
+    /**
+     * unwatch仓库
+     */
+    @DELETE("/user/subscriptions/{owner}/{repo}")
+    fun unwatchRepo(@Path("owner") owner: String
+                   , @Path("repo") repo: String): Observable<Response<ResponseBody>>
+
+    /**
      * 有星status : 204
      * 没星status : 404
      */
@@ -223,7 +246,7 @@ interface OAuthApi {
      */
     @Headers("Cache-Control: public, max-age=3600")
     @GET("repos/{owner}/{name}/readme")
-    fun readme(@Path("owner") owner: String, @Path("name") repo: String): Observable<Content>
+    fun getReadme(@Path("owner") owner: String, @Path("name") repo: String): Observable<Content>
 
     @GET("/users/{user}/following")
     fun getUserFollowing(@Path("user") user: String): Observable<ArrayList<User>>

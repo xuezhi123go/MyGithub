@@ -4,25 +4,28 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
 import com.gkzxhn.balabala.base.BaseActivity
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
+import com.gkzxhn.mygithub.bean.info.Content
 import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
+import com.gkzxhn.mygithub.extension.base64Decode
+import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.mvp.presenter.RepoDetailPresenter
-import com.gkzxhn.mygithub.ui.fragment.ContributorsFragment
-import com.gkzxhn.mygithub.ui.fragment.IssueFragment
 import kotlinx.android.synthetic.main.activity_repo_detail.*
 import javax.inject.Inject
+
+
 
 /**
  * Created by 方 on 2017/10/25.
@@ -33,6 +36,7 @@ class RepoDetailActivity:BaseActivity(),BaseView {
     private lateinit var mFragments: ArrayList<Fragment>
     private lateinit var repo : Repo
     private var isStarred = false
+    private var isWatched = false
 
     @Inject lateinit var presenter : RepoDetailPresenter
 
@@ -64,14 +68,14 @@ class RepoDetailActivity:BaseActivity(),BaseView {
         setContentView(R.layout.activity_repo_detail)
 
         repo = intent.getParcelableExtra<Repo>(IntentConstant.REPO)
+        stars_count = repo.stargazers_count
+        watchers_count = repo.watchers_count
 
         appbar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             Log.i(javaClass.simpleName, "verticalOffset -- : $verticalOffset total -- ${appBarLayout.totalScrollRange}")
             if (verticalOffset == 0) {
                 //完全展开状态
-                toolbar.navigationIcon = null
                 rl_repo_head.visibility = View.VISIBLE
-                rl_repo_head.background.alpha = 255
             } else if (Math.abs(verticalOffset) == appBarLayout.totalScrollRange) {
                 //appBarLayout.getTotalScrollRange() == 100
                 //完全折叠
@@ -83,18 +87,46 @@ class RepoDetailActivity:BaseActivity(),BaseView {
                 iv_avatar_small.visibility = View.INVISIBLE
                 toolbar_title.visibility = View.INVISIBLE
                 rl_repo_head.visibility = View.VISIBLE
-                val alpha = (1 - Math.abs(verticalOffset.toFloat()) / appBarLayout.totalScrollRange) * 255f
-                Log.i(javaClass.simpleName, "alpha : $alpha ~~")
-                rl_repo_head.background.alpha = alpha.toInt()
+//                val alpha = (1 - Math.abs(verticalOffset.toFloat()) / appBarLayout.totalScrollRange) * 255f
+//                Log.i(javaClass.simpleName, "alpha : $alpha ~~")
+//                rl_repo_head.background.alpha = alpha.toInt()
             }
         }
         setToolBar()
-        initFragments()
+        setBaseData()
+        presenter.getReadme(repo.owner.login, repo.name)
+        presenter.checkIfStarred(repo.owner.login, repo.name)
+        presenter.checkIfWatched(repo.owner.login, repo.name)
         setOnclick()
     }
 
+    private var stars_count = 0
+    private var watchers_count = 0
+
+    private fun setBaseData() {
+        tv_watch.setText(watchers_count.toString())
+        tv_stars.setText(stars_count.toString())
+        tv_forks.setText(repo.forks_count.toString())
+        repo_desc.text = repo.description
+        tv_update_time.text = repo.updated_at.substring(0, repo.created_at.indexOf("T"))
+
+        if (repo.fork) {
+            iv_fork.setImageResource(R.drawable.fork_selected)
+        }else {
+            iv_fork.setImageResource(R.drawable.fork_normal)
+        }
+    }
+
     private fun setOnclick(){
-        tv_stars.setOnClickListener {
+        ll_watch.setOnClickListener{
+            if (isWatched) {
+                presenter.unwatchRepo(repo.owner.login, repo.name)
+            }else {
+                presenter.watchRepo(repo.owner.login, repo.name)
+            }
+        }
+
+        ll_stars.setOnClickListener {
             if (isStarred) {
                 presenter.unStarred(repo.owner.login, repo.name)
             }else {
@@ -102,6 +134,13 @@ class RepoDetailActivity:BaseActivity(),BaseView {
             }
         }
 
+        tv_reame_all.setOnClickListener {
+            val layoutParams = md_view.layoutParams as LinearLayout.LayoutParams
+            layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT
+            md_view.layoutParams = layoutParams
+
+            tv_reame_all.visibility = View.GONE
+        }
     }
 
     @SuppressLint("ResourceAsColor")
@@ -111,12 +150,9 @@ class RepoDetailActivity:BaseActivity(),BaseView {
         toolbar_title.text = repo.name
         tv_repo_name.text = repo.name
         tv_code.text = repo.language
-        repo_desc.text = repo.description
         iv_avatar.load(this, repo.owner.avatar_url, R.drawable.default_avatar)
         iv_avatar_small.load(this, repo.owner.avatar_url, R.drawable.default_avatar)
         tv_username.text = repo.owner.login
-        tv_create_time.text = repo.created_at.substring(0, repo.created_at.indexOf("T"))
-        presenter.checkIfStarred(repo.owner.login, repo.name)
 
         setToolbarMenuClickListener(object : Toolbar.OnMenuItemClickListener{
             override fun onMenuItemClick(item: MenuItem?): Boolean {
@@ -131,25 +167,6 @@ class RepoDetailActivity:BaseActivity(),BaseView {
                 return true
             }
         })
-    }
-
-    private fun initFragments(){
-        mFragments = arrayListOf()
-        val contributorsFragment = ContributorsFragment(repo, IntentConstant.CONTRIBUTORS)
-        val forksFragment = ContributorsFragment(repo, IntentConstant.FORKS)
-        mFragments.add(contributorsFragment)
-        mFragments.add(forksFragment)
-        mFragments.add(IssueFragment(repo))
-
-        vp_repo.adapter = object : FragmentPagerAdapter(supportFragmentManager){
-            override fun getItem(position: Int): Fragment = mFragments[position]
-
-            override fun getCount(): Int = mTabs.size
-
-            override fun getPageTitle(position: Int): CharSequence = mTabs[position]
-        }
-        vp_repo.offscreenPageLimit = 3
-        tb_repo.setupWithViewPager(vp_repo)
     }
 
     override fun getToolbar(): Toolbar? {
@@ -167,13 +184,62 @@ class RepoDetailActivity:BaseActivity(),BaseView {
 
     fun starred(){
         isStarred = true
-        tv_stars.text = "starred"
-        tv_stars.setBackgroundColor(resources.getColor(R.color.yellow))
+        iv_stars.setImageResource(R.drawable.star_selected)
+        tv_stars.text = (++stars_count).toString()
     }
 
     fun unStarred(){
         isStarred = false
-        tv_stars.text = "unStarred"
-        tv_stars.setBackgroundColor(resources.getColor(R.color.blue_grey))
+        iv_stars.setImageResource(R.drawable.star_normal)
+        tv_stars.text = (--stars_count).toString()
+    }
+
+    fun loadReadme(content: Content){
+        val layoutParams = md_view.layoutParams as LinearLayout.LayoutParams
+        layoutParams.height = 180f.dp2px().toInt()
+        md_view.layoutParams = layoutParams
+
+        tv_reame_all.visibility = View.VISIBLE
+        md_view.setMDText(content.content.base64Decode())
+    }
+
+    fun showReadmeLoading() {
+        pb_readme.visibility = View.VISIBLE
+    }
+
+    fun hideReadmeLoading() {
+        pb_readme.visibility = View.GONE
+    }
+
+    fun showStarLoading() {
+        pb_star.visibility = View.VISIBLE
+        iv_stars.visibility = View.GONE
+    }
+
+    fun hideStarLoading() {
+        pb_star.visibility = View.GONE
+        iv_stars.visibility = View.VISIBLE
+    }
+
+    fun showWatchLoading() {
+        pb_watch.visibility = View.VISIBLE
+        iv_watch.visibility = View.GONE
+    }
+
+    fun hideWatchLoading() {
+        pb_watch.visibility = View.GONE
+        iv_watch.visibility = View.VISIBLE
+    }
+
+    fun watched() {
+        isWatched = true
+        iv_watch.setImageResource(R.drawable.watch_selected)
+        tv_watch.text = (++watchers_count).toString()
+    }
+
+    fun unwatched() {
+        isWatched = false
+        iv_watch.setImageResource(R.drawable.watch_normal)
+        tv_watch.text = (--watchers_count).toString()
     }
 }

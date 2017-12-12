@@ -9,70 +9,55 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:background="@color/blue_grey"
-        android:layout_height="wrap_content">
+        android:layout_height="120dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            android:background="@color/repo_header"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleEnabled="false">
 
             <RelativeLayout
                 android:id="@+id/rl_repo_head"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/repo_header"
-                android:paddingLeft="25dp"
                 app:layout_collapseMode="parallax">
 
                 <TextView
                     android:id="@+id/tv_repo_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_10"
-                    android:layout_marginTop="@dimen/dimen_30"
+                    android:layout_marginLeft="@dimen/dimen_50"
+                    android:layout_marginTop="@dimen/dimen_42"
                     android:text="my_github"
-                    android:textColor="@android:color/background_dark"
+                    android:textColor="@android:color/white"
                     android:textSize="20sp"/>
+
+
 
                 <TextView
                     android:id="@+id/tv_code"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginLeft="12dp"
                     android:layout_alignBottom="@+id/tv_repo_name"
                     android:layout_toRightOf="@id/tv_repo_name"
                     android:text="java"
+                    android:background="@drawable/green_bg"
                     style="@style/tv_tip"/>
 
-                <TextView
-                    android:id="@+id/repo_desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_repo_name"
-                    android:layout_marginTop="@dimen/dimen_5"
-                    android:layout_marginRight="@dimen/dimen_25"
-                    android:maxLines="2"
-                    android:text="descdescdesc"
-                    android:textColor="@android:color/primary_text_light_nodisable"
-                    android:textSize="16sp"
-                    />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/repo_desc"
-                    android:orientation="horizontal">
 
                     <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_below="@+id/tv_repo_name"
                         android:layout_height="wrap_content">
 
                         <ImageView
+                            android:layout_marginLeft="@dimen/dimen_25"
                             android:id="@+id/iv_avatar"
                             style="@style/iv_small_avatar"
                             android:layout_marginTop="@dimen/dimen_8"
+                            android:layout_marginBottom="@dimen/dimen_10"
                             android:src="@drawable/default_avatar"/>
 
                         <TextView
@@ -85,37 +70,9 @@
                             android:text="name"
                             android:textSize="17sp"/>
 
-                        <TextView
-                            android:id="@+id/tv_create_time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/iv_avatar"
-                            android:layout_marginBottom="@dimen/dimen_10"
-                            android:layout_marginTop="@dimen/dimen_8"
-                            android:text="2017-10-10"
-                            android:textSize="16sp"/>
-
 
                     </RelativeLayout>
 
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/tv_follow"
-                            style="@style/tv_tip"
-                            android:text="follows"/>
-
-                        <TextView
-                            android:id="@+id/tv_stars"
-                            android:layout_marginTop="@dimen/dimen_8"
-                            style="@style/tv_tip"
-                            android:text="stars"/>
-                    </LinearLayout>
-                </LinearLayout>
             </RelativeLayout>
 
             <!--<ImageView
@@ -158,29 +115,219 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tb_repo"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="46dp"
-            app:tabIndicatorColor="@android:color/black"
-            app:tabMode="fixed"
-            app:tabSelectedTextColor="@color/cardview_dark_background"
-            app:tabTextColor="@color/md_grey_300">
+            android:orientation="horizontal"
+            android:layout_height="@dimen/bottom_height">
 
-        </android.support.design.widget.TabLayout>
+            <LinearLayout
+                android:id="@+id/ll_watch"
+                android:clickable="true"
+                style="@style/item_repo_topic"
+                android:focusable="true">
 
+                <ImageView
+                    android:id="@+id/iv_watch"
+                    style="@style/iv_repo_stars"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/watch_normal"/>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/vp_repo"
+                <ProgressBar
+                    android:id="@+id/pb_watch"
+                    android:visibility="gone"
+                    style="@style/iv_repo_stars"/>
+                
+                <TextView
+                    android:id="@+id/tv_watch"
+                    android:text="0"
+                    style="@style/text_count"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_stars"
+                android:clickable="true"
+                style="@style/item_repo_topic"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/iv_stars"
+                    android:background="@drawable/star_normal"
+                    style="@style/iv_repo_stars"/>
+
+                <ProgressBar
+                    android:id="@+id/pb_star"
+                    android:visibility="gone"
+                    style="@style/iv_repo_stars"/>
+
+                <TextView
+                    android:id="@+id/tv_stars"
+                    android:text="0"
+                    style="@style/text_count"/>
+
+            </LinearLayout>
+            <LinearLayout
+                style="@style/item_repo_topic">
+
+                <ImageView
+                    android:id="@+id/iv_fork"
+                    android:background="@drawable/fork_normal"
+                    style="@style/iv_repo_stars"/>
+
+                <ProgressBar
+                    android:id="@+id/pb_fork"
+                    android:visibility="gone"
+                    style="@style/iv_repo_stars"/>
+
+                <TextView
+                    android:id="@+id/tv_forks"
+                    android:text="0"
+                    style="@style/text_count"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:background="@color/gray_back"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0.5dp"/>
 
-        </android.support.v4.view.ViewPager>
+        <TextView
+            android:id="@+id/repo_desc"
+            android:padding="@dimen/dimen_16"
+            android:text="descdescdesc"
+            style="@style/text_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:background="@drawable/stroke_bg"
+            android:layout_marginLeft="@dimen/dimen_16"
+            android:layout_marginRight="@dimen/dimen_16"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="68dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_height="0dp">
+
+                <TextView
+                    android:textSize="@dimen/sp_14"
+                    android:layout_marginLeft="16dp"
+                    android:text="@string/Update"
+                    style="@style/text_desc"/>
+
+                <TextView
+                    android:layout_marginLeft="@dimen/dimen_5"
+                    android:text="6分钟前"
+                    android:id="@+id/tv_update_time"
+                    style="@style/text_desc"/>
+            </LinearLayout>
+
+            <View
+                android:background="@color/gray_back"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"/>
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+
+                <TextView
+                    android:id="@+id/tv_view_code"
+                    android:text="View Code"
+                    android:drawableLeft="@drawable/code"
+                    android:paddingLeft="@dimen/dimen_30"
+                    android:drawablePadding="1dp"
+                    android:paddingRight="@dimen/dimen_30"
+                    style="@style/text_left_drawable"/>
+
+            <View
+                android:layout_width="0.5dp"
+                android:background="@color/gray_back"
+                android:layout_height="match_parent"/>
+
+                <TextView
+                    android:id="@+id/tv_view_issue"
+                    android:drawableLeft="@drawable/issue"
+                    android:paddingLeft="@dimen/dimen_30"
+                    android:drawablePadding="1dp"
+                    android:paddingRight="@dimen/dimen_30"
+                    android:text="View Issue"
+                    style="@style/text_left_drawable"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/dimen_16"
+            android:background="@drawable/stroke_bg"
+            android:layout_marginLeft="@dimen/dimen_16"
+            android:layout_marginRight="@dimen/dimen_16"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            
+            <TextView
+                android:id="@+id/tv_readme"
+                style="@style/text_left_drawable"
+                android:drawableLeft="@drawable/readme"
+                android:textColor="@color/text_black"
+                android:text="  README.md"
+                android:gravity="center_vertical"
+                android:paddingLeft="13dp"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray_back"/>
+            <com.mittsu.markedview.MarkedView
+                android:layout_margin="1dp"
+            android:id="@+id/md_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+            <ProgressBar
+                android:id="@+id/pb_readme"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray_back"/>
+
+            <TextView
+                android:id="@+id/tv_reame_all"
+                android:visibility="gone"
+                android:text="View all of README.md"
+                android:gravity="center"
+                android:textColor="@color/text_blue"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"/>
+
+        </LinearLayout>
+
     </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
 </android.support.design.widget.CoordinatorLayout>
