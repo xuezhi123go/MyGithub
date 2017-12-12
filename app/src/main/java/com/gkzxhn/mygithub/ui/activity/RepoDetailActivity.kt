@@ -185,13 +185,15 @@ class RepoDetailActivity:BaseActivity(),BaseView {
     fun starred(){
         isStarred = true
         iv_stars.setImageResource(R.drawable.star_selected)
-        tv_stars.text = (++stars_count).toString()
+    }
+
+    fun updateStars(add : Boolean) {
+        tv_stars.text = (if (add) ++stars_count else --stars_count).toString()
     }
 
     fun unStarred(){
         isStarred = false
         iv_stars.setImageResource(R.drawable.star_normal)
-        tv_stars.text = (--stars_count).toString()
     }
 
     fun loadReadme(content: Content){
@@ -234,12 +236,14 @@ class RepoDetailActivity:BaseActivity(),BaseView {
     fun watched() {
         isWatched = true
         iv_watch.setImageResource(R.drawable.watch_selected)
-        tv_watch.text = (++watchers_count).toString()
     }
 
     fun unwatched() {
         isWatched = false
         iv_watch.setImageResource(R.drawable.watch_normal)
-        tv_watch.text = (--watchers_count).toString()
+    }
+
+    fun updateWatch(add : Boolean) {
+        tv_watch.text = (if (add) ++watchers_count else --watchers_count).toString()
     }
 }

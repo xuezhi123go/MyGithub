@@ -14,11 +14,13 @@ import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.entity.Icon2Name
 import com.gkzxhn.mygithub.bean.info.ItemBean
+import com.gkzxhn.mygithub.bean.info.SearchRepoResult
 import com.gkzxhn.mygithub.bean.info.SearchUserResult
 import com.gkzxhn.mygithub.bean.info.TrendingResults
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.mvp.presenter.HomePresenter
+import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
 import com.gkzxhn.mygithub.ui.activity.RepoListActivity
 import com.gkzxhn.mygithub.ui.activity.SearchActivity
 import com.gkzxhn.mygithub.ui.activity.UserActivity
@@ -34,6 +36,7 @@ class HomeFragment : BaseFragment(), BaseView {
     private var trendingRepoList = arrayListOf<ItemBean>()
 
     private lateinit var repoWeekAdapter: AvatarListAdapter
+    private lateinit var popRepoAdapter: AvatarListAdapter
     private lateinit var popUsersAdapter: AvatarListAdapter
     @Inject lateinit var presenter: HomePresenter
 
@@ -72,6 +75,10 @@ class HomeFragment : BaseFragment(), BaseView {
         rv_repo_week.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         repoWeekAdapter = AvatarListAdapter(null)
         rv_repo_week.adapter = repoWeekAdapter
+
+        rv_pop_repo.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        popRepoAdapter = AvatarListAdapter(null)
+        rv_pop_repo.adapter = popRepoAdapter
 
         rv_pop_users.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         popUsersAdapter = AvatarListAdapter(null)
@@ -152,6 +159,22 @@ class HomeFragment : BaseFragment(), BaseView {
             val intent = Intent(context, UserActivity::class.java)
             val bundle = Bundle()
             bundle.putParcelable(IntentConstant.User, user)
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
+    }
+
+    fun loadPopRepos(result: SearchRepoResult) {
+        val list = result.items
+                .map { item ->
+                    return@map Icon2Name(item.owner.avatar_url, item.name, "user")
+                }
+        popRepoAdapter.setNewData(list)
+        popRepoAdapter.setOnItemClickListener { adapter, view, position ->
+            val repo = result.items[position]
+            val intent = Intent(context, RepoDetailActivity::class.java)
+            val bundle = Bundle()
+            bundle.putParcelable(IntentConstant.REPO, repo)
             intent.putExtras(bundle)
             startActivity(intent)
         }

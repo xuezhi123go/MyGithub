@@ -27,6 +27,7 @@ class RepoDetailPresenter @Inject constructor(private val mView : BaseView,
                     mView.hideStarLoading()
                     if (t.code() == 204) {
                         mView.starred()
+                        mView.updateStars(true)
                     }else {
                         mView.unStarred()
                     }
@@ -47,6 +48,7 @@ class RepoDetailPresenter @Inject constructor(private val mView : BaseView,
                     mView.hideStarLoading()
                     if (t.code() == 204) {
                         mView.unStarred()
+                        mView.updateStars(false)
                     }else {
                         mView.starred()
                     }
@@ -87,6 +89,7 @@ class RepoDetailPresenter @Inject constructor(private val mView : BaseView,
                     mView.hideWatchLoading()
                     if (t.code() == 204) {
                         mView.watched()
+                        mView.updateWatch(true)
                     }else {
                         mView.unwatched()
                     }
@@ -107,6 +110,7 @@ class RepoDetailPresenter @Inject constructor(private val mView : BaseView,
                     mView.hideWatchLoading()
                     if (t.code() == 204) {
                         mView.unwatched()
+                        mView.updateWatch(false)
                     }else {
                         mView.watched()
                     }
