@@ -37,7 +37,7 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                         view.loadData(event)
 
                         if (!event.toString().equals(SPUtil.get(view.context, "event", ""))) {
-                            rxBus.post(event[0])
+                            //rxBus.post(event[0])
                             SPUtil.put(view.context, "event", event.toString())
                         }
 

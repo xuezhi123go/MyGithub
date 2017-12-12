@@ -1,5 +1,6 @@
 package com.gkzxhn.mygithub.di.component
 
+import com.gkzxhn.balabala.ui.activity.MainActivity
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.ui.activity.*
 import com.gkzxhn.mygithub.ui.fragment.*
@@ -37,4 +38,6 @@ interface OAuthComponent {
     fun inject(eventFragment: EventFragment)
 
     fun inject(searchActivity: SearchActivity)
+
+    fun inject(mainActivity: MainActivity)
 }

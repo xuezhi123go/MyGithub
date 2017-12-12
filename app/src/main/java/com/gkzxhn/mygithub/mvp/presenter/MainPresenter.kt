@@ -3,21 +3,28 @@ package com.gkzxhn.mygithub.mvp.presenter
 import android.util.Log
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.balabala.ui.activity.MainActivity
+import com.gkzxhn.mygithub.api.OAuthApi
 import com.gkzxhn.mygithub.bean.entity.FinishMain
 import com.gkzxhn.mygithub.bean.info.Event
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.utils.AppUtils
+import com.gkzxhn.mygithub.utils.SPUtil
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
 import com.iflytek.autoupdate.IFlytekUpdate
 import com.iflytek.autoupdate.UpdateConstants
 import com.iflytek.autoupdate.UpdateErrorCode
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
  * Created by 方 on 2017/10/24.
  */
-class MainPresenter @Inject constructor(private val rxBus: RxBus, private val view: BaseView) {
+class MainPresenter @Inject constructor(private val rxBus: RxBus
+                                        , private val view: BaseView
+                                        , private val oAuthApi: OAuthApi
+) {
 
     fun subscribe() {
         rxBus.toFlowable(User::class.java)
@@ -70,5 +77,35 @@ class MainPresenter @Inject constructor(private val rxBus: RxBus, private val vi
             }
         })
     }
+    fun getEvents(username: String) {
+        view.showLoading()
+        oAuthApi.getEventsThatAUserHasReceived(username)
+                .bindToLifecycle(view as MainActivity)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate { view.hideLoading() }
+                .subscribe({ event ->
+                    if (event.size > 0) {
+//                        view.tv_notifications_login.visibility = View.GONE
+//                        view.srl_notifications.visibility = View.VISIBLE
+//                        view.loadData(event)
 
+                        if (!event.toString().equals(SPUtil.get(view.context, "event", ""))) {
+                            rxBus.post(event[0])
+                            SPUtil.put(view.context, "event", event.toString())
+                        }
+
+                        Log.i(javaClass.simpleName, "event = " + event)
+//                        view.tv_notifications_login.visibility = View.GONE
+                    } else {
+//                        view.context.toast("没有数据")
+                    }
+                }, { e ->
+                    Log.e(javaClass.simpleName, "e = " + e.message)
+//                    view.context.toast("请先登录")
+//                    view.tv_notifications_login.visibility = View.VISIBLE
+//                    view.srl_notifications.visibility = View.GONE
+                })
+    }
 }
