@@ -1,6 +1,7 @@
 package com.gkzxhn.balabala.ui.activity
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -18,7 +19,7 @@ import com.gkzxhn.mygithub.R.id.*
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.constant.SharedPreConstant
-import com.gkzxhn.mygithub.di.module.AuthModule
+import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.edit
 import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.extension.load
@@ -42,6 +43,8 @@ import javax.inject.Inject
 class MainActivity : BaseActivity(), BaseView {
     @Inject
     lateinit var mainPresenter: MainPresenter
+
+    val context:Context = this
 
 //    private lateinit var repo: Repo
 
@@ -79,6 +82,8 @@ class MainActivity : BaseActivity(), BaseView {
         setDrawer()
 
         mainPresenter.subscribe()
+
+        mainPresenter.getEvents(SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, ""))
 
         RxPermissions(this)
                 .requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -150,10 +155,17 @@ class MainActivity : BaseActivity(), BaseView {
 
     }
 
-    override fun setupComponent() {
+    /*override fun setupComponent() {
         App.getInstance()
                 .baseComponent
                 .plus(AuthModule(this))
+                .inject(this)
+    }*/
+
+    override fun setupComponent() {
+        App.getInstance()
+                .baseComponent
+                .plus(OAuthModule(this))
                 .inject(this)
     }
 
