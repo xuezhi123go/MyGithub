@@ -15,5 +15,6 @@ fun Context.toast(msg : String) {
     if (toast == null) {
         toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT)
     }
+    toast!!.setText(msg)
     toast!!.show()
 }
