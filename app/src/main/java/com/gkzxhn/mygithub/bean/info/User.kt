@@ -44,8 +44,8 @@ data class User(
 		val type: String, //User
 		val site_admin: Boolean, //false
 		val name: String, //monalisa octocat
-		val company: String?, //GitHub
-		val blog: String?, //https://github.com/blog
+		val company: String, //GitHub
+		val blog: String, //https://github.com/blog
 		val location: String, //San Francisco
 		val email: String, //octocat@github.com
 		val hireable: Boolean, //false

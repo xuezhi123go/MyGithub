@@ -14,6 +14,7 @@ import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.entity.Icon2Name
+import com.gkzxhn.mygithub.bean.entity.IvTvItemBean
 import com.gkzxhn.mygithub.bean.info.Owner
 import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.bean.info.User
@@ -23,7 +24,7 @@ import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.extension.loadBlur
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.ProfilePresenter
-import com.gkzxhn.mygithub.ui.adapter.RepoListAdapter
+import com.gkzxhn.mygithub.ui.adapter.IvTvAdapter
 import kotlinx.android.synthetic.main.activity_user.*
 import javax.inject.Inject
 
@@ -34,7 +35,7 @@ class UserActivity : BaseActivity(), BaseView {
 
     private var data: Parcelable? = null
 
-    private lateinit var adapter : RepoListAdapter
+    private lateinit var adapter : IvTvAdapter
 
     @Inject lateinit var presenter: ProfilePresenter
 
@@ -82,8 +83,8 @@ class UserActivity : BaseActivity(), BaseView {
             toast("请重新登录...")
             return
         }else {
-            initAppBar()
             initRecyclerView()
+            initAppBar()
         }
     }
 
@@ -124,65 +125,106 @@ class UserActivity : BaseActivity(), BaseView {
     }
 
     private fun updateAppbar() {
-        tv_desc.text = (data as User).bio.let {
+
+        tv_followers.text = (data as User).followers.toString().let {
             if (!TextUtils.isEmpty(it)) {
                 return@let it
             } else {
-                return@let "nothing to say"
+                return@let "0"
             }
         }
-        tv_business.text = (data as User).company.let {
+
+        tv_repositories.text = (data as User).public_repos.toString().let {
             if (!TextUtils.isEmpty(it)) {
                 return@let it
             } else {
-                return@let "unknow"
+                return@let "0"
             }
         }
-        tv_email.text = (data as User).email.let {
+        tv_following.text = (data as User).following.toString().let {
             if (!TextUtils.isEmpty(it)) {
                 return@let it
             } else {
-                return@let "unknow"
+                return@let "0"
             }
         }
-        tv_place.text = (data as User).location.let {
+
+        tvTitleList[4] = (data as User).company.let {
             if (!TextUtils.isEmpty(it)) {
                 return@let it
             } else {
-                return@let "unknow"
+                return@let "Not Set"
             }
         }
-        tv_rss_feed.text = (data as User).blog.let {
+
+        tvTitleList[6] = (data as User).email.let {
             if (!TextUtils.isEmpty(it)) {
                 return@let it
             } else {
-                return@let "unknow"
+                return@let "Not Set"
             }
         }
+        tvTitleList[5] = (data as User).location.let {
+            if (!TextUtils.isEmpty(it)) {
+                return@let it
+            } else {
+                return@let "Not Set"
+            }
+        }
+        tvTitleList[7] = (data as User).blog.let {
+            if (!TextUtils.isEmpty(it)) {
+                return@let it
+            } else {
+                return@let "Not Set"
+            }
+        }
+
+        rightTv[0] = username
+        list = ivLeftResources.mapIndexed { index, ivResource ->
+            if (index in 1..3)
+                IvTvItemBean(ivResource, tvTitleList[index], rightTv[index], true)
+            else if(index == 0){
+                IvTvItemBean(ivResource, tvTitleList[index], rightTv[index], true)
+            }else
+                IvTvItemBean(ivResource, tvTitleList[index], rightTv[index], false)
+        } as ArrayList<IvTvItemBean>
+
+        adapter.setNewData(list)
     }
 
-    private fun initRecyclerView() {
-        srl_repos.setOnRefreshListener {
-            login?.let {
-                presenter.loadUserRepos(it)
-            }
-        }
-        adapter = RepoListAdapter(null)
-        adapter.setOnItemClickListener { adapter, view, position ->
+    private val ivLeftResources =
+            arrayListOf(R.drawable.user, R.drawable.star_repos, R.drawable.organization, R.drawable.public_activity,
+            R.drawable.company, R.drawable.location, R.drawable.email, R.drawable.link)
+    private var tvTitleList = arrayListOf<String>("Name", "Starred Repos", "Organization", "Public Activity",
+            "Company", "Location", "Email", "Link")
+    private var rightTv = arrayListOf<Any>("name", R.drawable.right_arrow, R.drawable.right_arrow, R.drawable.right_arrow,
+            "", "", "", "")
+    private lateinit var list: ArrayList<IvTvItemBean>
 
-                    val repo = adapter.data[position] as Repo
+    private fun initRecyclerView() {
+        list = ivLeftResources.mapIndexed { index, ivResource ->
+            if (index in 1..3)
+                IvTvItemBean(ivResource, tvTitleList[index], rightTv[index], true)
+            else
+                IvTvItemBean(ivResource, tvTitleList[index], "", false)
+        } as ArrayList<IvTvItemBean>
+
+        srl_repos.setOnRefreshListener {
+
+        }
+        adapter = IvTvAdapter(null)
+        adapter.setOnItemClickListener { adapter, view, position ->
+                    toast("clicked  : ${position.toString()}")
+                    /*val repo = adapter.data[position] as Repo
                     val intent = Intent(this, RepoDetailActivity::class.java)
                     val mBundle = Bundle()
                     mBundle.putParcelable(IntentConstant.REPO, repo)
                     intent.putExtras(mBundle)
-                    startActivity(intent)
+                    startActivity(intent)*/
                 }
         adapter.openLoadAnimation()
         rv_user.layoutManager = LinearLayoutManager(this)
         rv_user.adapter = adapter
-        login?.let {
-            presenter.loadUserRepos(it)
-        }
     }
 
     override fun getToolbar(): Toolbar? {
@@ -205,7 +247,7 @@ class UserActivity : BaseActivity(), BaseView {
         if (repos.size == 0) {
             adapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
         }else {
-            adapter.setNewData(repos)
+//            adapter.setNewData(repos)
         }
     }
 }
