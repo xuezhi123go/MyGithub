@@ -3,12 +3,14 @@ package com.gkzxhn.mygithub.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.gkzxhn.balabala.base.BaseActivity
 import com.gkzxhn.balabala.mvp.contract.BaseView
@@ -26,6 +28,9 @@ import com.gkzxhn.mygithub.ui.fragment.RepoListFragment
 import com.ldoublem.loadingviewlib.view.LVNews
 import kotlinx.android.synthetic.main.activity_search.*
 import javax.inject.Inject
+
+
+
 
 /**
  * Created by 方 on 2017/11/13.
@@ -128,6 +133,8 @@ class SearchActivity : BaseView, BaseActivity() {
     private lateinit var mFragments: ArrayList<Fragment>
     val mTabs = listOf<String>("repositories", "users")
 
+    private var fragmentsUpdateFlag = arrayOf(false, false)
+
     fun initFragment(list: List<Repo>){
         vp_search.visibility = View.VISIBLE
         tb_search.visibility = View.VISIBLE
@@ -144,7 +151,65 @@ class SearchActivity : BaseView, BaseActivity() {
             override fun getPageTitle(position: Int): CharSequence {
                 return mTabs[position]
             }
+
+            override fun instantiateItem(container: ViewGroup?, position: Int): Any {
+
+                //得到缓存的fragment
+                var fragment = super.instantiateItem(container,
+                        position) as Fragment
+                //得到tag ❶
+                val fragmentTag = fragment.tag
+
+                if (fragmentsUpdateFlag[position % fragmentsUpdateFlag.size]) {
+                    //如果这个fragment需要更新
+
+                    val ft = supportFragmentManager.beginTransaction()
+                    //移除旧的fragment
+                    ft.remove(fragment)
+                    //换成新的fragment
+                    fragment = mFragments[position % mFragments.size]
+                    //添加新fragment时必须用前面获得的tag ❶
+                    ft.add(container!!.getId(), fragment, fragmentTag)
+                    ft.attach(fragment)
+                    ft.commit()
+
+                    //复位更新标志
+                    fragmentsUpdateFlag[position % fragmentsUpdateFlag.size] = false
+                }
+
+                return fragment
+            }
+
+            override fun finishUpdate(container: ViewGroup?) {
+                fragmentsUpdateFlag[0] = true
+                fragmentsUpdateFlag[1] = true
+                super.finishUpdate(container)
+            }
         }
         tb_search.setupWithViewPager(vp_search)
     }
+
+    fun removeFragment( fragment: Fragment, fm : FragmentManager) {
+        var ft = fm.beginTransaction()
+        ft.remove(fragment)
+        ft.commit()
+        fm.executePendingTransactions()
+    }
+
+    private fun getFragmentTag(viewId: Int, index: Int): String {
+        try {
+            val cls = FragmentPagerAdapter::class.java
+            val parameterTypes = arrayOf<Class<*>>(Int::class.java, Long::class.java)
+            val method = cls.getDeclaredMethod("makeFragmentName",
+                    *parameterTypes)
+            method.isAccessible = true
+            return method.invoke(this, viewId, index) as String
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return ""
+        }
+
+    }
+
+
 }

@@ -22,5 +22,6 @@
 
     <color name="toolBar">#273842</color>
     <color name="gray_line">#666666</color>
+    <color name="text_blue">#3978bd</color>
 
 </resources>

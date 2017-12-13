@@ -141,7 +141,10 @@ class RepoListActivity : BaseActivity(), BaseView {
                 intent.putExtras(mBundle)
                 startActivity(intent)
             } else if (data is ItemBean) {
-
+                val fullName = data.repo
+                val intent = Intent(this, RepoDetailActivity::class.java)
+                intent.putExtra(IntentConstant.FULL_NAME, fullName)
+                startActivity(intent)
             }
         }
         rv_repo_list.adapter = repoListAdapter

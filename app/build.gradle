@@ -77,4 +77,6 @@ dependencies {
     compile dependencies.rxPermissions2
     compile 'com.ldoublem.loadingview:loadingviewlib:1.0'
     compile files('libs/AutoUpdate_SDK.jar')
+
+    compile 'com.mittsu:markedview:1.0.5@aar'
 }

@@ -23,7 +23,7 @@ import javax.inject.Inject
  * Created by 方 on 2017/11/15.
  */
 @SuppressLint("ValidFragment")
-class RepoListFragment (private val list: List<Repo>) : BaseView, BaseFragment() {
+class RepoListFragment (private var list: List<Repo>) : BaseView, BaseFragment() {
 
     private lateinit var repoListAdapter: RepoListAdapter
     private lateinit var action : String

@@ -39,6 +39,7 @@ class HomePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         {result ->
+                            mView.loadPopRepos(result)
                             Log.i(javaClass.simpleName, result.toString())
                         }, {
                     e ->
