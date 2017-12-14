@@ -31,7 +31,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_50"
                     android:layout_marginTop="@dimen/dimen_42"
-                    android:text="my_github"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"/>
 
@@ -42,7 +41,6 @@
                     android:layout_marginLeft="12dp"
                     android:layout_alignBottom="@+id/tv_repo_name"
                     android:layout_toRightOf="@id/tv_repo_name"
-                    android:text="java"
                     android:background="@drawable/green_bg"
                     style="@style/tv_tip"/>
 

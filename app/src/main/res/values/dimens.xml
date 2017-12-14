@@ -27,4 +27,5 @@
     <dimen name="dimen_42">42dp</dimen>
     <dimen name="dimen_70">70dp</dimen>
     <dimen name="dimen_28">28dp</dimen>
+    <dimen name="sp_18">18sp</dimen>
 </resources>
