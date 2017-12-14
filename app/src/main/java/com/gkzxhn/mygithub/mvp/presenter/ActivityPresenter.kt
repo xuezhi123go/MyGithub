@@ -4,10 +4,8 @@ import android.util.Log
 import android.view.View
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.api.OAuthApi
-import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.extension.toast
-import com.gkzxhn.mygithub.ui.fragment.EventFragment
-import com.gkzxhn.mygithub.utils.SPUtil
+import com.gkzxhn.mygithub.ui.fragment.ActivityFragment
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
 import com.google.gson.Gson
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
@@ -17,16 +15,19 @@ import kotlinx.android.synthetic.main.fragment_notifications.*
 import javax.inject.Inject
 
 /**
- * Created by Xuezhi on 2017/11/29.
+ * Created by Xuezhi on 2017/12/14.
  */
-class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
-                                         private val view: BaseView,
-                                         private val rxBus: RxBus) {
+class ActivityPresenter @Inject constructor(private val oAuthApi: OAuthApi,
+                                            private val view: BaseView,
+                                            private val rxBus: RxBus) {
+
 
     fun getEvents(username: String) {
+
+
         view.showLoading()
-        oAuthApi.getEventsThatAUserHasReceived(username)
-                .bindToLifecycle(view as EventFragment)
+        oAuthApi.getEventsThatAUserPerformed(username)
+                .bindToLifecycle(view as ActivityFragment)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -36,10 +37,8 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                         view.tv_notifications_login.visibility = View.GONE
                         view.srl_notifications.visibility = View.VISIBLE
                         view.loadData(event)
-                        if (!event.toString().equals(SPUtil.get(view.context, "event", ""))) {
-                            SPUtil.put(view.context, "event", event.toString())
-                        }
                         Log.i(javaClass.simpleName, "event = " + Gson().toJson(event))
+                        //LogUtil.i(javaClass.simpleName,"event = " + Gson().toJson(event))
                     } else {
                         view.context.toast("没有数据")
                     }
@@ -51,21 +50,10 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 })
     }
 
-    fun subscribe() {
-        rxBus.toFlowable(User::class.java)
-                .bindToLifecycle(view as EventFragment)
-                .subscribe(
-                        { user: User? ->
-                            view.getNewData()
-                        }
-                )
-
-    }
-
     fun getRepoDetail(owner: String, repo: String) {
 
         oAuthApi.get(owner, repo)
-                .bindToLifecycle(view as EventFragment)
+                .bindToLifecycle(view as ActivityFragment)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ repo ->
@@ -77,5 +65,4 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 })
 
     }
-
 }
