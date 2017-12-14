@@ -61,12 +61,46 @@
                 android:layout_marginTop="25dp"
                 app:layout_collapseMode="pin">
 
+                <RelativeLayout
+                    android:id="@+id/rl_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
                 <TextView
                     android:visibility="invisible"
+                    android:layout_centerVertical="true"
                     android:id="@+id/toolbar_title"
                     android:text="user"
                     style="@style/tv_toolbar_title"/>
 
+                <TextView
+                    android:id="@+id/tv_follow"
+                    android:visibility="gone"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:drawableLeft="@drawable/unfollow"
+                    android:background="@drawable/green_bg"
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:layout_width="wrap_content"
+                    android:drawablePadding="3dp"
+                    android:padding="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/dimen_16"
+                    android:text="Follow" />
+
+                <ProgressBar
+                    android:id="@+id/pb_follow"
+                    android:layout_marginRight="@dimen/dimen_16"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="@dimen/dimen_20"
+                    android:layout_height="@dimen/dimen_20"/>
+
+
+                </RelativeLayout>
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>

@@ -87,8 +87,9 @@ class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
      * 检查是否关注该用户
      */
     fun checkIfFollowIng(username: String){
+        (view as UserActivity).updateListFollowStatus(-1)
         oAuthApi.checkIfFollowUser(username)
-                .bindToLifecycle(view as UserActivity)
+                .bindToLifecycle(view)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -96,9 +97,9 @@ class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     //TODO
                     Log.i(javaClass.simpleName, t.message())
                     if (t.code() == 204) {
-
+                        view.updateListFollowStatus(0)
                     }else{
-
+                        view.updateListFollowStatus(1)
                     }
                 },{
                     e ->
@@ -110,6 +111,7 @@ class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
      * 关注用户
      */
     fun followUser(username: String) {
+        (view as UserActivity).updateListFollowStatus(-1)
         oAuthApi.followUser(username)
                 .bindToLifecycle(view as UserActivity)
                 .subscribeOn(Schedulers.io())
@@ -119,9 +121,9 @@ class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     //TODO
                     Log.i(javaClass.simpleName, t.message())
                     if (t.code() == 204) {
-
+                        view.updateListFollowStatus(0)
                     }else {
-
+                        view.updateListFollowStatus(1)
                     }
                 }, {
                     e ->
@@ -133,6 +135,7 @@ class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
      * 取消关注用户
      */
     fun unFollowUser(username: String) {
+        (view as UserActivity).updateListFollowStatus(-1)
         oAuthApi.unFollowUser(username)
                 .bindToLifecycle(view as UserActivity)
                 .subscribeOn(Schedulers.io())
@@ -142,9 +145,11 @@ class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     //TODO
                     Log.i(javaClass.simpleName, t.message())
                     if (t.code() == 204) {
+                        view.updateListFollowStatus(1)
 
                     }else {
 
+                        view.updateListFollowStatus(0)
                     }
                 }, {
                     e ->

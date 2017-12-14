@@ -20,6 +20,7 @@ import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
+import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.extension.loadBlur
 import com.gkzxhn.mygithub.extension.toast
@@ -75,6 +76,7 @@ class UserActivity : BaseActivity(), BaseView {
         if (action == IntentConstant.MINE_ACTION) {
             val localUser = presenter.getLocalUser()
             localUser?.let { data = it }
+            pb_follow.visibility = View.GONE
         }else {
             data = intent.getParcelableExtra<Parcelable>(IntentConstant.User)
         }
@@ -85,8 +87,54 @@ class UserActivity : BaseActivity(), BaseView {
             return
         }else {
             initBaseData()
+            initFollowTopic()
             setOnclick()
             initAppBar()
+        }
+    }
+
+    private fun initFollowTopic() {
+        if (!IntentConstant.MINE_ACTION.equals(intent.action)) {
+            presenter.checkIfFollowIng(login)
+        }
+    }
+
+//    0表示已关注,1表示未关注,-1表示正在查询
+    private var isFollowing = -1
+
+    /**
+     * 更新follow标签状态
+     * @param isFollowing 0表示已关注,1表示未关注,-1表示正在查询
+     */
+    fun updateListFollowStatus(isFollowing: Int){
+        this.isFollowing = isFollowing
+        when (isFollowing) {
+            0 -> {
+                pb_follow.visibility = View.GONE
+                tv_follow.visibility = View.VISIBLE
+                tv_follow.text = "Unfollow"
+                tv_follow.setBackgroundResource(R.drawable.gray_btn_back)
+                tv_follow.setTextColor(resources.getColor(R.color.text_black))
+                val leftDrawable = resources.getDrawable(R.drawable.follow)
+                leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+                tv_follow.setCompoundDrawablePadding(3f.dp2px().toInt())//设置图片和text之间的间距
+                tv_follow.setCompoundDrawables(leftDrawable, null, null, null)
+            }
+            1 -> {
+                pb_follow.visibility = View.GONE
+                tv_follow.visibility = View.VISIBLE
+                tv_follow.text = "Follow"
+                tv_follow.setTextColor(resources.getColor(R.color.white))
+                tv_follow.setBackgroundResource(R.drawable.green_bg)
+                val leftDrawable = resources.getDrawable(R.drawable.unfollow)
+                leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+                tv_follow.setCompoundDrawablePadding(3f.dp2px().toInt())//设置图片和text之间的间距
+                tv_follow.setCompoundDrawables(leftDrawable, null, null, null)
+            }
+            else -> {
+                pb_follow.visibility = View.VISIBLE
+                tv_follow.visibility = View.GONE
+            }
         }
     }
 
@@ -113,6 +161,19 @@ class UserActivity : BaseActivity(), BaseView {
             intent.putExtra(IntentConstant.NAME, login)
             intent.action = IntentConstant.REPO
             startActivity(intent)
+        }
+
+        tv_follow.setOnClickListener{
+            when (isFollowing) {
+                0 -> {
+                    presenter.unFollowUser(login)
+                }
+                1 -> {
+                    presenter.followUser(login)
+                }
+                else -> {
+                }
+            }
         }
     }
 
