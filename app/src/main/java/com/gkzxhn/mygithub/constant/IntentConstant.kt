@@ -20,4 +20,6 @@ object IntentConstant {
     val REPO_ENTITIES = "repo_entities"
     val USERS = "users"
     val FULL_NAME = "full_name"
+    val POP_REPO = "pop_repo"
+    val TOOLBAR_TITLE = "toolbar_title"
 }

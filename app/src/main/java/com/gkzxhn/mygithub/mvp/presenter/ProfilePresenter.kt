@@ -71,22 +71,6 @@ class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 })
     }
 
-    fun loadUserRepos(username: String) {
-        view.showLoading()
-        oAuthApi.getUserRepos(username)
-                .bindToLifecycle(view as UserActivity)
-                .subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ datas ->
-                    view.loadRepos(datas)
-                    view.hideLoading()
-                }, { e ->
-                    Log.e(javaClass.simpleName, e.message)
-                    view.hideLoading()
-                })
-    }
-
     fun getLocalUser(): User? {
         try {
             return  gson.fromJson(SharedPreConstant.USER_SP

@@ -92,7 +92,12 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                         {result ->
                             Log.i(javaClass.simpleName, result.toString())
                             view.hideLoading()
-                            view.loadPopUsers(result)
+                            val list = result.items
+                                    .map { item ->
+                                        return@map Icon2Name(item.avatar_url, item.login, "user")
+                                    }
+                            view.loadPopUsers(list)
+                            getUserBio(list, view)
                         }, {
                     e ->
                     Log.e(javaClass.simpleName, e.message)
@@ -124,5 +129,81 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                                 Log.e(javaClass.simpleName, e.message)
                             })
         }
+    }
+
+    fun getPopularRepos() {
+        oAuthApi.searchRepos("language:java stars:>1000")
+                .bindToLifecycle(view as RepoListActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { result ->
+                            view.loadData(result.items)
+                            Log.i(javaClass.simpleName, result.toString())
+                        }, { e ->
+                    Log.e(javaClass.simpleName, e.message)
+                })
+    }
+
+    fun getUserFollowers(username: String) {
+        view.showLoading()
+        oAuthApi.getUserFollowers(username)
+                .bindToLifecycle(view as RepoListActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {result ->
+                            Log.i(javaClass.simpleName, result.toString())
+                            view.hideLoading()
+                            view.loadUsers(result)
+                            val list = result
+                                    .map { item ->
+                                        return@map Icon2Name(item.avatar_url, item.login, "user")
+                                    }
+                            view.loadPopUsers(list)
+                            getUserBio(list, view)
+                        }, {
+                    e ->
+                    Log.e(javaClass.simpleName, e.message)
+                })
+    }
+
+    fun getUserFollowing(username: String) {
+        view.showLoading()
+        oAuthApi.getUserFollowing(username)
+                .bindToLifecycle(view as RepoListActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {result ->
+                            Log.i(javaClass.simpleName, result.toString())
+                            view.hideLoading()
+                            view.loadUsers(result)
+                            val list = result
+                                    .map { item ->
+                                        return@map Icon2Name(item.avatar_url, item.login, "user")
+                                    }
+                            view.loadPopUsers(list)
+                            getUserBio(list, view)
+                        }, {
+                    e ->
+                    Log.e(javaClass.simpleName, e.message)
+                })
+    }
+
+    fun loadUserRepos(username: String) {
+        view.showLoading()
+        oAuthApi.getUserRepos(username)
+                .bindToLifecycle(view as RepoListActivity)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ datas ->
+                    view.loadData(datas)
+                    view.hideLoading()
+                }, { e ->
+                    Log.e(javaClass.simpleName, e.message)
+                    view.hideLoading()
+                })
     }
 }

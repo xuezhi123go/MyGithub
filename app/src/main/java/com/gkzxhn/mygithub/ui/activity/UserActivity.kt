@@ -79,33 +79,46 @@ class UserActivity : BaseActivity(), BaseView {
             data = intent.getParcelableExtra<Parcelable>(IntentConstant.User)
         }
         setToolBar()
+        initRecyclerView()
         if (null == data) {
             toast("请重新登录...")
             return
         }else {
-            initRecyclerView()
+            initBaseData()
+            setOnclick()
             initAppBar()
         }
     }
 
-    private fun initAppBar() {
-        var avatar_url = ""
-        if (data is Owner) {
-            login = (data as Owner).login
-            username = login
-            avatar_url = (data as Owner).avatar_url
-            presenter.getUser(login)
-        }else if (data is User) {
-            login = (data as User).login
-            avatar_url = (data as User).avatar_url
-            username = if (TextUtils.isEmpty((data as User).name)) login else (data as User).name
-            updateAppbar()
-        }else if (data is Icon2Name) {
-            login = (data as Icon2Name).name
-            username = login
-            avatar_url = (data as Icon2Name).avatarUrl
-            presenter.getUser(login)
+    private fun setOnclick() {
+        ll_followers.setOnClickListener{
+            val intent = Intent(this, RepoListActivity::class.java)
+            intent.putExtra(IntentConstant.TOOLBAR_TITLE, "Followers")
+            intent.putExtra(IntentConstant.NAME, login)
+            intent.action = IntentConstant.USERS
+            startActivity(intent)
         }
+
+        ll_following.setOnClickListener{
+            val intent = Intent(this, RepoListActivity::class.java)
+            intent.putExtra(IntentConstant.TOOLBAR_TITLE, "Following")
+            intent.putExtra(IntentConstant.NAME, login)
+            intent.action = IntentConstant.USERS
+            startActivity(intent)
+        }
+
+        ll_repositories.setOnClickListener{
+            val intent = Intent(this, RepoListActivity::class.java)
+            intent.putExtra(IntentConstant.TOOLBAR_TITLE, "Repositories")
+            intent.putExtra(IntentConstant.NAME, login)
+            intent.action = IntentConstant.REPO
+            startActivity(intent)
+        }
+    }
+
+    var avatar_url = ""
+
+    private fun initAppBar() {
         iv_avatar_big.load(this, avatar_url, R.drawable.default_avatar)
         iv_user_header.loadBlur(this, avatar_url)
         tv_username.text = if (TextUtils.isEmpty(username)) login else username
@@ -121,6 +134,28 @@ class UserActivity : BaseActivity(), BaseView {
             }else {
                 toolbar_title.visibility = View.GONE
             }
+        }
+    }
+
+    private fun initBaseData() {
+        if (data is Owner) {
+            login = (data as Owner).login
+            username = login
+            avatar_url = (data as Owner).avatar_url
+            presenter.getUser(login)
+        } else if (data is User) {
+            login = (data as User).login
+            avatar_url = (data as User).avatar_url
+            username = if (TextUtils.isEmpty((data as User).name)) login else (data as User).name
+            updateAppbar()
+        } else if (data is Icon2Name) {
+            login = (data as Icon2Name).name
+            username = login
+            avatar_url = (data as Icon2Name).avatarUrl
+            presenter.getUser(login)
+        }
+        srl_repos.setOnRefreshListener {
+            presenter.getUser(login)
         }
     }
 
@@ -209,9 +244,6 @@ class UserActivity : BaseActivity(), BaseView {
                 IvTvItemBean(ivResource, tvTitleList[index], "", false)
         } as ArrayList<IvTvItemBean>
 
-        srl_repos.setOnRefreshListener {
-
-        }
         adapter = IvTvAdapter(null)
         adapter.setOnItemClickListener { adapter, view, position ->
                     toast("clicked  : ${position.toString()}")

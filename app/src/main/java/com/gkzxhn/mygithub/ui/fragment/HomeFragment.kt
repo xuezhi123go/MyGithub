@@ -13,10 +13,7 @@ import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.entity.Icon2Name
-import com.gkzxhn.mygithub.bean.info.ItemBean
-import com.gkzxhn.mygithub.bean.info.SearchRepoResult
-import com.gkzxhn.mygithub.bean.info.SearchUserResult
-import com.gkzxhn.mygithub.bean.info.TrendingResults
+import com.gkzxhn.mygithub.bean.info.*
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.mvp.presenter.HomePresenter
@@ -34,6 +31,7 @@ import javax.inject.Inject
 class HomeFragment : BaseFragment(), BaseView {
 
     private var trendingRepoList = arrayListOf<ItemBean>()
+    private var popRepoList = arrayListOf<Repo>()
 
     private lateinit var repoWeekAdapter: AvatarListAdapter
     private lateinit var popRepoAdapter: AvatarListAdapter
@@ -94,8 +92,19 @@ class HomeFragment : BaseFragment(), BaseView {
             val data = Bundle()
             data.putParcelableArrayList(IntentConstant.REPO_ENTITIES, trendingRepoList)
             val intent = Intent(context, RepoListActivity::class.java)
+            intent.putExtra(IntentConstant.TOOLBAR_TITLE, "仓库周榜")
             intent.putExtras(data)
             intent.action = IntentConstant.TRENDING_REPO
+            startActivity(intent)
+        }
+
+        ll_see_all2.setOnClickListener {
+            val data = Bundle()
+            data.putParcelableArrayList(IntentConstant.REPO_ENTITIES, popRepoList)
+            val intent = Intent(context, RepoListActivity::class.java)
+            intent.putExtra(IntentConstant.TOOLBAR_TITLE, "仓库流行榜")
+            intent.putExtras(data)
+            intent.action = IntentConstant.POP_REPO
             startActivity(intent)
         }
 
@@ -104,6 +113,7 @@ class HomeFragment : BaseFragment(), BaseView {
             data.putParcelableArrayList(IntentConstant.USERS, popUsersAdapter.data as ArrayList)
             val intent = Intent(context, RepoListActivity::class.java)
             intent.putExtras(data)
+            intent.putExtra(IntentConstant.TOOLBAR_TITLE, "大牛榜")
             intent.action = IntentConstant.USERS
             startActivity(intent)
         }
@@ -163,6 +173,7 @@ class HomeFragment : BaseFragment(), BaseView {
     }
 
     fun loadPopRepos(result: SearchRepoResult) {
+        popRepoList = result.items
         val list = result.items
                 .map { item ->
                     return@map Icon2Name(item.owner.avatar_url, item.name, "user")

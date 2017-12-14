@@ -38,7 +38,7 @@ interface OAuthApi {
                  @Query("direction") direction: String = "asc"): Observable<List<Repo>>
 
     /**
-     * 获取用户的组织列表
+     * 获取用户的仓库列表
      * @param type 可以是一个all，owner，member。默认：owner
      * @param sort 可以是一个created，updated，pushed，full_name。默认：full_name
      * @param direction 可以是一个asc或desc。默认：使用时full_name：asc否则desc
@@ -249,16 +249,16 @@ interface OAuthApi {
     fun getReadme(@Path("owner") owner: String, @Path("name") repo: String): Observable<Content>
 
     @GET("/users/{user}/following")
-    fun getUserFollowing(@Path("user") user: String): Observable<ArrayList<User>>
+    fun getUserFollowing(@Path("user") user: String): Observable<ArrayList<Owner>>
 
     @GET("/users/{user}/followers")
-    fun getUserFollowers(@Path("user") user: String): Observable<ArrayList<User>>
+    fun getUserFollowers(@Path("user") user: String): Observable<ArrayList<Owner>>
 
     @GET("/user/following")
-    fun getMyFollowing(): Observable<ArrayList<User>>
+    fun getMyFollowing(): Observable<ArrayList<Owner>>
 
     @GET("/user/followers")
-    fun getMyFollowers(): Observable<ArrayList<User>>
+    fun getMyFollowers(): Observable<ArrayList<Owner>>
 
     /**
      * 关注用户

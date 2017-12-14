@@ -76,6 +76,7 @@
             android:layout_height="@dimen/bottom_height">
 
             <LinearLayout
+                android:id="@+id/ll_followers"
                 style="@style/item_repo_topic">
                 <TextView
                     android:id="@+id/tv_followers"
@@ -94,6 +95,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_repositories"
                 style="@style/item_repo_topic">
 
                 <TextView
@@ -112,6 +114,7 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/ll_following"
                 style="@style/item_repo_topic">
 
                 <TextView
