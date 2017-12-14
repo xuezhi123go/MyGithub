@@ -23,24 +23,38 @@ class EventAdapter(datas: List<Event>?) : BaseQuickAdapter<Event, BaseViewHolder
 
         var toNow = getDiffTime(creatTiem)
 
-        if ("PushEvent".equals(item!!.type)) {
-            did = " pushed to "
-            helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
-            helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.push_icon) }
-        } else if ("WatchEvent".equals(item!!.type)) {
-            did = " Starred "
-            helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
-            helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.push_icon) }
-        } else if ("MemberEvent".equals(item!!.type)) {
-            did = " added member to "
-            helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
-            helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.stared_icon) }
-        } else {
-            did = "*等我改*"
-            helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
-            //TODO("not implemented")//这里有几种不同的event判断，还没理清。
-            //这个todo会造成程序崩溃。。。
+        when (item!!.type) {
+            "PushEvent" -> {
+                did = " pushed to "
+                helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
+                helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.push_icon) }
+            }
+            "WatchEvent" -> {
+                did = " Starred "
+                helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
+                helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.stared_icon) }
+            }
+            "MemberEvent" -> {
+                did = " added member to "
+                helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
+                helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.company) }
+            }
+            "PullRequestEvent"->{
+                did = " opened pull request "
+                helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
+                helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.open_icon) }
+            }
+            "DeleteEvent"->{
+                did=" delete branch at "
+                helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
+                helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.close_icon) }
+            }
+            else -> {
+                did = "*等我改*"
+                helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
+            }
         }
+
 
         helper!!.setText(R.id.tv_new_date_notification, toNow)
 

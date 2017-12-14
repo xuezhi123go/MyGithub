@@ -26,9 +26,9 @@ import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.MainPresenter
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
-import com.gkzxhn.mygithub.ui.fragment.EventFragment
 import com.gkzxhn.mygithub.ui.fragment.HomeFragment
 import com.gkzxhn.mygithub.ui.fragment.ProfileFragment
+import com.gkzxhn.mygithub.ui.fragment.SecondFragment
 import com.tbruyelle.rxpermissions2.Permission
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
@@ -217,7 +217,8 @@ class MainActivity : BaseActivity(), BaseView {
     private fun initFragments() {
         mFragments = ArrayList()
         mFragments.add(HomeFragment())
-        mFragments.add(EventFragment())
+        //mFragments.add(EventFragment())
+        mFragments.add(SecondFragment())
         mFragments.add(ProfileFragment())
     }
 

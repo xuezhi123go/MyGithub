@@ -20,7 +20,7 @@ import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.getSharedPreference
-import com.gkzxhn.mygithub.mvp.presenter.EventPresenter
+import com.gkzxhn.mygithub.mvp.presenter.ActivityPresenter
 import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
 import com.gkzxhn.mygithub.ui.adapter.EventAdapter
 import com.ldoublem.loadingviewlib.view.LVGhost
@@ -28,18 +28,16 @@ import kotlinx.android.synthetic.main.fragment_notifications.*
 import javax.inject.Inject
 
 /**
- * Created by Xuezhi on 2017/11/19.
+ * Created by Xuezhi on 2017/12/13.
  */
-class EventFragment : BaseFragment(), BaseView {
+class ActivityFragment : BaseFragment(), BaseView {
 
     private lateinit var loading: LVGhost
-    private lateinit var event: Event
 
     @Inject
-    lateinit var presenter: EventPresenter
+    lateinit var presenter: ActivityPresenter
 
     private lateinit var adapter: EventAdapter
-
 
     override fun launchActivity(intent: Intent) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -59,7 +57,6 @@ class EventFragment : BaseFragment(), BaseView {
         }
         loading.stopAnim()
         fl_notifications.removeView(loading)
-
     }
 
     override fun showMessage() {
@@ -72,7 +69,6 @@ class EventFragment : BaseFragment(), BaseView {
 
     override fun initContentView() {
 
-        presenter.subscribe()
 
         srl_notifications.setOnRefreshListener {
             getNewData()
@@ -91,7 +87,6 @@ class EventFragment : BaseFragment(), BaseView {
         }
         rv_notifications.adapter = adapter
     }
-
     override fun setupComponent() {
         App.getInstance()
                 .baseComponent
@@ -100,20 +95,17 @@ class EventFragment : BaseFragment(), BaseView {
     }
 
     override fun initView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater!!.inflate(R.layout.fragment_notifications, container, false)
+        return inflater!!.inflate(R.layout.fragment_notifications,container,false)
     }
-
     fun loadData(event: List<Event>) {
         adapter.setNewData(event)
         Log.i(javaClass.simpleName, event[0].toString())
     }
-
     fun getNewData() {
         var string: String = SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, "")
         Log.i(javaClass.simpleName, "USER_NAME = " + string)
         presenter.getEvents(SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, ""))
     }
-
     fun toRepoDetailActivity(repo: Repo) {
         val intent = Intent(context, RepoDetailActivity::class.java)
         val mBundle = Bundle()

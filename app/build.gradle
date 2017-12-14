@@ -54,6 +54,8 @@ dependencies {
     compile dependencies.retrofitGsonConverter
     compile dependencies.okhttp3
     compile dependencies.gson
+    //打印网络日志
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
     //design
     compile dependencies.supportDesign
     //recycleView

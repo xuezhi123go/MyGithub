@@ -209,14 +209,14 @@ interface OAuthApi {
     @Headers("Content-Length: 0")
     @PUT("/user/subscriptions/{owner}/{repo}")
     fun watchRepo(@Path("owner") owner: String
-                 , @Path("repo") repo: String): Observable<Response<ResponseBody>>
+                  , @Path("repo") repo: String): Observable<Response<ResponseBody>>
 
     /**
      * unwatch仓库
      */
     @DELETE("/user/subscriptions/{owner}/{repo}")
     fun unwatchRepo(@Path("owner") owner: String
-                   , @Path("repo") repo: String): Observable<Response<ResponseBody>>
+                    , @Path("repo") repo: String): Observable<Response<ResponseBody>>
 
     /**
      * 有星status : 204
@@ -309,8 +309,20 @@ interface OAuthApi {
             @Query("before") before: String
     ): Observable<List<Notifications>>
 
+    /**
+     *列出用户已接收的事件
+     */
     @GET("/users/{username}/received_events")
     fun getEventsThatAUserHasReceived(
+            @Path("username") username: String
+    ): Observable<List<Event>>
+
+    /**
+     *列出用户执行的事件
+     *List events performed by a user
+     */
+    @GET("/users/{username}/events")
+    fun getEventsThatAUserPerformed(
             @Path("username") username: String
     ): Observable<List<Event>>
 }

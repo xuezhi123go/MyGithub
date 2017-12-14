@@ -40,4 +40,6 @@ interface OAuthComponent {
     fun inject(searchActivity: SearchActivity)
 
     fun inject(mainActivity: MainActivity)
+
+    fun inject(activityFragment: ActivityFragment)
 }

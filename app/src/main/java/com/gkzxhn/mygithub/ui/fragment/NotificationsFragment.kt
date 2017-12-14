@@ -3,7 +3,6 @@ package com.gkzxhn.mygithub.ui.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -80,13 +79,13 @@ class NotificationsFragment : BaseFragment(), BaseView {
         getNewData()
     }
 
-    override fun getStatusBar(): View? {
+   /* override fun getStatusBar(): View? {
         return status_view_notifications
     }
 
     override fun getToolbar(): Toolbar? {
         return toolbar_notifications
-    }
+    }*/
 
     override fun setupComponent() {
         App.getInstance()
