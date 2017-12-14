@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.gkzxhn.balabala.base.BaseFragment
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
@@ -71,6 +72,28 @@ class ContributorsFragment constructor(private val repo: Repo?,
             bundle.putParcelable(IntentConstant.User, user)
             intent.putExtras(bundle)
             startActivity(intent)
+        }
+        adapter.setOnItemChildClickListener{
+            adapter, view, position ->
+            when (view.id) {
+                R.id.tv_follow -> {
+                    val username = (adapter.getViewByPosition(rv_issue, position, R.id.tv_username) as TextView).text.toString()
+                    when (this.adapter.isFollowing[position]) {
+                        0 -> {
+                            //已关注,点击取消关注
+                            presenter.unFollowUser(position, username)
+                        }
+                        1 -> {
+                            presenter.followUser(position, username)
+                        }
+                        else -> {
+
+                        }
+                    }
+                }
+                else -> {
+                }
+            }
         }
         srl_issue.setOnRefreshListener {
             getNewData()
@@ -136,4 +159,13 @@ class ContributorsFragment constructor(private val repo: Repo?,
         Log.i(javaClass.simpleName, "ondestroy")
     }
 
+
+    /**
+     * 更新follow标签状态
+     * @param isFollowing 0表示已关注,1表示未关注,-1表示正在查询
+     */
+    fun updateListFollowStatus(position: Int, isFollowing: Int){
+        adapter.isFollowing.put(position, isFollowing)
+        adapter.notifyItemChanged(position)
+    }
 }

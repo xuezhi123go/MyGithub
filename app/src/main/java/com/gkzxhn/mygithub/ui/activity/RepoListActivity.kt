@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.gkzxhn.balabala.base.BaseActivity
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
@@ -157,6 +158,28 @@ class RepoListActivity : BaseActivity(), BaseView {
             intent.putExtras(bundle)
             startActivity(intent)
         }
+        userListAdapter.setOnItemChildClickListener{
+            adapter, view, position ->
+            when (view.id) {
+                R.id.tv_follow -> {
+                    val username = (adapter.getViewByPosition(rv_repo_list, position, R.id.tv_username) as TextView).text.toString()
+                    when (userListAdapter.isFollowing[position]) {
+                        0 -> {
+                            //已关注,点击取消关注
+                            presenter.unFollowUser(position, username)
+                        }
+                        1 -> {
+                            presenter.followUser(position, username)
+                        }
+                        else -> {
+
+                        }
+                    }
+                }
+                else -> {
+                }
+            }
+        }
         rv_repo_list.adapter = userListAdapter
         rv_repo_list.addItemDecoration(RecycleViewDivider(this, LinearLayoutManager.HORIZONTAL, 2,
                 App.getInstance().resources.getColor(R.color.gray_back)))
@@ -206,6 +229,15 @@ class RepoListActivity : BaseActivity(), BaseView {
     fun updateList(position: Int, data: Any) {
         userListAdapter.data[position] = data
         userListAdapter.notifyItemChanged(position, data)
+    }
+
+    /**
+     * 更新follow标签状态
+     * @param isFollowing 0表示已关注,1表示未关注,-1表示正在查询
+     */
+    fun updateListFollowStatus(position: Int, isFollowing: Int){
+        userListAdapter.isFollowing.put(position, isFollowing)
+        userListAdapter.notifyItemChanged(position)
     }
 
     private fun setToolBar() {

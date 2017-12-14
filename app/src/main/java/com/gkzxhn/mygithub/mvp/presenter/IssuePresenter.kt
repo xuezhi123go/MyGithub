@@ -236,7 +236,7 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     view.loadData(list)
                     list
                 }
-                .observeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     t ->
                     getUserBio(t, view)
@@ -250,8 +250,10 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
             if (view.isLoading) {
                 return
             }
+            checkIfFollowIng(index, owner.login)
             oAuthApi.getUser(owner.login)
                     .bindToLifecycle(view)
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ user: User ->
                         Log.i(javaClass.simpleName, "get user")
@@ -270,4 +272,75 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                             })
         }
     }
+
+    /**
+     * 检查是否关注该用户
+     */
+    fun checkIfFollowIng(index: Int, username: String){
+        (view as ContributorsFragment).updateListFollowStatus(index, -1)
+        oAuthApi.checkIfFollowUser(username)
+                .bindToLifecycle(view)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    t ->
+                    Log.i(javaClass.simpleName, t.message())
+                    if (t.code() == 204) {
+                        //已关注
+                        view.updateListFollowStatus(index, 0)
+                    }else{
+                        view.updateListFollowStatus(index, 1)
+                    }
+                },{
+                    e ->
+                    Log.i(javaClass.simpleName, e.message)
+                })
+    }
+
+    /**
+     * 关注用户
+     */
+    fun followUser(index: Int, username: String) {
+        (view as ContributorsFragment).updateListFollowStatus(index, -1)
+        oAuthApi.followUser(username)
+                .bindToLifecycle(view)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    t ->
+                    Log.i(javaClass.simpleName, t.message())
+                    if (t.code() == 204) {
+                        view.updateListFollowStatus(index, 0)
+                    }else {
+                        view.updateListFollowStatus(index, 1)
+                    }
+                }, {
+                    e ->
+                    Log.e(javaClass.simpleName, e.message)
+                })
+    }
+
+    /**
+     * 取消关注用户
+     */
+    fun unFollowUser(index: Int, username: String) {
+        (view as ContributorsFragment).updateListFollowStatus(index, -1)
+        oAuthApi.unFollowUser(username)
+                .bindToLifecycle(view)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    t ->
+                    Log.i(javaClass.simpleName, t.message())
+                    if (t.code() == 204) {
+                        view.updateListFollowStatus(index, 1)
+                    }else {
+                        view.updateListFollowStatus(index, 1)
+                    }
+                }, {
+                    e ->
+                    Log.e(javaClass.simpleName, e.message)
+                })
+    }
+
 }
