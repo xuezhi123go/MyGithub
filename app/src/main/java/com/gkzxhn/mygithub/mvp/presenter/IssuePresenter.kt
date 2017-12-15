@@ -248,7 +248,10 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
         t.forEachIndexed { index, owner ->
             Log.i(javaClass.simpleName, "when map list Current thread is " + Thread.currentThread().getName())
             if (view.isLoading) {
-                return
+                return@forEachIndexed
+            }
+            if ("USER" != owner.type){
+                return@forEachIndexed
             }
             checkIfFollowIng(index, owner.login)
             oAuthApi.getUser(owner.login)

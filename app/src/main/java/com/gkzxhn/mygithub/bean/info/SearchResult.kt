@@ -29,7 +29,7 @@ data class Item(
 		val repos_url: String, //https://api.github.com/users/torvalds/repos
 		val events_url: String, //https://api.github.com/users/torvalds/events{/privacy}
 		val received_events_url: String, //https://api.github.com/users/torvalds/received_events
-		val type: String, //User
+		val type: String, //USER
 		val site_admin: Boolean, //false
 		val score: Float //1.0
 )

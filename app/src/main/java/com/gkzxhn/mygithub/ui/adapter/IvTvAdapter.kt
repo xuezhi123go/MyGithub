@@ -12,12 +12,18 @@ import com.gkzxhn.mygithub.extension.dp2px
 /**
  * Created by 方 on 2017/12/13.
  */
-class IvTvAdapter(datas : List<IvTvItemBean>?) : BaseQuickAdapter<IvTvItemBean, BaseViewHolder>(R.layout.item_iv_tv, datas) {
+class IvTvAdapter(var datas : List<IvTvItemBean>?) : BaseQuickAdapter<IvTvItemBean, BaseViewHolder>(R.layout.item_iv_tv, datas) {
 
     override fun convert(helper: BaseViewHolder?, item: IvTvItemBean?) {
         val baseView = helper!!.getView<RelativeLayout>(R.id.rl_base)
         val layoutParams = baseView.layoutParams as RecyclerView.LayoutParams
-        if (helper.layoutPosition == 0 || helper.layoutPosition == 4) {
+        var group2 = 4
+        if ("USER" == type){
+            group2 = 4
+        }else if("Organization" == type) {
+            group2 = 1
+        }
+        if (helper.layoutPosition == 0 || helper.layoutPosition == group2) {
             layoutParams.topMargin = 20f.dp2px().toInt()
             baseView.layoutParams = layoutParams
             helper.setVisible(R.id.top_line, true)
@@ -26,7 +32,7 @@ class IvTvAdapter(datas : List<IvTvItemBean>?) : BaseQuickAdapter<IvTvItemBean, 
         }
         val bottom_line = helper.getView<View>(R.id.bottom_line)
         val lineLayoutParams = bottom_line.layoutParams as RelativeLayout.LayoutParams
-        if (helper.layoutPosition == 3 || helper.layoutPosition == 7) {
+        if (helper.layoutPosition == group2 - 1 || helper.layoutPosition == datas?.let { it.size - 1 }) {
             lineLayoutParams.leftMargin = 0
             bottom_line.layoutParams = lineLayoutParams
         }
@@ -41,4 +47,6 @@ class IvTvAdapter(datas : List<IvTvItemBean>?) : BaseQuickAdapter<IvTvItemBean, 
         }
         helper.setVisible(R.id.tv_right, item.clickable)
     }
+
+    var type = "USER"
 }

@@ -257,7 +257,7 @@ data class Owner(
         val repos_url: String, //https://api.github.com/users/FangforFun/repos
         val events_url: String, //https://api.github.com/users/FangforFun/events{/privacy}
         val received_events_url: String, //https://api.github.com/users/FangforFun/received_events
-        val type: String, //User
+        val type: String, //USER
         val site_admin: Boolean, //false
         val score: Float //1
 ) : Parcelable {

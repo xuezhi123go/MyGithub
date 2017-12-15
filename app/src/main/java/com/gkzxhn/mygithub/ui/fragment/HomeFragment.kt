@@ -166,7 +166,7 @@ class HomeFragment : BaseFragment(), BaseView {
             val user = adapter.data[position] as Parcelable
             val intent = Intent(context, UserActivity::class.java)
             val bundle = Bundle()
-            bundle.putParcelable(IntentConstant.User, user)
+            bundle.putParcelable(IntentConstant.USER, user)
             intent.putExtras(bundle)
             startActivity(intent)
         }

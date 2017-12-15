@@ -102,7 +102,7 @@ class LoginPresenter @Inject constructor(private val rxBus: RxBus,
 //        createAuthorization.scopes = GithubConstant.SCOPES
 //
 //        accountApi.createAuthorization(createAuthorization)
-//                .flatMap(Function<AuthorizationResp, Observable<User>> {
+//                .flatMap(Function<AuthorizationResp, Observable<USER>> {
 //                    t : AuthorizationResp->
 //
 //                    return@Function accountApi.getUserInfo(t.token)
@@ -113,7 +113,7 @@ class LoginPresenter @Inject constructor(private val rxBus: RxBus,
 //                .doOnTerminate { view.showLoading() }
 //                .doAfterTerminate { view.hideLoading() }
 //                .subscribe({
-//                    user: User? ->
+//                    user: USER? ->
 //                    Log.i(TAG, "user: ${user}"
 //                )},{
 //                    e -> Log.e(TAG, "login error : ${e.message}")

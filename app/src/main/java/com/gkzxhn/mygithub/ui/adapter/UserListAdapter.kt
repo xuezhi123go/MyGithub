@@ -8,6 +8,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.bean.entity.Icon2Name
+import com.gkzxhn.mygithub.bean.info.Organization
 import com.gkzxhn.mygithub.bean.info.Owner
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.extension.dp2px
@@ -59,10 +60,19 @@ class UserListAdapter(datas : List<Any>?) : BaseQuickAdapter<Any, BaseViewHolder
             helper!!.setText(R.id.tv_username, item.login)
             helper.getView<ImageView>(R.id.iv_avatar)
                     .let { it.load(it.context, item.avatar_url, R.drawable.default_avatar) }
+            if ("USER" != item.type) {
+                helper.setVisible(R.id.pb_follow, false)
+            }
         }else if (item is Icon2Name) {
             helper!!.setText(R.id.tv_username, item.name)
             helper.getView<ImageView>(R.id.iv_avatar)
                     .let { it.load(it.context, item.avatarUrl, R.drawable.default_avatar) }
+        }else if(item is Organization) {
+            helper.setVisible(R.id.pb_follow, false)
+                    .setText(R.id.tv_username, item.login)
+                    .setText(R.id.tv_bio, if(item.description == null) "" else item.description)
+            helper.getView<ImageView>(R.id.iv_avatar)
+                    .let { it.load(it.context, item.avatar_url, R.drawable.default_avatar) }
         }
     }
 

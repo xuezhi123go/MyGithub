@@ -7,7 +7,7 @@ import android.text.TextUtils
 /**
  * Created by 方 on 2017/10/19.
  *
- * User(login=FangforFun, id=23162290, avatar_url=https://avatars2.githubusercontent.com/u/23162290?v=4,
+ * USER(login=FangforFun, id=23162290, avatar_url=https://avatars2.githubusercontent.com/u/23162290?v=4,
  *       gravatar_id=, url=https://api.github.com/users/FangforFun, html_url=https://github.com/FangforFun,
  *       followers_url=https://api.github.com/users/FangforFun/followers,
  *       following_url=https://api.github.com/users/FangforFun/following{/other_user},
@@ -18,7 +18,7 @@ import android.text.TextUtils
  *       repos_url=https://api.github.com/users/FangforFun/repos,
  *       events_url=https://api.github.com/users/FangforFun/events{/privacy},
  *       received_events_url=https://api.github.com/users/FangforFun/received_events,
- *       type=User, site_admin=false, name=null, company=null, blog=, location=null, email=null,
+ *       type=USER, site_admin=false, name=null, company=null, blog=, location=null, email=null,
  *       hireable=false, bio=null, public_repos=8, public_gists=0, followers=1, following=1,
  *       created_at=2016-10-31T06:13:10Z, updated_at=2017-10-12T08:36:42Z, total_private_repos=0,
  *       owned_private_repos=0, private_gists=0, disk_usage=127160, collaborators=0,
@@ -41,7 +41,7 @@ data class User(
 		val repos_url: String, //https://api.github.com/users/octocat/repos
 		val events_url: String, //https://api.github.com/users/octocat/events{/privacy}
 		val received_events_url: String, //https://api.github.com/users/octocat/received_events
-		val type: String, //User
+		val type: String, //USER
 		val site_admin: Boolean, //false
 		val name: String, //monalisa octocat
 		val company: String, //GitHub
