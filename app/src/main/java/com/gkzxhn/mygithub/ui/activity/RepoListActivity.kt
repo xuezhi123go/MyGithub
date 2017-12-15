@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.gkzxhn.balabala.base.BaseActivity
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
@@ -15,7 +18,6 @@ import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.entity.Icon2Name
 import com.gkzxhn.mygithub.bean.info.ItemBean
 import com.gkzxhn.mygithub.bean.info.Repo
-import com.gkzxhn.mygithub.bean.info.SearchUserResult
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
@@ -71,6 +73,13 @@ class RepoListActivity : BaseActivity(), BaseView {
         setContentView(R.layout.activity_repo_list)
         setToolBar()
 
+        toolbar.title = intent.getStringExtra(IntentConstant.TOOLBAR_TITLE)?.let {
+            if (TextUtils.isEmpty(it)) {
+                return@let ""
+            }else {
+                return@let it
+            }
+        }
         action = intent.action
         when (action) {
             IntentConstant.MY_REPOS -> {
@@ -87,7 +96,6 @@ class RepoListActivity : BaseActivity(), BaseView {
             }
             IntentConstant.TRENDING_REPO -> {
                 val list = intent.getParcelableArrayListExtra<ItemBean>(IntentConstant.REPO_ENTITIES)
-                toolbar.title = "仓库周榜"
                 setReposRecyclerView()
                 if (list.size > 0) {
                     repoListAdapter.setNewData(list as List<Parcelable>?)
@@ -97,14 +105,42 @@ class RepoListActivity : BaseActivity(), BaseView {
             }
             IntentConstant.USERS -> {
                 val list = intent.getParcelableArrayListExtra<Icon2Name>(IntentConstant.USERS)
-                toolbar.title = "大牛榜"
                 setUsersRecyclerView()
+                if (list == null) {
+                    val login = intent.getStringExtra(IntentConstant.NAME)
+                    when (toolbar.title) {
+                        "Followers" -> {
+                            presenter.getUserFollowers(login)
+                        }
+                        "Following" ->{
+                            presenter.getUserFollowing(login)
+                        }
+                        else -> {
+                            Log.i(javaClass.simpleName, "login : $login")
+                        }
+                    }
+                    return
+                }
                 if (list.size > 0) {
                     userListAdapter.setNewData(list as List<Parcelable>?)
                     presenter.getUserBio(list, this)
                 } else {
                     presenter.getPopularUser()
                 }
+            }
+            IntentConstant.POP_REPO -> {
+                val list = intent.getParcelableArrayListExtra<Repo>(IntentConstant.REPO_ENTITIES)
+                setReposRecyclerView()
+                if (list.size > 0) {
+                    repoListAdapter.setNewData(list as List<Parcelable>?)
+                } else {
+                    presenter.getPopularRepos()
+                }
+            }
+            IntentConstant.REPO -> {
+                setReposRecyclerView()
+                val login = intent.getStringExtra(IntentConstant.NAME)
+                presenter.loadUserRepos(login)
             }
         }
     }
@@ -121,6 +157,28 @@ class RepoListActivity : BaseActivity(), BaseView {
             bundle.putParcelable(IntentConstant.User, data)
             intent.putExtras(bundle)
             startActivity(intent)
+        }
+        userListAdapter.setOnItemChildClickListener{
+            adapter, view, position ->
+            when (view.id) {
+                R.id.tv_follow -> {
+                    val username = (adapter.getViewByPosition(rv_repo_list, position, R.id.tv_username) as TextView).text.toString()
+                    when (userListAdapter.isFollowing[position]) {
+                        0 -> {
+                            //已关注,点击取消关注
+                            presenter.unFollowUser(position, username)
+                        }
+                        1 -> {
+                            presenter.followUser(position, username)
+                        }
+                        else -> {
+
+                        }
+                    }
+                }
+                else -> {
+                }
+            }
         }
         rv_repo_list.adapter = userListAdapter
         rv_repo_list.addItemDecoration(RecycleViewDivider(this, LinearLayoutManager.HORIZONTAL, 2,
@@ -150,26 +208,36 @@ class RepoListActivity : BaseActivity(), BaseView {
         rv_repo_list.adapter = repoListAdapter
     }
 
-    fun loadData(lists: List<Parcelable>) {
-        if (lists.size == 0) {
-            repoListAdapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
-        } else {
-            repoListAdapter.setNewData(lists)
-        }
+    fun loadData(lists: List<Parcelable>) = if (lists.size == 0) {
+        repoListAdapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
+    } else {
+        repoListAdapter.setNewData(lists)
     }
 
-    fun loadPopUsers(result: SearchUserResult) {
-        val list = result.items
-                .map { item ->
-                    return@map Icon2Name(item.avatar_url, item.login, "user")
-                }
-        userListAdapter.setNewData(list)
-        presenter.getUserBio(list, this)
+    fun loadPopUsers(result: List<Icon2Name>) {
+        userListAdapter.setNewData(result)
+    }
+
+    fun loadUsers(result: List<Parcelable>) {
+        if (result.isEmpty()) {
+            userListAdapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
+        }else {
+            userListAdapter.setNewData(result)
+        }
     }
 
     fun updateList(position: Int, data: Any) {
         userListAdapter.data[position] = data
         userListAdapter.notifyItemChanged(position, data)
+    }
+
+    /**
+     * 更新follow标签状态
+     * @param isFollowing 0表示已关注,1表示未关注,-1表示正在查询
+     */
+    fun updateListFollowStatus(position: Int, isFollowing: Int){
+        userListAdapter.isFollowing.put(position, isFollowing)
+        userListAdapter.notifyItemChanged(position)
     }
 
     private fun setToolBar() {

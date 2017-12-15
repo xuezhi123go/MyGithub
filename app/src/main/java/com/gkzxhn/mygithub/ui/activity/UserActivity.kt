@@ -20,6 +20,7 @@ import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
+import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.extension.loadBlur
 import com.gkzxhn.mygithub.extension.toast
@@ -75,37 +76,110 @@ class UserActivity : BaseActivity(), BaseView {
         if (action == IntentConstant.MINE_ACTION) {
             val localUser = presenter.getLocalUser()
             localUser?.let { data = it }
+            pb_follow.visibility = View.GONE
         }else {
             data = intent.getParcelableExtra<Parcelable>(IntentConstant.User)
         }
         setToolBar()
+        initRecyclerView()
         if (null == data) {
             toast("请重新登录...")
             return
         }else {
-            initRecyclerView()
+            initBaseData()
+            initFollowTopic()
+            setOnclick()
             initAppBar()
         }
     }
 
-    private fun initAppBar() {
-        var avatar_url = ""
-        if (data is Owner) {
-            login = (data as Owner).login
-            username = login
-            avatar_url = (data as Owner).avatar_url
-            presenter.getUser(login)
-        }else if (data is User) {
-            login = (data as User).login
-            avatar_url = (data as User).avatar_url
-            username = if (TextUtils.isEmpty((data as User).name)) login else (data as User).name
-            updateAppbar()
-        }else if (data is Icon2Name) {
-            login = (data as Icon2Name).name
-            username = login
-            avatar_url = (data as Icon2Name).avatarUrl
-            presenter.getUser(login)
+    private fun initFollowTopic() {
+        if (!IntentConstant.MINE_ACTION.equals(intent.action)) {
+            presenter.checkIfFollowIng(login)
         }
+    }
+
+//    0表示已关注,1表示未关注,-1表示正在查询
+    private var isFollowing = -1
+
+    /**
+     * 更新follow标签状态
+     * @param isFollowing 0表示已关注,1表示未关注,-1表示正在查询
+     */
+    fun updateListFollowStatus(isFollowing: Int){
+        this.isFollowing = isFollowing
+        when (isFollowing) {
+            0 -> {
+                pb_follow.visibility = View.GONE
+                tv_follow.visibility = View.VISIBLE
+                tv_follow.text = "Unfollow"
+                tv_follow.setBackgroundResource(R.drawable.gray_btn_back)
+                tv_follow.setTextColor(resources.getColor(R.color.text_black))
+                val leftDrawable = resources.getDrawable(R.drawable.follow)
+                leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+                tv_follow.setCompoundDrawablePadding(3f.dp2px().toInt())//设置图片和text之间的间距
+                tv_follow.setCompoundDrawables(leftDrawable, null, null, null)
+            }
+            1 -> {
+                pb_follow.visibility = View.GONE
+                tv_follow.visibility = View.VISIBLE
+                tv_follow.text = "Follow"
+                tv_follow.setTextColor(resources.getColor(R.color.white))
+                tv_follow.setBackgroundResource(R.drawable.green_bg)
+                val leftDrawable = resources.getDrawable(R.drawable.unfollow)
+                leftDrawable.setBounds(0, 0, leftDrawable.getMinimumWidth(), leftDrawable.getMinimumHeight());
+                tv_follow.setCompoundDrawablePadding(3f.dp2px().toInt())//设置图片和text之间的间距
+                tv_follow.setCompoundDrawables(leftDrawable, null, null, null)
+            }
+            else -> {
+                pb_follow.visibility = View.VISIBLE
+                tv_follow.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun setOnclick() {
+        ll_followers.setOnClickListener{
+            val intent = Intent(this, RepoListActivity::class.java)
+            intent.putExtra(IntentConstant.TOOLBAR_TITLE, "Followers")
+            intent.putExtra(IntentConstant.NAME, login)
+            intent.action = IntentConstant.USERS
+            startActivity(intent)
+        }
+
+        ll_following.setOnClickListener{
+            val intent = Intent(this, RepoListActivity::class.java)
+            intent.putExtra(IntentConstant.TOOLBAR_TITLE, "Following")
+            intent.putExtra(IntentConstant.NAME, login)
+            intent.action = IntentConstant.USERS
+            startActivity(intent)
+        }
+
+        ll_repositories.setOnClickListener{
+            val intent = Intent(this, RepoListActivity::class.java)
+            intent.putExtra(IntentConstant.TOOLBAR_TITLE, "Repositories")
+            intent.putExtra(IntentConstant.NAME, login)
+            intent.action = IntentConstant.REPO
+            startActivity(intent)
+        }
+
+        tv_follow.setOnClickListener{
+            when (isFollowing) {
+                0 -> {
+                    presenter.unFollowUser(login)
+                }
+                1 -> {
+                    presenter.followUser(login)
+                }
+                else -> {
+                }
+            }
+        }
+    }
+
+    var avatar_url = ""
+
+    private fun initAppBar() {
         iv_avatar_big.load(this, avatar_url, R.drawable.default_avatar)
         iv_user_header.loadBlur(this, avatar_url)
         tv_username.text = if (TextUtils.isEmpty(username)) login else username
@@ -121,6 +195,28 @@ class UserActivity : BaseActivity(), BaseView {
             }else {
                 toolbar_title.visibility = View.GONE
             }
+        }
+    }
+
+    private fun initBaseData() {
+        if (data is Owner) {
+            login = (data as Owner).login
+            username = login
+            avatar_url = (data as Owner).avatar_url
+            presenter.getUser(login)
+        } else if (data is User) {
+            login = (data as User).login
+            avatar_url = (data as User).avatar_url
+            username = if (TextUtils.isEmpty((data as User).name)) login else (data as User).name
+            updateAppbar()
+        } else if (data is Icon2Name) {
+            login = (data as Icon2Name).name
+            username = login
+            avatar_url = (data as Icon2Name).avatarUrl
+            presenter.getUser(login)
+        }
+        srl_repos.setOnRefreshListener {
+            presenter.getUser(login)
         }
     }
 
@@ -209,9 +305,6 @@ class UserActivity : BaseActivity(), BaseView {
                 IvTvItemBean(ivResource, tvTitleList[index], "", false)
         } as ArrayList<IvTvItemBean>
 
-        srl_repos.setOnRefreshListener {
-
-        }
         adapter = IvTvAdapter(null)
         adapter.setOnItemClickListener { adapter, view, position ->
                     toast("clicked  : ${position.toString()}")

@@ -38,7 +38,7 @@ data class Item(
 data class SearchRepoResult(
 		val total_count: Int, //40
 		val incomplete_results: Boolean, //false
-		val items: List<Repo>
+		val items: ArrayList<Repo>
 )
 
 data class RepoItem(

@@ -196,6 +196,7 @@ class RepoDetailActivity:BaseActivity(),BaseView {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu)
+        menu!!.getItem(0).setIcon(android.R.drawable.ic_menu_add)
         return true
     }
 
