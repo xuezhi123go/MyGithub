@@ -161,8 +161,24 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                                     .map { item ->
                                         return@map Icon2Name(item.avatar_url, item.login, "user")
                                     }
-                            view.loadPopUsers(list)
                             getUserBio(list, view)
+                        }, {
+                    e ->
+                    Log.e(javaClass.simpleName, e.message)
+                })
+    }
+
+    fun getUserOrgs(username: String) {
+        view.showLoading()
+        oAuthApi.getUserOrgs(username)
+                .bindToLifecycle(view as RepoListActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        {result ->
+                            Log.i(javaClass.simpleName, result.toString())
+                            view.hideLoading()
+                            view.loadOrgs(result)
                         }, {
                     e ->
                     Log.e(javaClass.simpleName, e.message)
@@ -184,7 +200,6 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                                     .map { item ->
                                         return@map Icon2Name(item.avatar_url, item.login, "user")
                                     }
-                            view.loadPopUsers(list)
                             getUserBio(list, view)
                         }, {
                     e ->
@@ -208,6 +223,21 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 })
     }
 
+    fun getStaredRepos(username: String) {
+        view.showLoading()
+        oAuthApi.getStars(username)
+                .bindToLifecycle(view as RepoListActivity)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ datas ->
+                    view.loadData(datas)
+                    view.hideLoading()
+                }, { e ->
+                    Log.e(javaClass.simpleName, e.message)
+                    view.hideLoading()
+                })
+    }
 
     /**
      * 检查是否关注该用户

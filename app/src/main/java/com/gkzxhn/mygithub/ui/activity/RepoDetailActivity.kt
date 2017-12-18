@@ -95,12 +95,13 @@ class RepoDetailActivity:BaseActivity(),BaseView {
             if (verticalOffset == 0) {
                 //完全展开状态
                 rl_repo_head.visibility = View.VISIBLE
+                iv_avatar_small.visibility = View.INVISIBLE
+                toolbar_title.visibility = View.INVISIBLE
             } else if (Math.abs(verticalOffset) == appBarLayout.totalScrollRange) {
                 //appBarLayout.getTotalScrollRange() == 100
                 //完全折叠
                 iv_avatar_small.visibility = View.VISIBLE
                 toolbar_title.visibility = View.VISIBLE
-                toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
                 rl_repo_head.visibility = View.INVISIBLE
             } else {
                 iv_avatar_small.visibility = View.INVISIBLE

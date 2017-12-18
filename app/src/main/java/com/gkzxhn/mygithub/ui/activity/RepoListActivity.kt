@@ -17,6 +17,7 @@ import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.entity.Icon2Name
 import com.gkzxhn.mygithub.bean.info.ItemBean
+import com.gkzxhn.mygithub.bean.info.Organization
 import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.constant.SharedPreConstant
@@ -115,6 +116,9 @@ class RepoListActivity : BaseActivity(), BaseView {
                         "Following" ->{
                             presenter.getUserFollowing(login)
                         }
+                        "Organization" -> {
+                            presenter.getUserOrgs(login)
+                        }
                         else -> {
                             Log.i(javaClass.simpleName, "login : $login")
                         }
@@ -140,7 +144,17 @@ class RepoListActivity : BaseActivity(), BaseView {
             IntentConstant.REPO -> {
                 setReposRecyclerView()
                 val login = intent.getStringExtra(IntentConstant.NAME)
-                presenter.loadUserRepos(login)
+                when (toolbar.title) {
+                    "Repositories" -> {
+                        presenter.loadUserRepos(login)
+                    }
+                    "Starred Repos" ->{
+                        presenter.getStaredRepos(login)
+                    }
+                    else -> {
+
+                    }
+                }
             }
         }
     }
@@ -154,7 +168,7 @@ class RepoListActivity : BaseActivity(), BaseView {
             val data = adapter.data[position] as Parcelable
             val intent = Intent(this, UserActivity::class.java)
             val bundle = Bundle()
-            bundle.putParcelable(IntentConstant.User, data)
+            bundle.putParcelable(IntentConstant.USER, data)
             intent.putExtras(bundle)
             startActivity(intent)
         }
@@ -219,6 +233,14 @@ class RepoListActivity : BaseActivity(), BaseView {
     }
 
     fun loadUsers(result: List<Parcelable>) {
+        if (result.isEmpty()) {
+            userListAdapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
+        }else {
+            userListAdapter.setNewData(result)
+        }
+    }
+
+    fun loadOrgs(result: List<Organization>){
         if (result.isEmpty()) {
             userListAdapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
         }else {

@@ -15,6 +15,7 @@ import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.entity.Icon2Name
 import com.gkzxhn.mygithub.bean.entity.IvTvItemBean
+import com.gkzxhn.mygithub.bean.info.Organization
 import com.gkzxhn.mygithub.bean.info.Owner
 import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.bean.info.User
@@ -78,7 +79,7 @@ class UserActivity : BaseActivity(), BaseView {
             localUser?.let { data = it }
             pb_follow.visibility = View.GONE
         }else {
-            data = intent.getParcelableExtra<Parcelable>(IntentConstant.User)
+            data = intent.getParcelableExtra<Parcelable>(IntentConstant.USER)
         }
         setToolBar()
         initRecyclerView()
@@ -94,8 +95,10 @@ class UserActivity : BaseActivity(), BaseView {
     }
 
     private fun initFollowTopic() {
-        if (!IntentConstant.MINE_ACTION.equals(intent.action)) {
+        if (IntentConstant.MINE_ACTION != intent.action && adapter.type == "USER") {
             presenter.checkIfFollowIng(login)
+        }else {
+            pb_follow.visibility = View.GONE
         }
     }
 
@@ -203,24 +206,115 @@ class UserActivity : BaseActivity(), BaseView {
             login = (data as Owner).login
             username = login
             avatar_url = (data as Owner).avatar_url
-            presenter.getUser(login)
+            when ((data as Owner).type) {
+                "USER" -> {
+                    adapter.type = "USER"
+                    presenter.getUser(login)
+                }
+                "Organization" -> {
+                    adapter.type = "Organization"
+                    presenter.getOrg(login)
+                }
+                else -> {
+                }
+            }
         } else if (data is User) {
             login = (data as User).login
             avatar_url = (data as User).avatar_url
             username = if (TextUtils.isEmpty((data as User).name)) login else (data as User).name
-            updateAppbar()
+            updateUserData()
         } else if (data is Icon2Name) {
             login = (data as Icon2Name).name
             username = login
             avatar_url = (data as Icon2Name).avatarUrl
             presenter.getUser(login)
+        }else if(data is Organization) {
+            login = (data as Organization).login
+            username = login
+            adapter.type = "Organization"
+            presenter.getOrg(login)
         }
         srl_repos.setOnRefreshListener {
-            presenter.getUser(login)
+            when (adapter.type) {
+                "USER" -> {
+                    presenter.getUser(login)
+                }
+                "Organization" -> {
+                    presenter.getOrg(login)
+                }
+                else -> {
+                }
+            }
         }
     }
 
-    private fun updateAppbar() {
+    /**
+     * 更新组织信息
+     */
+    private fun updateOrgData() {
+
+        ll_followers.visibility = View.GONE
+        ll_following.visibility = View.GONE
+        tv_repositories.text = (data as Organization).public_repos.toString().let {
+            if (!TextUtils.isEmpty(it)) {
+                return@let it
+            } else {
+                return@let "0"
+            }
+        }
+
+        for (i in 0..2){
+            ivLeftResources.removeAt(1)
+            tvTitleList.removeAt(1)
+            rightTv.removeAt(1)
+        }
+
+        tvTitleList[0] = "Organization Name"
+        tvTitleList[1] = (data as Organization).company.let {
+            if (!TextUtils.isEmpty(it)) {
+                return@let it
+            } else {
+                return@let "Not Set"
+            }
+        }
+
+        tvTitleList[2] = (data as Organization).email.let {
+            if (!TextUtils.isEmpty(it)) {
+                return@let it
+            } else {
+                return@let "Not Set"
+            }
+        }
+        tvTitleList[3] = (data as Organization).location.let {
+            if (!TextUtils.isEmpty(it)) {
+                return@let it
+            } else {
+                return@let "Not Set"
+            }
+        }
+        tvTitleList[4] = (data as Organization).blog.let {
+            if (!TextUtils.isEmpty(it)) {
+                return@let it
+            } else {
+                return@let "Not Set"
+            }
+        }
+
+        rightTv[0] = username
+        list = ivLeftResources.mapIndexed { index, ivResource ->
+            if(index == 0){
+                IvTvItemBean(ivResource, tvTitleList[index], rightTv[index], true)
+            }else
+                IvTvItemBean(ivResource, tvTitleList[index], rightTv[index], false)
+        } as ArrayList<IvTvItemBean>
+
+        adapter.setNewData(list)
+    }
+
+    /**
+     * 更新用户信息
+     */
+    private fun updateUserData() {
 
         tv_followers.text = (data as User).followers.toString().let {
             if (!TextUtils.isEmpty(it)) {
@@ -288,7 +382,7 @@ class UserActivity : BaseActivity(), BaseView {
         adapter.setNewData(list)
     }
 
-    private val ivLeftResources =
+    private var ivLeftResources =
             arrayListOf(R.drawable.user, R.drawable.star_repos, R.drawable.organization, R.drawable.public_activity,
             R.drawable.company, R.drawable.location, R.drawable.email, R.drawable.link)
     private var tvTitleList = arrayListOf<String>("Name", "Starred Repos", "Organization", "Public Activity",
@@ -307,13 +401,36 @@ class UserActivity : BaseActivity(), BaseView {
 
         adapter = IvTvAdapter(null)
         adapter.setOnItemClickListener { adapter, view, position ->
-                    toast("clicked  : ${position.toString()}")
                     /*val repo = adapter.data[position] as Repo
                     val intent = Intent(this, RepoDetailActivity::class.java)
                     val mBundle = Bundle()
                     mBundle.putParcelable(IntentConstant.REPO, repo)
                     intent.putExtras(mBundle)
                     startActivity(intent)*/
+            if ((adapter as IvTvAdapter).type == "USER") {
+
+                when (position) {
+                    1 -> {
+                        val intent = Intent(this, RepoListActivity::class.java)
+                        intent.putExtra(IntentConstant.TOOLBAR_TITLE, "Starred Repos")
+                        intent.putExtra(IntentConstant.NAME, login)
+                        intent.action = IntentConstant.REPO
+                        startActivity(intent)
+                    }
+                    2 -> {
+                        val intent = Intent(this, RepoListActivity::class.java)
+                        intent.putExtra(IntentConstant.TOOLBAR_TITLE, "Organization")
+                        intent.putExtra(IntentConstant.NAME, login)
+                        intent.action = IntentConstant.USERS
+                        startActivity(intent)
+                    }
+                    3 -> {
+
+                    }
+                    else -> {
+                    }
+                }
+            }
                 }
         adapter.openLoadAnimation()
         rv_user.layoutManager = LinearLayoutManager(this)
@@ -331,9 +448,13 @@ class UserActivity : BaseActivity(), BaseView {
         setToolBarBack(true)
     }
 
-    fun loadData(user : User){
+    fun loadData(user : Parcelable){
         data = user
-        updateAppbar()
+        if (data is User) {
+            updateUserData()
+        }else if (data is Organization) {
+            updateOrgData()
+        }
     }
 
     fun loadRepos(repos : List<Repo>){

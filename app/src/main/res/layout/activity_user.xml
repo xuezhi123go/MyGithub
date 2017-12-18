@@ -122,6 +122,7 @@
                     android:layout_height="wrap_content"/>
 
                 <TextView
+                    android:id="@+id/tv_topic1"
                     android:text="followers"
                     android:textColor="@color/text_black"
                     android:layout_width="wrap_content"
@@ -143,6 +144,7 @@
 
                 <TextView
                     android:text="repositories"
+                    android:id="@+id/tv_topic2"
                     android:textColor="@color/text_black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -162,6 +164,7 @@
 
                 <TextView
                     android:text="following"
+                    android:id="@+id/tv_topic3"
                     android:textColor="@color/text_black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>

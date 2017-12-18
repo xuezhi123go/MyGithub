@@ -27,7 +27,7 @@ class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
 
     fun loadUserData(username: String) {
         view.showLoading()
-        oAuthApi.getOrg("GKZX-HN")
+        oAuthApi.getUserOrgs(username)
                 .bindToLifecycle(view as ProfileFragment)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -35,8 +35,26 @@ class ProfilePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .subscribe({ t ->
                     view.hideLoading()
                     val datas = arrayListOf<Organization>()
-                    datas.add(t)
+                    datas.addAll(t)
                     view.loadData(datas!!)
+                    Log.i(javaClass.simpleName, t.toString())
+                }, { e ->
+                    view.hideLoading()
+                    Log.e(javaClass.simpleName, e.message)
+                })
+    }
+
+    fun getOrg(orgName: String) {
+        view.showLoading()
+        oAuthApi.getOrg(orgName)
+                .bindToLifecycle(view as UserActivity)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ t ->
+                    view.hideLoading()
+
+                    view.loadData(t)
                     Log.i(javaClass.simpleName, t.toString())
                 }, { e ->
                     view.hideLoading()

@@ -87,7 +87,7 @@ interface OAuthApi {
      */
     @GET("/users/{username}/starred")
     fun getStars(@Path("username") username: String)
-            : Observable<List<Starred>>
+            : Observable<List<Repo>>
 
 
     /**
