@@ -23,8 +23,6 @@ class ActivityPresenter @Inject constructor(private val oAuthApi: OAuthApi,
 
 
     fun getEvents(username: String) {
-
-
         view.showLoading()
         oAuthApi.getEventsThatAUserPerformed(username)
                 .bindToLifecycle(view as ActivityFragment)

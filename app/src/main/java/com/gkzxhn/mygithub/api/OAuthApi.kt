@@ -325,4 +325,12 @@ interface OAuthApi {
     fun getEventsThatAUserPerformed(
             @Path("username") username: String
     ): Observable<List<Event>>
+
+    /**
+     * 列出用户执行的公共事件
+     */
+    @GET("/users/{username}/events/public")
+    fun getEventThatAUserPublicPerformed(
+            @Path("username") username: String
+    ): Observable<List<Event>>
 }
