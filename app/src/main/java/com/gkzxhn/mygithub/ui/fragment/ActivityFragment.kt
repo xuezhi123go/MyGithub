@@ -68,14 +68,10 @@ class ActivityFragment : BaseFragment(), BaseView {
     }
 
     override fun initContentView() {
-
-
         srl_notifications.setOnRefreshListener {
             getNewData()
         }
-
         getNewData()
-
         adapter = EventAdapter(null)
         rv_notifications.layoutManager = LinearLayoutManager(context)
         adapter.setOnItemClickListener { adapter, view, position ->
@@ -87,6 +83,7 @@ class ActivityFragment : BaseFragment(), BaseView {
         }
         rv_notifications.adapter = adapter
     }
+
     override fun setupComponent() {
         App.getInstance()
                 .baseComponent
@@ -95,17 +92,20 @@ class ActivityFragment : BaseFragment(), BaseView {
     }
 
     override fun initView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater!!.inflate(R.layout.fragment_notifications,container,false)
+        return inflater!!.inflate(R.layout.fragment_notifications, container, false)
     }
+
     fun loadData(event: List<Event>) {
         adapter.setNewData(event)
         Log.i(javaClass.simpleName, event[0].toString())
     }
+
     fun getNewData() {
         var string: String = SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, "")
         Log.i(javaClass.simpleName, "USER_NAME = " + string)
         presenter.getEvents(SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, ""))
     }
+
     fun toRepoDetailActivity(repo: Repo) {
         val intent = Intent(context, RepoDetailActivity::class.java)
         val mBundle = Bundle()

@@ -7,7 +7,9 @@ import com.gkzxhn.mygithub.api.TrendingApi
 import com.gkzxhn.mygithub.bean.entity.Icon2Name
 import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.bean.info.User
+import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.ui.activity.RepoListActivity
+import com.google.gson.Gson
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -18,24 +20,23 @@ import javax.inject.Inject
  */
 class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                                             private val trendingApi: TrendingApi,
-                                           private val view : BaseView) {
+                                            private val view: BaseView) {
 
     /**
      * 我的仓库列表
      */
-    fun loadRepos(){
+    fun loadRepos() {
         view.showLoading()
         oAuthApi.getRepos(sort = "pushed", direction = "desc")
                 .bindToLifecycle(view as RepoListActivity)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    t: List<Repo>? ->
+                .subscribe({ t: List<Repo>? ->
                     view.hideLoading()
                     view.loadData(t!!)
                     Log.i(javaClass.simpleName, t.get(0).toString())
-                },{
+                }, {
 
                     e ->
                     Log.e(javaClass.simpleName, e.message)
@@ -45,51 +46,49 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
     /**
      * 组织仓库列表
      */
-    fun loadOrgRepos(org :String) {
+    fun loadOrgRepos(org: String) {
         view.showLoading()
         oAuthApi.getOrgRepos(org)
                 .bindToLifecycle(view as RepoListActivity)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    t: List<Repo>? ->
+                .subscribe({ t: List<Repo>? ->
                     view.hideLoading()
                     view.loadData(t!!)
                     Log.i(javaClass.simpleName, t.get(0).toString())
-                },{
+                }, {
 
                     e ->
                     Log.e(javaClass.simpleName, e.message)
                 })
     }
 
-    fun getTrendingRepo(){
+    fun getTrendingRepo() {
         view.showLoading()
         trendingApi.getTrendingRepos(since = "weekly")
                 .bindToLifecycle(view as RepoListActivity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        {result ->
+                        { result ->
                             Log.i(javaClass.simpleName, result.toString())
                             view.hideLoading()
                             view.loadData(result.items)
-                        }, {
-                    e ->
+                        }, { e ->
                     Log.e(javaClass.simpleName, e.message)
                     view.hideLoading()
                 })
     }
 
-    fun getPopularUser(){
+    fun getPopularUser() {
         view.showLoading()
         oAuthApi.searchUsers("followers:>=10000 type:user")
                 .bindToLifecycle(view as RepoListActivity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        {result ->
+                        { result ->
                             Log.i(javaClass.simpleName, result.toString())
                             view.hideLoading()
                             val list = result.items
@@ -98,8 +97,7 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                                     }
                             view.loadPopUsers(list)
                             getUserBio(list, view)
-                        }, {
-                    e ->
+                        }, { e ->
                     Log.e(javaClass.simpleName, e.message)
                 })
     }
@@ -153,7 +151,7 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        {result ->
+                        { result ->
                             Log.i(javaClass.simpleName, result.toString())
                             view.hideLoading()
                             view.loadUsers(result)
@@ -162,8 +160,7 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                                         return@map Icon2Name(item.avatar_url, item.login, "user")
                                     }
                             getUserBio(list, view)
-                        }, {
-                    e ->
+                        }, { e ->
                     Log.e(javaClass.simpleName, e.message)
                 })
     }
@@ -175,12 +172,11 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        {result ->
+                        { result ->
                             Log.i(javaClass.simpleName, result.toString())
                             view.hideLoading()
                             view.loadOrgs(result)
-                        }, {
-                    e ->
+                        }, { e ->
                     Log.e(javaClass.simpleName, e.message)
                 })
     }
@@ -192,7 +188,7 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        {result ->
+                        { result ->
                             Log.i(javaClass.simpleName, result.toString())
                             view.hideLoading()
                             view.loadUsers(result)
@@ -201,8 +197,7 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                                         return@map Icon2Name(item.avatar_url, item.login, "user")
                                     }
                             getUserBio(list, view)
-                        }, {
-                    e ->
+                        }, { e ->
                     Log.e(javaClass.simpleName, e.message)
                 })
     }
@@ -242,23 +237,21 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
     /**
      * 检查是否关注该用户
      */
-    fun checkIfFollowIng(index: Int, username: String){
+    fun checkIfFollowIng(index: Int, username: String) {
         (view as RepoListActivity).updateListFollowStatus(index, -1)
         oAuthApi.checkIfFollowUser(username)
                 .bindToLifecycle(view)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    t ->
+                .subscribe({ t ->
                     Log.i(javaClass.simpleName, t.message())
                     if (t.code() == 204) {
                         //已关注
                         view.updateListFollowStatus(index, 0)
-                    }else{
+                    } else {
                         view.updateListFollowStatus(index, 1)
                     }
-                },{
-                    e ->
+                }, { e ->
                     Log.i(javaClass.simpleName, e.message)
                 })
     }
@@ -272,16 +265,14 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .bindToLifecycle(view)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    t ->
+                .subscribe({ t ->
                     Log.i(javaClass.simpleName, t.message())
                     if (t.code() == 204) {
                         view.updateListFollowStatus(index, 0)
-                    }else {
+                    } else {
                         view.updateListFollowStatus(index, 1)
                     }
-                }, {
-                    e ->
+                }, { e ->
                     Log.e(javaClass.simpleName, e.message)
                 })
     }
@@ -295,17 +286,58 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .bindToLifecycle(view)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    t ->
+                .subscribe({ t ->
                     Log.i(javaClass.simpleName, t.message())
                     if (t.code() == 204) {
                         view.updateListFollowStatus(index, 1)
-                    }else {
+                    } else {
                         view.updateListFollowStatus(index, 1)
                     }
-                }, {
-                    e ->
+                }, { e ->
                     Log.e(javaClass.simpleName, e.message)
                 })
+    }
+
+    /**
+     * 获取用户Public Activity
+     */
+    fun getPublicActivity(username: String) {
+        view.showLoading()
+        oAuthApi.getEventThatAUserPublicPerformed(username)
+                .bindToLifecycle(view as RepoListActivity)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate { view.hideLoading() }
+                .subscribe({event->
+                    if (event.size > 0) {
+                        view.loadActivityData(event)
+                        Log.i(javaClass.simpleName, "event = " + Gson().toJson(event))
+                    } else {
+                        view.toast("没有数据")
+                    }
+                }, { e ->
+                    view.toast("网络错误")
+                    Log.e(javaClass.simpleName, "e = " + e)
+                })
+    }
+
+    /**
+     * 根据用户名和仓库名获得仓库数据
+     */
+    fun getRepoDetail(owner: String, repo: String) {
+
+        oAuthApi.get(owner, repo)
+                .bindToLifecycle(view as RepoListActivity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ repo ->
+
+                    view.toRepoDetailActivity(repo)
+
+                }, { e ->
+                    Log.i(javaClass.simpleName, e.message)
+                })
+
     }
 }

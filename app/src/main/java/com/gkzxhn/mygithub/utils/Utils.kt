@@ -38,6 +38,7 @@ object Utils {
         var lastMonth = ca.time
         return lastMonth
     }
+
     /**
      * 将日期字符串转换为时间
      * @param date 日期字符串，必须为"yyyy-MM-dd'T'HH:mm:ss'Z'"
@@ -65,9 +66,9 @@ object Utils {
         /** 1s==1000ms  */
         val TIME_MILLISECONDS = 1000
         /** 时间中的分、秒最大值均为60  */
-         val TIME_NUMBERS = 60
+        val TIME_NUMBERS = 60
         /** 时间中的小时最大值  */
-         val TIME_HOURSES = 24
+        val TIME_HOURSES = 24
 
         var strTime = "long long ago"
         val time = Math.abs(Date().time - date)

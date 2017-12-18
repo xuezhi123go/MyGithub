@@ -16,6 +16,7 @@ import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.entity.Icon2Name
+import com.gkzxhn.mygithub.bean.info.Event
 import com.gkzxhn.mygithub.bean.info.ItemBean
 import com.gkzxhn.mygithub.bean.info.Organization
 import com.gkzxhn.mygithub.bean.info.Repo
@@ -25,6 +26,7 @@ import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.mvp.presenter.RepoListPresenter
+import com.gkzxhn.mygithub.ui.adapter.EventAdapter
 import com.gkzxhn.mygithub.ui.adapter.RepoListAdapter
 import com.gkzxhn.mygithub.ui.adapter.UserListAdapter
 import com.gkzxhn.mygithub.ui.wedgit.RecycleViewDivider
@@ -39,6 +41,7 @@ class RepoListActivity : BaseActivity(), BaseView {
 
     private lateinit var repoListAdapter: RepoListAdapter
     private lateinit var userListAdapter: UserListAdapter
+    private lateinit var eventAdapter: EventAdapter
     private lateinit var action: String
     private lateinit var loading: LVGhost
 
@@ -77,7 +80,7 @@ class RepoListActivity : BaseActivity(), BaseView {
         toolbar.title = intent.getStringExtra(IntentConstant.TOOLBAR_TITLE)?.let {
             if (TextUtils.isEmpty(it)) {
                 return@let ""
-            }else {
+            } else {
                 return@let it
             }
         }
@@ -113,7 +116,7 @@ class RepoListActivity : BaseActivity(), BaseView {
                         "Followers" -> {
                             presenter.getUserFollowers(login)
                         }
-                        "Following" ->{
+                        "Following" -> {
                             presenter.getUserFollowing(login)
                         }
                         "Organization" -> {
@@ -148,7 +151,7 @@ class RepoListActivity : BaseActivity(), BaseView {
                     "Repositories" -> {
                         presenter.loadUserRepos(login)
                     }
-                    "Starred Repos" ->{
+                    "Starred Repos" -> {
                         presenter.getStaredRepos(login)
                     }
                     else -> {
@@ -156,7 +159,25 @@ class RepoListActivity : BaseActivity(), BaseView {
                     }
                 }
             }
+            IntentConstant.ACTIVITY -> {
+                val login = intent.getStringExtra(IntentConstant.NAME)
+                setActivityView()
+                presenter.getPublicActivity(login)
+            }
         }
+    }
+
+    private fun setActivityView() {
+        rv_repo_list.layoutManager = LinearLayoutManager(this)
+        eventAdapter = EventAdapter(null)
+        eventAdapter.openLoadAnimation()
+        eventAdapter.setOnItemClickListener { adapter, view, position ->
+            var name = (adapter.data[position] as Event).repo.name.split("/")
+            var owenr = name[0]
+            var repo = name[1]
+            presenter.getRepoDetail(owenr, repo)
+        }
+        rv_repo_list.adapter = eventAdapter
     }
 
     private fun setUsersRecyclerView() {
@@ -172,8 +193,7 @@ class RepoListActivity : BaseActivity(), BaseView {
             intent.putExtras(bundle)
             startActivity(intent)
         }
-        userListAdapter.setOnItemChildClickListener{
-            adapter, view, position ->
+        userListAdapter.setOnItemChildClickListener { adapter, view, position ->
             when (view.id) {
                 R.id.tv_follow -> {
                     val username = (adapter.getViewByPosition(rv_repo_list, position, R.id.tv_username) as TextView).text.toString()
@@ -235,15 +255,15 @@ class RepoListActivity : BaseActivity(), BaseView {
     fun loadUsers(result: List<Parcelable>) {
         if (result.isEmpty()) {
             userListAdapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
-        }else {
+        } else {
             userListAdapter.setNewData(result)
         }
     }
 
-    fun loadOrgs(result: List<Organization>){
+    fun loadOrgs(result: List<Organization>) {
         if (result.isEmpty()) {
             userListAdapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
-        }else {
+        } else {
             userListAdapter.setNewData(result)
         }
     }
@@ -253,11 +273,15 @@ class RepoListActivity : BaseActivity(), BaseView {
         userListAdapter.notifyItemChanged(position, data)
     }
 
+    fun loadActivityData(event: List<Event>) {
+        eventAdapter.setNewData(event)
+    }
+
     /**
      * 更新follow标签状态
      * @param isFollowing 0表示已关注,1表示未关注,-1表示正在查询
      */
-    fun updateListFollowStatus(position: Int, isFollowing: Int){
+    fun updateListFollowStatus(position: Int, isFollowing: Int) {
         userListAdapter.isFollowing.put(position, isFollowing)
         userListAdapter.notifyItemChanged(position)
     }
@@ -285,5 +309,13 @@ class RepoListActivity : BaseActivity(), BaseView {
     override fun onDestroy() {
         isOn = false
         super.onDestroy()
+    }
+
+    fun toRepoDetailActivity(repo: Repo) {
+        val intent = Intent(this, RepoDetailActivity::class.java)
+        val mBundle = Bundle()
+        mBundle.putParcelable(IntentConstant.REPO, repo)
+        intent.putExtras(mBundle)
+        startActivity(intent)
     }
 }

@@ -68,7 +68,6 @@ class HomeFragment : BaseFragment(), BaseView {
         presenter.getTrendingRepo()
     }
 
-
     private fun setRecyclerView() {
         rv_repo_week.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         repoWeekAdapter = AvatarListAdapter(null)

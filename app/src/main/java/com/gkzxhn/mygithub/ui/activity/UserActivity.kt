@@ -37,12 +37,12 @@ class UserActivity : BaseActivity(), BaseView {
 
     private var data: Parcelable? = null
 
-    private lateinit var adapter : IvTvAdapter
+    private lateinit var adapter: IvTvAdapter
 
     @Inject lateinit var presenter: ProfilePresenter
 
-    private lateinit var username : String
-    private lateinit var login : String
+    private lateinit var username: String
+    private lateinit var login: String
 
     override fun launchActivity(intent: Intent) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -78,7 +78,7 @@ class UserActivity : BaseActivity(), BaseView {
             val localUser = presenter.getLocalUser()
             localUser?.let { data = it }
             pb_follow.visibility = View.GONE
-        }else {
+        } else {
             data = intent.getParcelableExtra<Parcelable>(IntentConstant.USER)
         }
         setToolBar()
@@ -86,7 +86,7 @@ class UserActivity : BaseActivity(), BaseView {
         if (null == data) {
             toast("请重新登录...")
             return
-        }else {
+        } else {
             initBaseData()
             initFollowTopic()
             setOnclick()
@@ -97,19 +97,19 @@ class UserActivity : BaseActivity(), BaseView {
     private fun initFollowTopic() {
         if (IntentConstant.MINE_ACTION != intent.action && adapter.type == "USER") {
             presenter.checkIfFollowIng(login)
-        }else {
+        } else {
             pb_follow.visibility = View.GONE
         }
     }
 
-//    0表示已关注,1表示未关注,-1表示正在查询
+    //    0表示已关注,1表示未关注,-1表示正在查询
     private var isFollowing = -1
 
     /**
      * 更新follow标签状态
      * @param isFollowing 0表示已关注,1表示未关注,-1表示正在查询
      */
-    fun updateListFollowStatus(isFollowing: Int){
+    fun updateListFollowStatus(isFollowing: Int) {
         this.isFollowing = isFollowing
         when (isFollowing) {
             0 -> {
@@ -142,7 +142,7 @@ class UserActivity : BaseActivity(), BaseView {
     }
 
     private fun setOnclick() {
-        ll_followers.setOnClickListener{
+        ll_followers.setOnClickListener {
             val intent = Intent(this, RepoListActivity::class.java)
             intent.putExtra(IntentConstant.TOOLBAR_TITLE, "Followers")
             intent.putExtra(IntentConstant.NAME, login)
@@ -150,7 +150,7 @@ class UserActivity : BaseActivity(), BaseView {
             startActivity(intent)
         }
 
-        ll_following.setOnClickListener{
+        ll_following.setOnClickListener {
             val intent = Intent(this, RepoListActivity::class.java)
             intent.putExtra(IntentConstant.TOOLBAR_TITLE, "Following")
             intent.putExtra(IntentConstant.NAME, login)
@@ -158,7 +158,7 @@ class UserActivity : BaseActivity(), BaseView {
             startActivity(intent)
         }
 
-        ll_repositories.setOnClickListener{
+        ll_repositories.setOnClickListener {
             val intent = Intent(this, RepoListActivity::class.java)
             intent.putExtra(IntentConstant.TOOLBAR_TITLE, "Repositories")
             intent.putExtra(IntentConstant.NAME, login)
@@ -166,7 +166,7 @@ class UserActivity : BaseActivity(), BaseView {
             startActivity(intent)
         }
 
-        tv_follow.setOnClickListener{
+        tv_follow.setOnClickListener {
             when (isFollowing) {
                 0 -> {
                     presenter.unFollowUser(login)
@@ -195,7 +195,7 @@ class UserActivity : BaseActivity(), BaseView {
                 //appBarLayout.getTotalScrollRange() == 100
                 //完全折叠
                 toolbar_title.visibility = View.VISIBLE
-            }else {
+            } else {
                 toolbar_title.visibility = View.GONE
             }
         }
@@ -228,7 +228,7 @@ class UserActivity : BaseActivity(), BaseView {
             username = login
             avatar_url = (data as Icon2Name).avatarUrl
             presenter.getUser(login)
-        }else if(data is Organization) {
+        } else if (data is Organization) {
             login = (data as Organization).login
             username = login
             adapter.type = "Organization"
@@ -263,7 +263,7 @@ class UserActivity : BaseActivity(), BaseView {
             }
         }
 
-        for (i in 0..2){
+        for (i in 0..2) {
             ivLeftResources.removeAt(1)
             tvTitleList.removeAt(1)
             rightTv.removeAt(1)
@@ -302,9 +302,9 @@ class UserActivity : BaseActivity(), BaseView {
 
         rightTv[0] = username
         list = ivLeftResources.mapIndexed { index, ivResource ->
-            if(index == 0){
+            if (index == 0) {
                 IvTvItemBean(ivResource, tvTitleList[index], rightTv[index], true)
-            }else
+            } else
                 IvTvItemBean(ivResource, tvTitleList[index], rightTv[index], false)
         } as ArrayList<IvTvItemBean>
 
@@ -373,9 +373,9 @@ class UserActivity : BaseActivity(), BaseView {
         list = ivLeftResources.mapIndexed { index, ivResource ->
             if (index in 1..3)
                 IvTvItemBean(ivResource, tvTitleList[index], rightTv[index], true)
-            else if(index == 0){
+            else if (index == 0) {
                 IvTvItemBean(ivResource, tvTitleList[index], rightTv[index], true)
-            }else
+            } else
                 IvTvItemBean(ivResource, tvTitleList[index], rightTv[index], false)
         } as ArrayList<IvTvItemBean>
 
@@ -384,7 +384,7 @@ class UserActivity : BaseActivity(), BaseView {
 
     private var ivLeftResources =
             arrayListOf(R.drawable.user, R.drawable.star_repos, R.drawable.organization, R.drawable.public_activity,
-            R.drawable.company, R.drawable.location, R.drawable.email, R.drawable.link)
+                    R.drawable.company, R.drawable.location, R.drawable.email, R.drawable.link)
     private var tvTitleList = arrayListOf<String>("Name", "Starred Repos", "Organization", "Public Activity",
             "Company", "Location", "Email", "Link")
     private var rightTv = arrayListOf<Any>("name", R.drawable.right_arrow, R.drawable.right_arrow, R.drawable.right_arrow,
@@ -401,12 +401,12 @@ class UserActivity : BaseActivity(), BaseView {
 
         adapter = IvTvAdapter(null)
         adapter.setOnItemClickListener { adapter, view, position ->
-                    /*val repo = adapter.data[position] as Repo
-                    val intent = Intent(this, RepoDetailActivity::class.java)
-                    val mBundle = Bundle()
-                    mBundle.putParcelable(IntentConstant.REPO, repo)
-                    intent.putExtras(mBundle)
-                    startActivity(intent)*/
+            /*val repo = adapter.data[position] as Repo
+            val intent = Intent(this, RepoDetailActivity::class.java)
+            val mBundle = Bundle()
+            mBundle.putParcelable(IntentConstant.REPO, repo)
+            intent.putExtras(mBundle)
+            startActivity(intent)*/
             if ((adapter as IvTvAdapter).type == "USER") {
 
                 when (position) {
@@ -425,13 +425,17 @@ class UserActivity : BaseActivity(), BaseView {
                         startActivity(intent)
                     }
                     3 -> {
-
+                        val intent = Intent(this, RepoListActivity::class.java)
+                        intent.putExtra(IntentConstant.TOOLBAR_TITLE, "Activity")
+                        intent.putExtra(IntentConstant.NAME, login)
+                        intent.action = IntentConstant.ACTIVITY
+                        startActivity(intent)
                     }
                     else -> {
                     }
                 }
             }
-                }
+        }
         adapter.openLoadAnimation()
         rv_user.layoutManager = LinearLayoutManager(this)
         rv_user.adapter = adapter
@@ -448,19 +452,19 @@ class UserActivity : BaseActivity(), BaseView {
         setToolBarBack(true)
     }
 
-    fun loadData(user : Parcelable){
+    fun loadData(user: Parcelable) {
         data = user
         if (data is User) {
             updateUserData()
-        }else if (data is Organization) {
+        } else if (data is Organization) {
             updateOrgData()
         }
     }
 
-    fun loadRepos(repos : List<Repo>){
+    fun loadRepos(repos: List<Repo>) {
         if (repos.size == 0) {
             adapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
-        }else {
+        } else {
 //            adapter.setNewData(repos)
         }
     }

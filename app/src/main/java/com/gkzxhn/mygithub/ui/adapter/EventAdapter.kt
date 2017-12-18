@@ -21,7 +21,10 @@ class EventAdapter(datas: List<Event>?) : BaseQuickAdapter<Event, BaseViewHolder
 
         var creatTiem = parseDate(item!!.created_at, "yyyy-MM-dd'T'HH:mm:ss'Z'")
 
-        var toNow = getDiffTime(creatTiem)
+        /**
+         * 这里拿到的时间是世界标准时间，所以要加上8*60*60*1000转化成中国东八区的时间
+         */
+        var toNow = getDiffTime(creatTiem + 8 * 60 * 60 * 1000)
 
         when (item!!.type) {
             "PushEvent" -> {
@@ -39,25 +42,27 @@ class EventAdapter(datas: List<Event>?) : BaseQuickAdapter<Event, BaseViewHolder
                 helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
                 helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.company) }
             }
-            "PullRequestEvent"->{
+            "PullRequestEvent" -> {
                 did = " opened pull request "
                 helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
                 helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.open_icon) }
             }
-            "DeleteEvent"->{
-                did=" delete branch at "
+            "DeleteEvent" -> {
+                did = " delete branch at "
                 helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
                 helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.close_icon) }
+            }
+            "IssueCommentEvent"->{
+                did = " created comment on issue in "
+                helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
+                helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.public_activity) }
             }
             else -> {
                 did = "*等我改*"
                 helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
             }
         }
-
-
         helper!!.setText(R.id.tv_new_date_notification, toNow)
-
         helper!!.getView<ImageView>(R.id.iv_avatar)
                 .let { it.loadRoundConner(it.context, item.actor.avatar_url) }
     }
