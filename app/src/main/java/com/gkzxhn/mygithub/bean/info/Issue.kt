@@ -17,7 +17,7 @@ data class Issue(
 		val state: String, //open
 		val title: String, //Found a bug
 		val body: String, //I'm having a problem with this.
-		val user: UserData,
+		val user: Owner,
 		val labels: List<Label>,
 		val assignee: Assignee,
 		val assignees: List<Assignee>,

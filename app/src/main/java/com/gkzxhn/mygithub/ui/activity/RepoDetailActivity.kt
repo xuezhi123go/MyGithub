@@ -154,6 +154,14 @@ class RepoDetailActivity:BaseActivity(),BaseView {
             }
         }
 
+        tv_view_issue.setOnClickListener {
+            val intent = Intent(this, IssuesActivity::class.java)
+            val mBundle = Bundle()
+            mBundle.putParcelable(IntentConstant.REPO, repo)
+            intent.putExtras(mBundle)
+            startActivity(intent)
+        }
+
         tv_reame_all.setOnClickListener {
             val layoutParams = md_view.layoutParams as LinearLayout.LayoutParams
             layoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT

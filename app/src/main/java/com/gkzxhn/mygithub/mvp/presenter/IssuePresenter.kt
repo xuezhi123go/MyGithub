@@ -49,12 +49,56 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 })
     }
 
+    fun getOpenIssues(owner: String, repo: String) {
+        this.owner = owner
+        this.repo = repo
+        view.showLoading()
+        oAuthApi.getIssues(owner = owner, repo = repo, state = "open")
+                .bindToLifecycle(view as IssueFragment)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    issues ->
+                    if (issues.size > 0) {
+                        view.loadData(issues)
+                    }
+                    view.hideLoading()
+                },{
+                    e ->
+                    Log.e(javaClass.simpleName, e.message )
+                    view.context.toast("加载失败...")
+                })
+    }
+
+    fun getClosedIssues(owner: String, repo: String) {
+        this.owner = owner
+        this.repo = repo
+        view.showLoading()
+        oAuthApi.getIssues(owner = owner, repo = repo, state = "closed")
+                .bindToLifecycle(view as IssueFragment)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    issues ->
+                    if (issues.size > 0) {
+                        view.loadData(issues)
+                    }
+                    view.hideLoading()
+                },{
+                    e ->
+                    Log.e(javaClass.simpleName, e.message )
+                    view.context.toast("加载失败...")
+                })
+    }
+
     fun addSubscribe(){
         rxBus.toFlowable(PostIssueResponse::class.java)
                 .bindToLifecycle(view as IssueFragment)
                 .subscribe(
                         {
-                            t -> getIssues(owner = owner!!, repo = repo!!)
+                            t -> getOpenIssues(owner = owner!!, repo = repo!!)
                         },
                         {
                             e ->
@@ -250,7 +294,7 @@ class IssuePresenter @Inject constructor(private val oAuthApi: OAuthApi,
             if (view.isLoading) {
                 return@forEachIndexed
             }
-            if ("USER" != owner.type){
+            if ("User" != owner.type){
                 return@forEachIndexed
             }
             checkIfFollowIng(index, owner.login)
