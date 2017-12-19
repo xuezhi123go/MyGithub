@@ -68,9 +68,9 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .bindToLifecycle(view as EventFragment)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ repo ->
+                .subscribe({ repoData ->
 
-                    view.toRepoDetailActivity(repo)
+                    view.toRepoDetailActivity(repoData)
 
                 }, { e ->
                     Log.i(javaClass.simpleName, e.message)
