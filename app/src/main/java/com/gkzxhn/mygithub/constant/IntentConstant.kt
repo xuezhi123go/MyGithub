@@ -22,5 +22,10 @@ object IntentConstant {
     val FULL_NAME = "full_name"
     val POP_REPO = "pop_repo"
     val TOOLBAR_TITLE = "toolbar_title"
+    val OPEN = "open"
+    val CLOSED = "closed"
+    val BODY = "body"
+    val CREATE_TIME = "create_time"
+    val TITLE = "title"
     val ACTIVITY = "activity"
 }

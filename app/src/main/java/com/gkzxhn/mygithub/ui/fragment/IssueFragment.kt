@@ -27,7 +27,7 @@ import javax.inject.Inject
 /**
  * Created by 方 on 2017/10/25.
  */
-class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseView {
+class IssueFragment (private val repo: Repo, val content_tag: String) : BaseFragment(), BaseView {
 
     @Inject lateinit var presenter: IssuePresenter
     private lateinit var adapter: IssueAdapter
@@ -58,6 +58,7 @@ class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseVi
     }
 
     override fun initContentView() {
+
         srl_issue.setOnRefreshListener {
             getNewData()
         }
@@ -70,10 +71,18 @@ class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseVi
             val name = owner
             val repo = repoName
             val number = issue.number
+            val time = issue.created_at
+            val avatar = issue.user.avatar_url
+            val body = issue.body
+            val title = issue.title
             val intent = Intent(context, IssueDetailActivity::class.java)
             intent.putExtra(IntentConstant.NAME, name)
             intent.putExtra(IntentConstant.REPO, repo)
             intent.putExtra(IntentConstant.ISSUE_NUM, number)
+            intent.putExtra(IntentConstant.CREATE_TIME, time)
+            intent.putExtra(IntentConstant.AVATAR, avatar)
+            intent.putExtra(IntentConstant.BODY, body)
+            intent.putExtra(IntentConstant.TITLE, title)
             startActivity(intent)
         }
         rv_issue.adapter = adapter
@@ -85,7 +94,18 @@ class IssueFragment constructor(private val repo: Repo) : BaseFragment(), BaseVi
     private fun getNewData() {
         owner = repo.owner.login
         repoName = repo.name
-        presenter.getIssues(owner, repoName)
+
+        when (content_tag) {
+            IntentConstant.OPEN -> {
+                presenter.getOpenIssues(owner, repoName)
+            }
+            IntentConstant.CLOSED -> {
+                presenter.getClosedIssues(owner, repoName)
+            }
+            else -> {
+                presenter.getIssues(owner, repoName)
+            }
+        }
     }
 
     override fun initView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {

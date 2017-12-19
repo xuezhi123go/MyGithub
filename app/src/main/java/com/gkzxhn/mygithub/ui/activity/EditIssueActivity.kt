@@ -14,6 +14,7 @@ import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
+import com.gkzxhn.mygithub.extension.showSoftInputFromWindow
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.EditIssuePresenter
 import com.ldoublem.loadingviewlib.view.LVGhost
@@ -63,6 +64,7 @@ class EditIssueActivity : BaseActivity(), BaseView {
         userName = intent.getStringExtra(IntentConstant.NAME)
 
         setToolbar()
+        setEditText()
         bt_post_issue.setOnClickListener { v ->
             val title = edit_title.text.toString().trim()
             val body = edit_body.text.toString()
@@ -74,6 +76,10 @@ class EditIssueActivity : BaseActivity(), BaseView {
         }
     }
 
+    private fun setEditText() {
+        edit_title.showSoftInputFromWindow(this)
+    }
+
     override fun setupComponent() {
         App.getInstance()
                 .baseComponent
@@ -83,7 +89,7 @@ class EditIssueActivity : BaseActivity(), BaseView {
 
     private fun setToolbar() {
         setToolBarBack(true)
-        toolbar.title = repoName
+        toolbar.title = "New Issue"
     }
 
     override fun getToolbar(): Toolbar? {

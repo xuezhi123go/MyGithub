@@ -207,7 +207,7 @@ class UserActivity : BaseActivity(), BaseView {
             username = login
             avatar_url = (data as Owner).avatar_url
             when ((data as Owner).type) {
-                "USER" -> {
+                "User" -> {
                     adapter.type = "USER"
                     presenter.getUser(login)
                 }
@@ -231,6 +231,7 @@ class UserActivity : BaseActivity(), BaseView {
         } else if (data is Organization) {
             login = (data as Organization).login
             username = login
+            avatar_url = (data as Organization).avatar_url
             adapter.type = "Organization"
             presenter.getOrg(login)
         }

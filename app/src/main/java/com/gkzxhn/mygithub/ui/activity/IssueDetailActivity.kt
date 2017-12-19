@@ -7,7 +7,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.ImageView
 import android.widget.RelativeLayout
+import android.widget.TextView
 import com.gkzxhn.balabala.base.BaseActivity
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
@@ -16,6 +19,7 @@ import com.gkzxhn.mygithub.bean.info.Comment
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
+import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.IssueDetailPresenter
 import com.gkzxhn.mygithub.ui.adapter.IssueDetailAdapter
@@ -36,8 +40,6 @@ class IssueDetailActivity: BaseActivity(), BaseView {
     @Inject
     lateinit var presenter: IssueDetailPresenter
 
-    private lateinit var repoName : String
-
     override fun launchActivity(intent: Intent) {
 
     }
@@ -51,7 +53,7 @@ class IssueDetailActivity: BaseActivity(), BaseView {
         }
         loading.layoutParams = params
         loading.startAnim()
-        ll_issue_detail.addView(loading, 2)
+        ll_issue_detail.addView(loading, 3)
     }
 
     override fun hideLoading() {
@@ -69,7 +71,7 @@ class IssueDetailActivity: BaseActivity(), BaseView {
         setContentView(R.layout.activity_issue_detail)
 
         val name = intent.getStringExtra(IntentConstant.NAME)
-        repoName = intent.getStringExtra(IntentConstant.REPO)
+        val repoName = intent.getStringExtra(IntentConstant.REPO)
         val number = intent.getIntExtra(IntentConstant.ISSUE_NUM, 0)
 
         setToolBar()
@@ -80,7 +82,8 @@ class IssueDetailActivity: BaseActivity(), BaseView {
     }
 
     private fun setToolBar() {
-        toolbar.title = repoName
+        val title = intent.getStringExtra(IntentConstant.TITLE)
+        toolbar.title = title
         setToolBarBack(true)
     }
 
@@ -104,6 +107,17 @@ class IssueDetailActivity: BaseActivity(), BaseView {
         adapter.openLoadAnimation()
         rv_issue_detail.layoutManager = LinearLayoutManager(this)
         rv_issue_detail.adapter = adapter
+
+        val headView = LayoutInflater.from(this).inflate(R.layout.issue_head, ll_issue_detail, false)
+        adapter.addHeaderView(headView)
+        val avatar = intent.getStringExtra(IntentConstant.AVATAR)
+        val time = intent.getStringExtra(IntentConstant.CREATE_TIME).substring(0, 10)
+        val name = intent.getStringExtra(IntentConstant.NAME)
+        val body = intent.getStringExtra(IntentConstant.BODY)
+        headView.findViewById<ImageView>(R.id.img_avatar).load(this, avatar, R.drawable.default_avatar)
+        headView.findViewById<TextView>(R.id.tv_name).text = name
+        headView.findViewById<TextView>(R.id.tv_create_time).text = time
+        headView.findViewById<TextView>(R.id.tv_body).text = body
     }
 
     override fun setupComponent() {
@@ -115,14 +129,10 @@ class IssueDetailActivity: BaseActivity(), BaseView {
 
     override fun getToolbar(): Toolbar? = toolbar
 
-    override fun getStatusBar()=status_view
+    override fun getStatusBar() : View? =status_view
 
     fun loadData(comments: List<Comment>){
-        if (comments.size == 0) {
-            adapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.empty_view, null, false))
-        }
         adapter.setNewData(comments)
-
     }
 
     fun addComment(comment: Comment) {

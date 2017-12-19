@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#273842</color>
+    <color name="colorPrimaryDark">#273842</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
     <color name="background">#ddeeeeee</color>
     <color name="primary_text">#DE000000</color>
 
-    <color name="blue_grey">#607D8B</color>
+    <color name="blue_grey">#273842</color>
+    <color name="blue_grey1">#607D8B</color>
 
     <color name="button_bg">@color/blue_grey</color>
     <color name="md_grey_300">#E0E0E0</color>
     <color name="gray_back">#c8c8c8</color>
-    <color name="green">#2cd670</color>
+    <color name="green">#14af52</color>
     <color name="user_blue">#971052ec</color>
     <color name="red">#e81414</color>
     <color name="repo_header">#88edc69b</color>

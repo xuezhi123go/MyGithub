@@ -114,9 +114,9 @@ class LoginPresenter @Inject constructor(private val rxBus: RxBus,
 //                .doAfterTerminate { view.hideLoading() }
 //                .subscribe({
 //                    user: USER? ->
-//                    Log.i(TAG, "user: ${user}"
+//                    Log.i(content_tag, "user: ${user}"
 //                )},{
-//                    e -> Log.e(TAG, "login error : ${e.message}")
+//                    e -> Log.e(content_tag, "login error : ${e.message}")
 //                })
 
     }
