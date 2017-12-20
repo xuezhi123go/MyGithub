@@ -14,7 +14,6 @@ import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.info.Event
-import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
@@ -83,11 +82,10 @@ class EventFragment : BaseFragment(), BaseView {
         adapter = EventAdapter(null)
         rv_notifications.layoutManager = LinearLayoutManager(context)
         adapter.setOnItemClickListener { adapter, view, position ->
-
-            var name = (adapter.data[position] as Event).repo.name.split("/")
-            var owenr = name[0]
-            var repo = name[1]
-            presenter.getRepoDetail(owenr, repo)
+            var fullName = (adapter.data[position] as Event).repo.name
+            val intent = Intent(context, RepoDetailActivity::class.java)
+            intent.putExtra(IntentConstant.FULL_NAME, fullName)
+            startActivity(intent)
         }
         rv_notifications.adapter = adapter
     }
@@ -112,14 +110,6 @@ class EventFragment : BaseFragment(), BaseView {
         var string: String = SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, "")
         Log.i(javaClass.simpleName, "USER_NAME = " + string)
         presenter.getEvents(SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, ""))
-    }
-
-    fun toRepoDetailActivity(repo: Repo) {
-        val intent = Intent(context, RepoDetailActivity::class.java)
-        val mBundle = Bundle()
-        mBundle.putParcelable(IntentConstant.REPO, repo)
-        intent.putExtras(mBundle)
-        startActivity(intent)
     }
 
 }

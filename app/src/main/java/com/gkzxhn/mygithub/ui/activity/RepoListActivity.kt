@@ -172,10 +172,10 @@ class RepoListActivity : BaseActivity(), BaseView {
         eventAdapter = EventAdapter(null)
         eventAdapter.openLoadAnimation()
         eventAdapter.setOnItemClickListener { adapter, view, position ->
-            var name = (adapter.data[position] as Event).repo.name.split("/")
-            var owenr = name[0]
-            var repo = name[1]
-            presenter.getRepoDetail(owenr, repo)
+            var fullName = (adapter.data[position] as Event).repo.name
+            val intent = Intent(this, RepoDetailActivity::class.java)
+            intent.putExtra(IntentConstant.FULL_NAME, fullName)
+            startActivity(intent)
         }
         rv_repo_list.adapter = eventAdapter
     }
@@ -309,13 +309,5 @@ class RepoListActivity : BaseActivity(), BaseView {
     override fun onDestroy() {
         isOn = false
         super.onDestroy()
-    }
-
-    fun toRepoDetailActivity(repo: Repo) {
-        val intent = Intent(this, RepoDetailActivity::class.java)
-        val mBundle = Bundle()
-        mBundle.putParcelable(IntentConstant.REPO, repo)
-        intent.putExtras(mBundle)
-        startActivity(intent)
     }
 }

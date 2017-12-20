@@ -48,19 +48,4 @@ class ActivityPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 })
     }
 
-    fun getRepoDetail(owner: String, repo: String) {
-
-        oAuthApi.get(owner, repo)
-                .bindToLifecycle(view as ActivityFragment)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ repo ->
-
-                    view.toRepoDetailActivity(repo)
-
-                }, { e ->
-                    Log.i(javaClass.simpleName, e.message)
-                })
-
-    }
 }
