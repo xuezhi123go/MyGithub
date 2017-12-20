@@ -321,23 +321,4 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     Log.e(javaClass.simpleName, "e = " + e)
                 })
     }
-
-    /**
-     * 根据用户名和仓库名获得仓库数据
-     */
-    fun getRepoDetail(owner: String, repo: String) {
-
-        oAuthApi.get(owner, repo)
-                .bindToLifecycle(view as RepoListActivity)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ repo ->
-
-                    view.toRepoDetailActivity(repo)
-
-                }, { e ->
-                    Log.i(javaClass.simpleName, e.message)
-                })
-
-    }
 }
