@@ -52,24 +52,23 @@ class EventAdapter(datas: List<Event>?) : BaseQuickAdapter<Event, BaseViewHolder
                 helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
                 helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.close_icon) }
             }
-            "IssueCommentEvent"->{
+            "IssueCommentEvent" -> {
                 did = " created comment on issue in "
                 helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
                 helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.public_activity) }
             }
-            "IssuesEvent"->{
+            "IssuesEvent" -> {
                 did = " created issus in"
                 helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
                 helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.public_activity) }
             }
-            "FrokEvent"->{
+            "FrokEvent" -> {
                 did = " forked "
                 helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
                 helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.open_icon) }
             }
             else -> {
-                did = "*等我改*"
-                helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
+                helper!!.setText(R.id.tv_new_data_notification, " 请提交log给开发小哥确定Event类型 O(∩_∩)O ")
             }
         }
         helper!!.setText(R.id.tv_new_date_notification, toNow)
