@@ -25,6 +25,7 @@ import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.getSharedPreference
+import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.RepoListPresenter
 import com.gkzxhn.mygithub.ui.adapter.EventAdapter
 import com.gkzxhn.mygithub.ui.adapter.RepoListAdapter
@@ -172,10 +173,18 @@ class RepoListActivity : BaseActivity(), BaseView {
         eventAdapter = EventAdapter(null)
         eventAdapter.openLoadAnimation()
         eventAdapter.setOnItemClickListener { adapter, view, position ->
-            var fullName = (adapter.data[position] as Event).repo.name
-            val intent = Intent(this, RepoDetailActivity::class.java)
-            intent.putExtra(IntentConstant.FULL_NAME, fullName)
-            startActivity(intent)
+            var type = (adapter.data[position] as Event).type
+            when (type) {"IssuesEvent", "IssueCommentEvent" -> {
+                toast("这里要跳Issues")
+            }
+                else -> {
+                    var fullName = (adapter.data[position] as Event).repo.name
+                    val intent = Intent(this, RepoDetailActivity::class.java)
+                    intent.putExtra(IntentConstant.FULL_NAME, fullName)
+                    startActivity(intent)
+                }
+            }
+
         }
         rv_repo_list.adapter = eventAdapter
     }

@@ -19,6 +19,7 @@ import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.getSharedPreference
+import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.ActivityPresenter
 import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
 import com.gkzxhn.mygithub.ui.adapter.EventAdapter
@@ -74,10 +75,18 @@ class ActivityFragment : BaseFragment(), BaseView {
         adapter = EventAdapter(null)
         rv_notifications.layoutManager = LinearLayoutManager(context)
         adapter.setOnItemClickListener { adapter, view, position ->
-            var fullName = (adapter.data[position] as Event).repo.name
-            val intent = Intent(context, RepoDetailActivity::class.java)
-            intent.putExtra(IntentConstant.FULL_NAME, fullName)
-            startActivity(intent)
+            var type = (adapter.data[position] as Event).type
+            when (type) {"IssuesEvent", "IssueCommentEvent" -> {
+                context.toast("这里要跳Issues")
+            }
+                else -> {
+                    var fullName = (adapter.data[position] as Event).repo.name
+                    val intent = Intent(context, RepoDetailActivity::class.java)
+                    intent.putExtra(IntentConstant.FULL_NAME, fullName)
+                    startActivity(intent)
+                }
+            }
+
         }
         rv_notifications.adapter = adapter
     }
