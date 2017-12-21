@@ -38,7 +38,7 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                         if (!event.toString().equals(SPUtil.get(view.context, "event", ""))) {
                             SPUtil.put(view.context, "event", event.toString())
                         }
-                        Log.i(javaClass.simpleName, "event = " + event[2])
+                        Log.i(javaClass.simpleName, "event12 = " + event[12])
                     } else {
                         view.context.toast("没有数据")
                     }
