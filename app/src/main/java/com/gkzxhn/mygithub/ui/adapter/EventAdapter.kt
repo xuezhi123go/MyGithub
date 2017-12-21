@@ -67,6 +67,11 @@ class EventAdapter(datas: List<Event>?) : BaseQuickAdapter<Event, BaseViewHolder
                 helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
                 helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.open_icon) }
             }
+            "PullRequestReviewCommentEvent" -> {
+                did = " pull request review comment in "
+                helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
+                helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.public_activity) }
+            }
             else -> {
                 helper!!.setText(R.id.tv_new_data_notification, " 请提交log给开发小哥确定Event类型 O(∩_∩)O ")
             }
