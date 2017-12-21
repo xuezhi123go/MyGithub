@@ -81,4 +81,5 @@ dependencies {
     compile files('libs/AutoUpdate_SDK.jar')
 
     compile 'com.mittsu:markedview:1.0.5@aar'
+    compile 'com.pddstudio:highlightjs-android:1.5.0'
 }

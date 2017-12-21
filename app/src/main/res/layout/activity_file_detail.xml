@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <View
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_25"
+        android:id="@+id/status_view"/>
+
+    <android.support.v7.widget.Toolbar
+        android:background="@color/colorPrimary"
+        android:id="@+id/toolbar"
+        app:titleTextColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_height">
+    </android.support.v7.widget.Toolbar>
+
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_margin="@dimen/dimen_10"
+            android:text="loading..."
+            android:textSize="@dimen/sp_18"
+            android:textColor="@color/text_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <com.pddstudio.highlightjs.HighlightJsView
+        android:id="@+id/highlight_js_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.pddstudio.highlightjs.HighlightJsView>
+
+    </FrameLayout>
+
+</LinearLayout>

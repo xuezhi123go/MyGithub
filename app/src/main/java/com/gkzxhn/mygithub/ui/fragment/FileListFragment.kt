@@ -14,8 +14,10 @@ import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.info.Content
+import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.mvp.presenter.FileListPresenter
+import com.gkzxhn.mygithub.ui.activity.FileDetailActivity
 import com.gkzxhn.mygithub.ui.adapter.FileListAdapter
 import com.gkzxhn.mygithub.ui.wedgit.RecycleViewDivider
 import kotlinx.android.synthetic.main.fragment_file_list.*
@@ -70,7 +72,11 @@ class FileListFragment (val index: Int) : BaseView, BaseFragment() {
                     presenter.goNextPage(index, item.path, item.name)
                 }
                 "file" -> {
-
+                    val intent = Intent(context, FileDetailActivity::class.java)
+                    intent.putExtra(IntentConstant.PATH, item.path)
+                    intent.putExtra(IntentConstant.REPO, repoName)
+                    intent.putExtra(IntentConstant.NAME, owner)
+                    startActivity(intent)
                 }
                 else -> {
                 }

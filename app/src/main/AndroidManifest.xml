@@ -40,6 +40,7 @@
         <activity android:name ="com.iflytek.autoupdate.IFlytekUpdateDialog"/>
         <activity android:name=".ui.activity.IssuesActivity"/>
         <activity android:name=".ui.activity.FileTreeActivity"/>
+        <activity android:name=".ui.activity.FileDetailActivity"/>
 
         <service android:name="com.iflytek.autoupdate.IFlytekDownloadService"/>
     </application>
