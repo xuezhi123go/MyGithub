@@ -76,6 +76,7 @@ class IssueFragment (private val repo: Repo, val content_tag: String) : BaseFrag
             val body = issue.body
             val title = issue.title
             val intent = Intent(context, IssueDetailActivity::class.java)
+            intent.putExtra(IntentConstant.TYPE, content_tag)
             intent.putExtra(IntentConstant.NAME, name)
             intent.putExtra(IntentConstant.REPO, repo)
             intent.putExtra(IntentConstant.ISSUE_NUM, number)

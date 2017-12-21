@@ -73,6 +73,19 @@ class IssueDetailActivity: BaseActivity(), BaseView {
         val name = intent.getStringExtra(IntentConstant.NAME)
         val repoName = intent.getStringExtra(IntentConstant.REPO)
         val number = intent.getIntExtra(IntentConstant.ISSUE_NUM, 0)
+        val content_tag = intent.getStringExtra(IntentConstant.TYPE)
+        when (content_tag) {
+            IntentConstant.OPEN -> {
+                status_view.setBackgroundResource(R.color.green)
+                toolbar.setBackgroundResource(R.color.green)
+            }
+            IntentConstant.CLOSED -> {
+                status_view.setBackgroundResource(R.color.red)
+                toolbar.setBackgroundResource(R.color.red)
+            }
+            else -> {
+            }
+        }
 
         setToolBar()
         initRecyclerView()

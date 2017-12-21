@@ -29,4 +29,5 @@ object IntentConstant {
     val TITLE = "title"
     val ACTIVITY = "activity"
     val PATH = "path"
+    val TYPE = "type"
 }
