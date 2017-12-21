@@ -333,4 +333,13 @@ interface OAuthApi {
     fun getEventThatAUserPublicPerformed(
             @Path("username") username: String
     ): Observable<List<Event>>
+
+    /**
+     * 获得仓库具体内容
+     */
+    @GET("/repos/{owner}/{repo}/contents/{path}")
+    fun getCodeDetail(@Path("owner") owner: String,
+                      @Path("repo") repo: String,
+                      @Path("path") path: String,
+                      @Query("ref") ref: String?): Observable<ArrayList<Content>>
 }

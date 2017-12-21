@@ -8,7 +8,7 @@ import android.os.Parcelable
  */
 
 data class Icon2Name(
-        val avatarUrl: String, //头像地址
+        val avatarUrl: String?, //头像地址
         val name: String,//名字
         val type: String//对象类型
 ) : Parcelable {

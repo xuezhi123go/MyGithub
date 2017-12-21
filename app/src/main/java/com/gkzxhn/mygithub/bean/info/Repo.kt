@@ -80,7 +80,7 @@ data class Repo(
 		val open_issues: Int, //0
 		val watchers: Int, //0
 		val default_branch: String, //master
-		val permissions: Permissions
+		val permissions: Permissions?
 ) : Parcelable {
 	constructor(source: Parcel) : this(
 			source.readInt(),
@@ -153,7 +153,7 @@ data class Repo(
 			source.readInt(),
 			source.readInt(),
 			source.readString(),
-			source.readParcelable<Permissions>(Permissions::class.java.classLoader)
+			source.readParcelable<Permissions?>(Permissions::class.java.classLoader)
 	)
 
 	override fun describeContents() = 0

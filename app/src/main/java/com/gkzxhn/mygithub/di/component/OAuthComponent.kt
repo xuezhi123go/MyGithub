@@ -42,4 +42,6 @@ interface OAuthComponent {
     fun inject(mainActivity: MainActivity)
 
     fun inject(activityFragment: ActivityFragment)
+
+    fun inject(fileListFragment: FileListFragment)
 }

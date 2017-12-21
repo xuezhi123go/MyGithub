@@ -226,7 +226,7 @@ class UserActivity : BaseActivity(), BaseView {
         } else if (data is Icon2Name) {
             login = (data as Icon2Name).name
             username = login
-            avatar_url = (data as Icon2Name).avatarUrl
+            avatar_url = (data as Icon2Name).avatarUrl!!
             presenter.getUser(login)
         } else if (data is Organization) {
             login = (data as Organization).login

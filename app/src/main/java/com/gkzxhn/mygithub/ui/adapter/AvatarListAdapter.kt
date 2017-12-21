@@ -14,7 +14,7 @@ class AvatarListAdapter(datas : ArrayList<Icon2Name>?) : BaseQuickAdapter<Icon2N
 
     override fun convert(helper: BaseViewHolder?, item: Icon2Name?) {
         helper!!.getView<ImageView>(R.id.iv_avatar)
-                .let { it.loadRoundConner(it.context, item!!.avatarUrl) }
+                .let { it.loadRoundConner(it.context, item!!.avatarUrl!!) }
         helper.setText(R.id.tv_name, item!!.name)
     }
 }

@@ -27,7 +27,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:contentDescription="@string/app_name"
-                android:src="@mipmap/ic_launcher"
+                android:src="@mipmap/github"
                 />
             
             <TextView 
