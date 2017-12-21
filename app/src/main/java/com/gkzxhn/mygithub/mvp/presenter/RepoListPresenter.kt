@@ -9,7 +9,6 @@ import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.ui.activity.RepoListActivity
-import com.google.gson.Gson
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -312,7 +311,7 @@ class RepoListPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .subscribe({event->
                     if (event.size > 0) {
                         view.loadActivityData(event)
-                        Log.i(javaClass.simpleName, "event = " + Gson().toJson(event))
+                        Log.i(javaClass.simpleName, "event = " + event)
                     } else {
                         view.toast("没有数据")
                     }

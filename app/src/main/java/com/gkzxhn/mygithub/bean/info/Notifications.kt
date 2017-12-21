@@ -22,7 +22,7 @@ data class Subject(
         val type: String //Issue
 )
 
-data class Repository(
+/*data class Repository(
         val id: Int, //1296269
         val owner: Owner,
         val name: String, //Hello-World
@@ -32,7 +32,7 @@ data class Repository(
         val fork: Boolean, //false
         val url: String, //https://api.github.com/repos/octocat/Hello-World
         val html_url: String //https://github.com/octocat/Hello-World
-)
+)*/
 
 /*
 data class Owner(

@@ -19,8 +19,8 @@ import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.getSharedPreference
-import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.ActivityPresenter
+import com.gkzxhn.mygithub.ui.activity.IssueDetailActivity
 import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
 import com.gkzxhn.mygithub.ui.adapter.EventAdapter
 import com.ldoublem.loadingviewlib.view.LVGhost
@@ -76,11 +76,28 @@ class ActivityFragment : BaseFragment(), BaseView {
         rv_notifications.layoutManager = LinearLayoutManager(context)
         adapter.setOnItemClickListener { adapter, view, position ->
             var type = (adapter.data[position] as Event).type
+            var fullName = (adapter.data[position] as Event).repo.name
+            var s = fullName.split("/")
             when (type) {"IssuesEvent", "IssueCommentEvent" -> {
-                context.toast("这里要跳Issues")
+                val issue = (adapter.data[position] as Event).payload.issue
+                val name = s[0]
+                val repo = s[1]
+                val number = issue.number
+                val time = issue.created_at
+                val avatar = issue.user.avatar_url
+                val body = issue.body
+                val title = issue.title
+                val intent = Intent(context, IssueDetailActivity::class.java)
+                intent.putExtra(IntentConstant.NAME, name)
+                intent.putExtra(IntentConstant.REPO, repo)
+                intent.putExtra(IntentConstant.ISSUE_NUM, number)
+                intent.putExtra(IntentConstant.CREATE_TIME, time)
+                intent.putExtra(IntentConstant.AVATAR, avatar)
+                intent.putExtra(IntentConstant.BODY, body)
+                intent.putExtra(IntentConstant.TITLE, title)
+                startActivity(intent)
             }
                 else -> {
-                    var fullName = (adapter.data[position] as Event).repo.name
                     val intent = Intent(context, RepoDetailActivity::class.java)
                     intent.putExtra(IntentConstant.FULL_NAME, fullName)
                     startActivity(intent)
