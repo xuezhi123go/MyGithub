@@ -62,4 +62,20 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
 
     }
 
+    fun getEvents(){
+        oAuthApi.getEvents()
+                .bindToLifecycle(view as EventFragment)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate { view.hideLoading() }
+                .subscribe({ event ->
+                    Log.i(javaClass.simpleName, "event = $event")
+                }, { e ->
+                    Log.e(javaClass.simpleName, "e = " + e.message)
+                    view.context.toast("请先登录")
+                    view.tv_notifications_login.visibility = View.VISIBLE
+                    view.srl_notifications.visibility = View.GONE
+                })
+    }
 }

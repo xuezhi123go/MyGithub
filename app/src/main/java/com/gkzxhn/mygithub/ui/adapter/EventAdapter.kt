@@ -62,7 +62,7 @@ class EventAdapter(datas: List<Event>?) : BaseQuickAdapter<Event, BaseViewHolder
                 helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
                 helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.public_activity) }
             }
-            "FrokEvent" -> {
+            "ForkEvent" -> {
                 did = " forked "
                 helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
                 helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.open_icon) }
