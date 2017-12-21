@@ -9,7 +9,6 @@ import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.ui.fragment.EventFragment
 import com.gkzxhn.mygithub.utils.SPUtil
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
-import com.google.gson.Gson
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -39,7 +38,7 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                         if (!event.toString().equals(SPUtil.get(view.context, "event", ""))) {
                             SPUtil.put(view.context, "event", event.toString())
                         }
-                        Log.i(javaClass.simpleName, "event = " + Gson().toJson(event))
+                        Log.i(javaClass.simpleName, "event = " + event[2])
                     } else {
                         view.context.toast("没有数据")
                     }
@@ -59,6 +58,21 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                             view.getNewData()
                         }
                 )
+
+    }
+
+    fun getRepoDetail(owner: String, repo: String) {
+        view.showLoading()
+        oAuthApi.get(owner, repo)
+                .bindToLifecycle(view as EventFragment)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ repo ->
+                    //view.hideLoading()
+                    view.toIssues(repo)
+                }, { e ->
+                    Log.i(javaClass.simpleName, e.message)
+                })
 
     }
 

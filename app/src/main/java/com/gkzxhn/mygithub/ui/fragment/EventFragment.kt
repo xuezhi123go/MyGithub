@@ -14,13 +14,15 @@ import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.info.Event
+import com.gkzxhn.mygithub.bean.info.Repo
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.getSharedPreference
-import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.EventPresenter
+import com.gkzxhn.mygithub.ui.activity.IssueDetailActivity
+import com.gkzxhn.mygithub.ui.activity.IssuesActivity
 import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
 import com.gkzxhn.mygithub.ui.adapter.EventAdapter
 import com.ldoublem.loadingviewlib.view.LVGhost
@@ -84,11 +86,28 @@ class EventFragment : BaseFragment(), BaseView {
         rv_notifications.layoutManager = LinearLayoutManager(context)
         adapter.setOnItemClickListener { adapter, view, position ->
             var type = (adapter.data[position] as Event).type
+            var fullName = (adapter.data[position] as Event).repo.name
+            var s = fullName.split("/")
             when (type) {"IssuesEvent", "IssueCommentEvent" -> {
-                context.toast("这里要跳Issues")
+                val issue = (adapter.data[position] as Event).payload.issue
+                val name = s[0]
+                val repo = s[1]
+                val number = issue.number
+                val time = issue.created_at
+                val avatar = issue.user.avatar_url
+                val body = issue.body
+                val title = issue.title
+                val intent = Intent(context, IssueDetailActivity::class.java)
+                intent.putExtra(IntentConstant.NAME, name)
+                intent.putExtra(IntentConstant.REPO, repo)
+                intent.putExtra(IntentConstant.ISSUE_NUM, number)
+                intent.putExtra(IntentConstant.CREATE_TIME, time)
+                intent.putExtra(IntentConstant.AVATAR, avatar)
+                intent.putExtra(IntentConstant.BODY, body)
+                intent.putExtra(IntentConstant.TITLE, title)
+                startActivity(intent)
             }
                 else -> {
-                    var fullName = (adapter.data[position] as Event).repo.name
                     val intent = Intent(context, RepoDetailActivity::class.java)
                     intent.putExtra(IntentConstant.FULL_NAME, fullName)
                     startActivity(intent)
@@ -118,6 +137,15 @@ class EventFragment : BaseFragment(), BaseView {
         var string: String = SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, "")
         Log.i(javaClass.simpleName, "USER_NAME = " + string)
         presenter.getEvents(SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, ""))
+    }
+
+    fun toIssues(repo: Repo) {
+        val intent = Intent(context, IssuesActivity::class.java)
+        val mBundle = Bundle()
+        mBundle.putParcelable(IntentConstant.REPO, repo)
+        intent.putExtras(mBundle)
+        startActivity(intent)
+        hideLoading()
     }
 
 }
