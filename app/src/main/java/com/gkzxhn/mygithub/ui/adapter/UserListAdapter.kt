@@ -66,7 +66,7 @@ class UserListAdapter(datas : List<Any>?) : BaseQuickAdapter<Any, BaseViewHolder
         }else if (item is Icon2Name) {
             helper!!.setText(R.id.tv_username, item.name)
             helper.getView<ImageView>(R.id.iv_avatar)
-                    .let { it.load(it.context, item.avatarUrl, R.drawable.default_avatar) }
+                    .let { it.load(it.context, item.avatarUrl!!, R.drawable.default_avatar) }
         }else if(item is Organization) {
             helper.setVisible(R.id.pb_follow, false)
                     .setText(R.id.tv_username, item.login)

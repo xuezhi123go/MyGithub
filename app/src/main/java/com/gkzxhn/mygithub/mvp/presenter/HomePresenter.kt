@@ -33,7 +33,7 @@ class HomePresenter @Inject constructor(private val oAuthApi: OAuthApi,
     }
 
     fun getPopularRepos(){
-        oAuthApi.searchRepos("language:java stars:>1000")
+        oAuthApi.searchRepos("stars:>1000")
                 .bindToLifecycle(mView as HomeFragment)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

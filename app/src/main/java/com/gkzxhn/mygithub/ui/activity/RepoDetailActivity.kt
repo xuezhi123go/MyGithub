@@ -169,6 +169,14 @@ class RepoDetailActivity:BaseActivity(),BaseView {
 
             tv_reame_all.visibility = View.GONE
         }
+
+        tv_view_code.setOnClickListener {
+//            presenter.getCode(repo!!.owner.login, repo!!.name)
+            val intent = Intent(this, FileTreeActivity::class.java)
+            intent.putExtra(IntentConstant.NAME, repo!!.owner.login)
+            intent.putExtra(IntentConstant.REPO, repo!!.name)
+            startActivity(intent)
+        }
     }
 
     @SuppressLint("ResourceAsColor")
