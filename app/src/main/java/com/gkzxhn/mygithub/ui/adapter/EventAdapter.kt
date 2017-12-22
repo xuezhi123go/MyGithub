@@ -71,7 +71,7 @@ class EventAdapter(datas: List<Event>?) : BaseQuickAdapter<Event, BaseViewHolder
                 helper!!.setText(R.id.tv_detail_data_notification, item!!.payload.issue.title)
                 helper.getView<TextView>(R.id.tv_detail_data_notification).let { it.visibility = View.VISIBLE }
             }
-            "FrokEvent" -> {
+            "ForkEvent" -> {
                 did = " forked "
                 helper!!.setText(R.id.tv_new_data_notification, item!!.actor.login + did + item!!.repo.name)
                 helper!!.getView<ImageView>(R.id.iv_state_icon).let { it.load(it.context, R.drawable.open_icon) }

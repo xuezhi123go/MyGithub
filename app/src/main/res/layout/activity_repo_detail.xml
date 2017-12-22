@@ -120,6 +120,7 @@
 
             <LinearLayout
                 android:id="@+id/ll_watch"
+                android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 style="@style/item_repo_topic"
                 android:focusable="true">
@@ -145,6 +146,7 @@
             <LinearLayout
                 android:id="@+id/ll_stars"
                 android:clickable="true"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/item_repo_topic"
                 android:focusable="true">
 
@@ -253,6 +255,7 @@
 
                 <TextView
                     android:id="@+id/tv_view_code"
+                    android:background="?android:attr/selectableItemBackground"
                     android:text="View Code"
                     android:drawableLeft="@drawable/code"
                     android:paddingLeft="@dimen/dimen_30"
@@ -268,6 +271,7 @@
                 <TextView
                     android:id="@+id/tv_view_issue"
                     android:drawableLeft="@drawable/issue"
+                    android:background="?android:attr/selectableItemBackground"
                     android:paddingLeft="@dimen/dimen_30"
                     android:drawablePadding="1dp"
                     android:paddingRight="@dimen/dimen_30"
@@ -321,6 +325,7 @@
                 android:id="@+id/tv_reame_all"
                 android:visibility="gone"
                 android:text="View all of README.md"
+                android:background="?android:attr/selectableItemBackground"
                 android:gravity="center"
                 android:textColor="@color/text_blue"
                 android:textStyle="bold"

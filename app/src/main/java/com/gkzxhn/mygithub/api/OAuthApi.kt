@@ -342,4 +342,19 @@ interface OAuthApi {
                       @Path("repo") repo: String,
                       @Path("path") path: String,
                       @Query("ref") ref: String?): Observable<ArrayList<Content>>
+
+    /**
+     *
+     */
+    @GET("/repos/{owner}/{repo}/contents/{path}")
+    fun getContentDetail(@Path("owner") owner: String,
+                         @Path("repo") repo: String,
+                         @Path("path") path: String,
+                         @Query("ref") ref: String?): Observable<Content>
+
+    /**
+     * 列出用户执行的公共事件
+     */
+    @GET("/events")
+    fun getEvents(): Observable<List<Event>>
 }

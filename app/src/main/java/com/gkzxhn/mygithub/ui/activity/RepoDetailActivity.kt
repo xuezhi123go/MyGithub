@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import com.gkzxhn.balabala.base.BaseActivity
@@ -177,6 +175,26 @@ class RepoDetailActivity:BaseActivity(),BaseView {
             intent.putExtra(IntentConstant.REPO, repo!!.name)
             startActivity(intent)
         }
+
+        iv_avatar.setOnClickListener {
+            gotoUser()
+        }
+
+        iv_avatar_small.setOnClickListener {
+            gotoUser()
+        }
+    }
+
+    /**
+     * 跳转个人页
+     */
+    private fun gotoUser() {
+        val owner = repo!!.owner
+        val intent = Intent(this, UserActivity::class.java)
+        val bundle = Bundle()
+        bundle.putParcelable(IntentConstant.USER, owner)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 
     @SuppressLint("ResourceAsColor")
@@ -188,7 +206,7 @@ class RepoDetailActivity:BaseActivity(),BaseView {
         iv_avatar_small.load(this, repo!!.owner.avatar_url, R.drawable.default_avatar)
         tv_username.text = repo!!.owner.login
 
-        setToolbarMenuClickListener(object : Toolbar.OnMenuItemClickListener{
+        /*setToolbarMenuClickListener(object : Toolbar.OnMenuItemClickListener{
             override fun onMenuItemClick(item: MenuItem?): Boolean {
                 when(item!!.itemId) {
                     R.id.toolbar_add_issue -> {
@@ -200,7 +218,7 @@ class RepoDetailActivity:BaseActivity(),BaseView {
                 }
                 return true
             }
-        })
+        })*/
     }
 
     override fun getToolbar(): Toolbar? {
@@ -209,13 +227,12 @@ class RepoDetailActivity:BaseActivity(),BaseView {
 
    /* override fun getStatusBar(): View? {
         return status_view
-    }*/
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu)
-        menu!!.getItem(0).setIcon(android.R.drawable.ic_menu_add)
-        return true
     }
+*/
+   /* override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu)
+        return true
+    }*/
 
     fun starred(){
         isStarred = true

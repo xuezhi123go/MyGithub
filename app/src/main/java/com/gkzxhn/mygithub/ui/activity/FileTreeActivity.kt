@@ -142,5 +142,6 @@ class FileTreeActivity : BaseActivity(), BaseView {
     private fun updateFileTitle(name: String) {
         fileTreeTitleAdapter.addData("$name >")
         fileTreeTitleAdapter.notifyDataSetChanged()
+        rv_file_title.smoothScrollToPosition(fileTreeTitleAdapter.datas!!.size - 1)
     }
 }
