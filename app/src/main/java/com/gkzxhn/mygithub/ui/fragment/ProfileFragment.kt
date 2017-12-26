@@ -19,12 +19,12 @@ import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
+import com.gkzxhn.mygithub.extension.edit
 import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.mvp.presenter.ProfilePresenter
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
 import com.gkzxhn.mygithub.ui.activity.RepoListActivity
-import com.gkzxhn.mygithub.ui.activity.SettingActivity
 import com.gkzxhn.mygithub.ui.activity.UserActivity
 import com.gkzxhn.mygithub.ui.adapter.IconListAdapter
 import com.ldoublem.loadingviewlib.view.LVGhost
@@ -107,9 +107,16 @@ class ProfileFragment : BaseFragment(), BaseView {
             }
         }
         setting_layout.setOnClickListener {
-            var intent = Intent(context,SettingActivity::class.java)
+            /*var intent = Intent(context,SettingActivity::class.java)
+            startActivity(intent)*/
+            SharedPreConstant.USER_SP.getSharedPreference()
+                    .edit {
+                        remove(SharedPreConstant.ACCESS_TOKEN)
+                        putString(SharedPreConstant.USER_NAME, "")
+                    }
+            var intent = Intent(context, LoginActivity::class.java)
             startActivity(intent)
-            //context.toast("进入设置")
+            activity.finish()
         }
     }
 

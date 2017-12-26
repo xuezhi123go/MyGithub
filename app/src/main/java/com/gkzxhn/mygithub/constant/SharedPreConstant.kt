@@ -15,4 +15,7 @@ object SharedPreConstant {
     val AVATAR_URL = "avatar_url"
     val USER_BIO = "user_bio"
     val USER_JSON = "user_json"
+
+    val LAST_TIME = "last_time"
+    val EVENT = "event"
 }

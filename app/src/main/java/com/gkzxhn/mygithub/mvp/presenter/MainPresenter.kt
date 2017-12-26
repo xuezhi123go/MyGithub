@@ -7,6 +7,7 @@ import com.gkzxhn.mygithub.api.OAuthApi
 import com.gkzxhn.mygithub.bean.entity.FinishMain
 import com.gkzxhn.mygithub.bean.info.Event
 import com.gkzxhn.mygithub.bean.info.User
+import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.utils.AppUtils
 import com.gkzxhn.mygithub.utils.SPUtil
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
@@ -77,6 +78,7 @@ class MainPresenter @Inject constructor(private val rxBus: RxBus
             }
         })
     }
+
     fun getEvents(username: String) {
         view.showLoading()
         oAuthApi.getEventsThatAUserHasReceived(username)
@@ -87,25 +89,13 @@ class MainPresenter @Inject constructor(private val rxBus: RxBus
                 .doAfterTerminate { view.hideLoading() }
                 .subscribe({ event ->
                     if (event.size > 0) {
-//                        view.tv_notifications_login.visibility = View.GONE
-//                        view.srl_notifications.visibility = View.VISIBLE
-//                        view.loadData(event)
-
-                        if (!event.toString().equals(SPUtil.get(view.context, "event", ""))) {
+                        if (!event.toString().equals(SPUtil.get(view.context, SharedPreConstant.EVENT, ""))) {
                             rxBus.post(event[0])
-                            SPUtil.put(view.context, "event", event.toString())
+                            SPUtil.put(view.context, SharedPreConstant.EVENT, event.toString())
                         }
-
                         Log.i(javaClass.simpleName, "event = " + event)
-//                        view.tv_notifications_login.visibility = View.GONE
-                    } else {
-//                        view.context.toast("没有数据")
-                    }
-                }, { e ->
+                    } }, { e ->
                     Log.e(javaClass.simpleName, "e = " + e.message)
-//                    view.context.toast("请先登录")
-//                    view.tv_notifications_login.visibility = View.VISIBLE
-//                    view.srl_notifications.visibility = View.GONE
                 })
     }
 }

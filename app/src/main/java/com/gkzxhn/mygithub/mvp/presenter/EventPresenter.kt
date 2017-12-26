@@ -4,10 +4,13 @@ import android.util.Log
 import android.view.View
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.api.OAuthApi
+import com.gkzxhn.mygithub.bean.entity.EventAdapterLoaded
 import com.gkzxhn.mygithub.bean.info.User
+import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.ui.fragment.EventFragment
 import com.gkzxhn.mygithub.utils.SPUtil
+import com.gkzxhn.mygithub.utils.Utils
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,6 +25,8 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                                          private val view: BaseView,
                                          private val rxBus: RxBus) {
 
+    var lastTime: Long = 0
+
     fun getEvents(username: String) {
         view.showLoading()
         oAuthApi.getEventsThatAUserHasReceived(username)
@@ -35,10 +40,12 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                         view.tv_notifications_login.visibility = View.GONE
                         view.srl_notifications.visibility = View.VISIBLE
                         view.loadData(event)
-                        if (!event.toString().equals(SPUtil.get(view.context, "event", ""))) {
-                            SPUtil.put(view.context, "event", event.toString())
+                        if (!event.toString().equals(SPUtil.get(view.context, SharedPreConstant.EVENT, ""))) {
+                            SPUtil.put(view.context, SharedPreConstant.EVENT, event.toString())
                         }
-                        Log.i(javaClass.simpleName, "event12 = " + event[12])
+                        lastTime = Utils.parseDate(event[0].created_at, "yyyy-MM-dd'T'HH:mm:ss'Z'") + 8 * 60 * 60 * 1000
+                        Log.i(javaClass.simpleName, "event0 = " + event[0])
+                        Log.i(javaClass.simpleName, "event1 = " + event[1])
                     } else {
                         view.context.toast("没有数据")
                     }
@@ -58,7 +65,12 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                             view.getNewData()
                         }
                 )
-
+        rxBus.toFlowable(EventAdapterLoaded::class.java)
+                .subscribe({ e: EventAdapterLoaded? ->
+                    //var time = Utils.getTiem().time
+                    SPUtil.put(view.context, SharedPreConstant.LAST_TIME, lastTime)
+                    Log.i(javaClass.simpleName, "" + Utils.getTiem())
+                })
     }
 
     fun getRepoDetail(owner: String, repo: String) {
@@ -76,7 +88,7 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
 
     }
 
-    fun getEvents(){
+    fun getEvents() {
         oAuthApi.getEvents()
                 .bindToLifecycle(view as EventFragment)
                 .subscribeOn(Schedulers.io())
