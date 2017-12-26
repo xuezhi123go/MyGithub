@@ -1,16 +1,20 @@
 package com.gkzxhn.mygithub.ui.adapter
 
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.gkzxhn.mygithub.R
+import com.gkzxhn.mygithub.bean.entity.EventAdapterLoaded
 import com.gkzxhn.mygithub.bean.info.Event
+import com.gkzxhn.mygithub.constant.Constant
 import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.extension.loadRoundConner
 import com.gkzxhn.mygithub.utils.Utils.getDiffTime
 import com.gkzxhn.mygithub.utils.Utils.parseDate
+import com.gkzxhn.mygithub.utils.rxbus.RxBus
 
 /**
  * Created by Xuezhi on 2017/11/19.
@@ -19,12 +23,16 @@ class EventAdapter(datas: List<Event>?) : BaseQuickAdapter<Event, BaseViewHolder
 
     override fun convert(helper: BaseViewHolder?, item: Event?) {
 
+        var lastTime = Constant.TIME
+
+        Log.i(javaClass.simpleName, "" + lastTime)
+
         var did: String
 
-        var creatTiem = parseDate(item!!.created_at, "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        var creatTiem = parseDate(item!!.created_at, "yyyy-MM-dd'T'HH:mm:ss'Z'") + 8 * 60 * 60 * 1000
 
         /*这里拿到的时间是世界标准时间，所以要加上8*60*60*1000转化成中国东八区的时间*/
-        var toNow = getDiffTime(creatTiem + 8 * 60 * 60 * 1000)
+        var toNow = getDiffTime(creatTiem)
 
         when (item!!.type) {
             "PushEvent" -> {
@@ -91,5 +99,35 @@ class EventAdapter(datas: List<Event>?) : BaseQuickAdapter<Event, BaseViewHolder
         helper!!.setText(R.id.tv_new_date_notification, toNow)
         helper!!.getView<ImageView>(R.id.iv_avatar)
                 .let { it.loadRoundConner(it.context, item.actor.avatar_url) }
+
+        when (Constant.CURRENT_PAGE) {
+            "EventFragment" -> {
+                if (creatTiem > lastTime) {
+                    helper!!.getView<TextView>(R.id.tv_news).let { it.visibility = View.VISIBLE }
+                } else {
+                    helper!!.getView<TextView>(R.id.tv_news).let { it.visibility = View.GONE }
+                }
+            }
+            else -> {
+                helper!!.getView<TextView>(R.id.tv_news).let { it.visibility = View.GONE }
+            }
+        }
+    }
+
+    override fun loadMoreEnd() {
+
+        RxBus.instance.post(EventAdapterLoaded("eventAdapter加载完成"))
+
+        /*var time = Utils.getTiem().time
+        SPUtil.put(context, SharedPreConstant.LAST_TIME, time)
+        Log.i(javaClass.simpleName, "" + Utils.getTiem())
+
+        var lastTime: Long = SPUtil.get(context, SharedPreConstant.LAST_TIME, 1L) as Long
+
+        if (creatTiem > lastTime) {
+            helper!!.setText(R.id.tv_new_date_notification, "新消息")
+        } else {
+            helper!!.setText(R.id.tv_new_date_notification, "oleDate")
+        }*/
     }
 }

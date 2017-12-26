@@ -15,6 +15,7 @@ import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.info.Event
 import com.gkzxhn.mygithub.bean.info.Repo
+import com.gkzxhn.mygithub.constant.Constant
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
@@ -25,6 +26,7 @@ import com.gkzxhn.mygithub.ui.activity.IssueDetailActivity
 import com.gkzxhn.mygithub.ui.activity.IssuesActivity
 import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
 import com.gkzxhn.mygithub.ui.adapter.EventAdapter
+import com.gkzxhn.mygithub.utils.SPUtil
 import com.ldoublem.loadingviewlib.view.LVGhost
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import javax.inject.Inject
@@ -73,13 +75,10 @@ class EventFragment : BaseFragment(), BaseView {
     }
 
     override fun initContentView() {
-
         presenter.subscribe()
-
         srl_notifications.setOnRefreshListener {
             getNewData()
         }
-
         getNewData()
 
         adapter = EventAdapter(null)
@@ -88,6 +87,11 @@ class EventFragment : BaseFragment(), BaseView {
             var type = (adapter.data[position] as Event).type
             var fullName = (adapter.data[position] as Event).repo.name
             var s = fullName.split("/")
+            //Constant.TIME = (adapter.data[position] as Event).created_at as Long
+
+            /*这里点击item之后刷新当前item，由于加载完数据之后已经记录了新的lasttime，所以刷新之后新消息标志会隐藏*/
+            adapter.notifyItemChanged(position)
+
             when (type) {"IssuesEvent", "IssueCommentEvent" -> {
                 val issue = (adapter.data[position] as Event).payload.issue
                 val name = s[0]
@@ -125,15 +129,20 @@ class EventFragment : BaseFragment(), BaseView {
     }
 
     override fun initView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+
+        Constant.CURRENT_PAGE = javaClass.simpleName
+
         return inflater!!.inflate(R.layout.fragment_notifications, container, false)
     }
 
     fun loadData(event: List<Event>) {
         adapter.setNewData(event)
+        adapter.loadMoreEnd()
         Log.i(javaClass.simpleName, event[0].toString())
     }
 
     fun getNewData() {
+        Constant.TIME = SPUtil.get(context, SharedPreConstant.LAST_TIME, 1L) as Long
         var string: String = SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, "")
         Log.i(javaClass.simpleName, "USER_NAME = " + string)
         presenter.getEvents(SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, ""))
@@ -147,5 +156,4 @@ class EventFragment : BaseFragment(), BaseView {
         startActivity(intent)
         hideLoading()
     }
-
 }

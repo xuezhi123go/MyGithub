@@ -14,6 +14,7 @@ import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.base.App
 import com.gkzxhn.mygithub.bean.info.Event
+import com.gkzxhn.mygithub.constant.Constant
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
@@ -116,6 +117,7 @@ class ActivityFragment : BaseFragment(), BaseView {
     }
 
     override fun initView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        Constant.CURRENT_PAGE = javaClass.simpleName
         return inflater!!.inflate(R.layout.fragment_notifications, container, false)
     }
 
