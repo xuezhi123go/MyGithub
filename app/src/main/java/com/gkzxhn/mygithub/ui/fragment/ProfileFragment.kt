@@ -116,7 +116,7 @@ class ProfileFragment : BaseFragment(), BaseView {
                     }
             var intent = Intent(context, LoginActivity::class.java)
             startActivity(intent)
-            activity.finish()
+            //activity.finish()
         }
     }
 
