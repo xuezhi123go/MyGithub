@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import com.gkzxhn.mygithub.ui.activity.MainActivity
 
 /**
  * Created by 方 on 2017/10/13.

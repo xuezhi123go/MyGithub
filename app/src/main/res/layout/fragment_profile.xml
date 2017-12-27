@@ -130,6 +130,15 @@
                 android:layout_marginBottom="@dimen/dimen_2"
                 />
 
+            <ProgressBar
+                android:id="@+id/progress"
+                android:visibility="gone"
+                android:layout_marginLeft="@dimen/dimen_15"
+                android:layout_marginBottom="@dimen/dimen_15"
+                android:layout_marginTop="@dimen/dimen_15"
+                android:layout_width="@dimen/dimen_10"
+                android:layout_height="@dimen/dimen_10"/>
+
         </LinearLayout>
 
         <LinearLayout

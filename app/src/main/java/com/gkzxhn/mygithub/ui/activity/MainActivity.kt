@@ -1,4 +1,4 @@
-package com.gkzxhn.balabala.ui.activity
+package com.gkzxhn.mygithub.ui.activity
 
 import android.Manifest
 import android.content.Context
@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.GravityCompat
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
@@ -25,7 +24,6 @@ import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.mvp.presenter.MainPresenter
-import com.gkzxhn.mygithub.ui.activity.LoginActivity
 import com.gkzxhn.mygithub.ui.fragment.HomeFragment
 import com.gkzxhn.mygithub.ui.fragment.ProfileFragment
 import com.gkzxhn.mygithub.ui.fragment.SecondFragment
@@ -79,7 +77,7 @@ class MainActivity : BaseActivity(), BaseView {
 //        repo = intent.getParcelableExtra<Repo>(IntentConstant.REPO)
         initFragments()
         setBottomBar()
-        setDrawer()
+//        setDrawer()
 
         mainPresenter.subscribe()
 
@@ -233,10 +231,10 @@ class MainActivity : BaseActivity(), BaseView {
     var back = 0
 
     override fun onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        /*if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
             return
-        }
+        }*/
         back++
         if (back == 2) {
             finish()
