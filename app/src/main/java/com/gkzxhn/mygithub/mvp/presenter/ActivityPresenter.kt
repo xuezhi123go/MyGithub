@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.api.OAuthApi
+import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.extension.toast
 import com.gkzxhn.mygithub.ui.fragment.ActivityFragment
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
@@ -46,6 +47,16 @@ class ActivityPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     view.tv_notifications_login.visibility = View.VISIBLE
                     view.srl_notifications.visibility = View.GONE
                 })
+    }
+
+    fun subscribe() {
+        rxBus.toFlowable(User::class.java)
+                .bindToLifecycle(view as ActivityFragment)
+                .subscribe(
+                        { user: User? ->
+                            view.getNewData()
+                        }
+                )
     }
 
 }
