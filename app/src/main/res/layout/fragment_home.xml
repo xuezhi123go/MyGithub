@@ -6,17 +6,29 @@
     android:background="@color/background"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.youth.banner.Banner
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="180dp">
+
+        </com.youth.banner.Banner>
+
     <View
         android:id="@+id/status_view"
         android:layout_width="match_parent"
         android:layout_height="26dp"
-        android:background="@color/blue_grey" />
+        android:background="@android:color/transparent" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
+        android:layout_below="@id/status_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_height"
-        android:background="@color/blue_grey"
+        android:background="@android:color/transparent"
         app:contentInsetStart="0dp">
 
         <LinearLayout
@@ -45,16 +57,12 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dimen_2"
                 android:text="@string/search"
-                android:textColor="@color/gray_back" />
+                android:textColor="@color/text_black" />
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp">
-
-    </FrameLayout>
+    </RelativeLayout>
 
     <RelativeLayout style="@style/rl_home_item">
 

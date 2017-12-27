@@ -1,5 +1,6 @@
 package com.gkzxhn.mygithub.ui.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.gkzxhn.balabala.base.BaseFragment
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
@@ -16,14 +18,19 @@ import com.gkzxhn.mygithub.bean.entity.Icon2Name
 import com.gkzxhn.mygithub.bean.info.*
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
+import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.mvp.presenter.HomePresenter
 import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
 import com.gkzxhn.mygithub.ui.activity.RepoListActivity
 import com.gkzxhn.mygithub.ui.activity.SearchActivity
 import com.gkzxhn.mygithub.ui.activity.UserActivity
 import com.gkzxhn.mygithub.ui.adapter.AvatarListAdapter
+import com.youth.banner.BannerConfig
+import com.youth.banner.Transformer
+import com.youth.banner.loader.ImageLoader
 import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
+
 
 /**
  * Created by 方 on 2017/10/19.
@@ -64,8 +71,9 @@ class HomeFragment : BaseFragment(), BaseView {
         setRecyclerView()
         presenter.getPopularUser()
         presenter.getPopularRepos()
-        presenter.getTrendingUser()
+//        presenter.getTrendingUser()
         presenter.getTrendingRepo()
+        presenter.getBanner()
     }
 
     private fun setRecyclerView() {
@@ -187,4 +195,40 @@ class HomeFragment : BaseFragment(), BaseView {
             startActivity(intent)
         }
     }
+
+    fun setBanner(srcList: List<Icon2Name>) {
+        //设置banner样式
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE)
+        //设置图片加载器
+        banner.setImageLoader(GlideImageLoader())
+        //设置图片集合
+        banner.setImages(srcList)
+        //设置banner动画效果
+        banner.setBannerAnimation(Transformer.ScaleInOut)
+        //设置标题集合（当banner样式有显示title时）
+        banner.setBannerTitles(srcList.map { it.name })
+        //设置自动轮播，默认为true
+        banner.isAutoPlay(true)
+        //设置轮播时间
+        banner.setDelayTime(4000)
+        //设置指示器位置（当banner模式中有指示器时）
+        banner.setIndicatorGravity(BannerConfig.CENTER)
+        //banner设置方法全部调用完毕时最后调用
+        banner.start()
+    }
+}
+
+class GlideImageLoader : ImageLoader() {
+    override fun displayImage(context: Context, path: Any, imageView: ImageView) {
+        /**
+        注意：
+        1.图片加载器由自己选择，这里不限制，只是提供几种使用方法
+        2.返回的图片路径为Object类型，由于不能确定你到底使用的那种图片加载器，
+        传输的到的是什么格式，那么这种就使用Object接收和返回，你只需要强转成你传输的类型就行，
+        切记不要胡乱强转！
+         */
+
+        imageView.load(context, (path as Icon2Name).avatarUrl!!)
+    }
+
 }

@@ -6,6 +6,6 @@
 
     <size android:height="@dimen/dimen_20" android:width="@dimen/dimen_50"/>
 
-    <solid android:color="@color/white"/>
+    <solid android:color="@color/translucence"/>
 
 </shape>
