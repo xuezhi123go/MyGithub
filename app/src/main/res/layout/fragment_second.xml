@@ -38,6 +38,7 @@
                 android:id="@+id/tv_right_button"
                 android:layout_width="@dimen/dimen_70"
                 android:layout_height="@dimen/dimen_28"
+                android:layout_marginLeft="-2dp"
                 android:background="@drawable/notification_right_unselect"
                 android:gravity="center"
                 android:text="Activity"
