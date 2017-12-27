@@ -69,6 +69,7 @@ class ActivityFragment : BaseFragment(), BaseView {
     }
 
     override fun initContentView() {
+        presenter.subscribe()
         srl_notifications.setOnRefreshListener {
             getNewData()
         }

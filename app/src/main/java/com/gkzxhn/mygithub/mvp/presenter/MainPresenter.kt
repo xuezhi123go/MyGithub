@@ -39,7 +39,6 @@ class MainPresenter @Inject constructor(private val rxBus: RxBus
                 .bindToLifecycle(view as MainActivity)
                 .subscribe({ event: Event? ->
                     Log.i(javaClass.simpleName, "小红点的消息")
-
                     view.showRedPoint()
                 })
         rxBus.toFlowable(FinishMain::class.java)
