@@ -26,4 +26,6 @@
     <color name="text_blue">#3978bd</color>
     <color name="gray_btn_back">#ECECEC</color>
 
+    <color name="translucence">#5cffffff</color>
+
 </resources>

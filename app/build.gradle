@@ -68,7 +68,7 @@ dependencies {
         exclude module: 'xpp3'
     }
     //banner
-    compile dependencies.banner
+    compile dependencies.banner2
     //jsoup
     compile dependencies.jsoup
     //glide

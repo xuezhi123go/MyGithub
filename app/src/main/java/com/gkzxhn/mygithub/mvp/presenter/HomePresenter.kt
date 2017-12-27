@@ -2,12 +2,18 @@ package com.gkzxhn.mygithub.mvp.presenter
 
 import android.util.Log
 import com.gkzxhn.balabala.mvp.contract.BaseView
+import com.gkzxhn.mygithub.api.ExploreApi
 import com.gkzxhn.mygithub.api.OAuthApi
 import com.gkzxhn.mygithub.api.TrendingApi
+import com.gkzxhn.mygithub.bean.entity.Icon2Name
+import com.gkzxhn.mygithub.constant.GithubConstant
+import com.gkzxhn.mygithub.extension.sanitizeHtml
 import com.gkzxhn.mygithub.ui.fragment.HomeFragment
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 import javax.inject.Inject
 
 /**
@@ -15,6 +21,7 @@ import javax.inject.Inject
  */
 class HomePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                                         private val trendingApi: TrendingApi,
+                                        private val exploreApi: ExploreApi,
                                         private val mView: BaseView) {
 
     fun getPopularUser(){
@@ -74,5 +81,44 @@ class HomePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                     e ->
                     Log.e(javaClass.simpleName, e.message)
                 })
+    }
+
+    fun getBanner() {
+        exploreApi.getExploreContent()
+                .bindToLifecycle(mView as HomeFragment)
+                .sanitizeHtml ({
+                    Log.i(javaClass.simpleName, "html : ${this.body().toString()}")
+                    val list = parse(this)
+                    list
+                }).subscribe ({
+            list: List<Icon2Name> ->
+            mView.setBanner(list)
+            list.forEach {
+                Log.i(javaClass.simpleName, "src : ${it.name}")
+            }
+        }, {
+            e -> Log.e(javaClass.simpleName, "exceptions : ${e.message}")
+        })
+    }
+
+    private fun parse(doc: Document): List<Icon2Name> {
+        val element = doc.getElementsByClass("carousel-inner").first()
+        val list = element
+                .children()
+                .map { ele ->
+                    var child: Element? = null
+                    try {
+                        child = ele.getElementsByTag("a").first().child(0)
+                    } catch (e: Exception) {
+                        child = Element("a")
+                    }
+                    val src = GithubConstant.EXPLORE_URL + child!!.attr("src")
+                    val title = child!!.attr("title")
+                    Icon2Name(src, title, "banner")
+                }.filter {
+            it ->
+            it.avatarUrl != GithubConstant.EXPLORE_URL
+        }
+        return list
     }
 }

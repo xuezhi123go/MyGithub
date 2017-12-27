@@ -79,6 +79,7 @@ ext {
 
             baseRecyclerView        : 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.21',
             banner                  : 'com.bigkoo:convenientbanner:2.0.5',
+            banner2                  : 'com.youth.banner:banner:1.4.10',
             jsoup                   : 'org.jsoup:jsoup:1.10.3'
 
     ]

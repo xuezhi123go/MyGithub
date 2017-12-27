@@ -1,6 +1,7 @@
 package com.gkzxhn.mygithub.di.module
 
 import android.content.Context
+import com.gkzxhn.mygithub.api.ExploreApi
 import com.gkzxhn.mygithub.api.TrendingApi
 import com.gkzxhn.mygithub.constant.GithubConstant
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
@@ -41,6 +42,7 @@ class BaseModule(private val context: Context) {
                 .cache(cache)
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
+//                .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .build()
     }
 
@@ -62,4 +64,18 @@ class BaseModule(private val context: Context) {
     @Provides
     @Singleton
     fun provideRxbus() = RxBus.instance
+
+    @Provides
+    @Singleton
+    @Named("explore")
+    fun provideExploreRetrofit(@Named("cache_client")client: OkHttpClient) =
+            Retrofit.Builder()
+                    .baseUrl(GithubConstant.EXPLORE_URL)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+                    .client(client)
+                    .build()
+
+    @Provides
+    @Singleton
+    fun provideExploreApi(@Named("explore") retrofit : Retrofit) = retrofit.create(ExploreApi::class.java)
 }
