@@ -27,6 +27,7 @@ import com.gkzxhn.mygithub.ui.activity.IssuesActivity
 import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
 import com.gkzxhn.mygithub.ui.adapter.EventAdapter
 import com.gkzxhn.mygithub.utils.SPUtil
+import com.gkzxhn.mygithub.utils.Utils
 import com.ldoublem.loadingviewlib.view.LVGhost
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import javax.inject.Inject
@@ -52,7 +53,7 @@ class EventFragment : BaseFragment(), BaseView {
     override fun showLoading() {
         loading = LVGhost(context)
         val params = FrameLayout.LayoutParams(300f.dp2px().toInt(), 150f.dp2px().toInt(), Gravity.CENTER)
-        loading.layoutParams = params
+        loading.layoutParams = params as ViewGroup.LayoutParams?
         loading.startAnim()
         fl_notifications.addView(loading)
     }
@@ -87,8 +88,7 @@ class EventFragment : BaseFragment(), BaseView {
             var type = (adapter.data[position] as Event).type
             var fullName = (adapter.data[position] as Event).repo.name
             var s = fullName.split("/")
-            //Constant.TIME = (adapter.data[position] as Event).created_at as Long
-
+            Constant.TIME = Utils.parseDate((adapter.data[position] as Event).created_at, "yyyy-MM-dd'T'HH:mm:ss'Z'") + 8 * 60 * 60 * 1000
             /*这里点击item之后刷新当前item，由于加载完数据之后已经记录了新的lasttime，所以刷新之后新消息标志会隐藏*/
             adapter.notifyItemChanged(position)
 

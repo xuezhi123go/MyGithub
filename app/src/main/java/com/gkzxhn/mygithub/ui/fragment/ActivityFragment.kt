@@ -23,7 +23,7 @@ import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.mvp.presenter.ActivityPresenter
 import com.gkzxhn.mygithub.ui.activity.IssueDetailActivity
 import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
-import com.gkzxhn.mygithub.ui.adapter.EventAdapter
+import com.gkzxhn.mygithub.ui.adapter.ActivityAdapter
 import com.ldoublem.loadingviewlib.view.LVGhost
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import javax.inject.Inject
@@ -38,7 +38,7 @@ class ActivityFragment : BaseFragment(), BaseView {
     @Inject
     lateinit var presenter: ActivityPresenter
 
-    private lateinit var adapter: EventAdapter
+    private lateinit var adapter: ActivityAdapter
 
     override fun launchActivity(intent: Intent) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -74,7 +74,7 @@ class ActivityFragment : BaseFragment(), BaseView {
             getNewData()
         }
         getNewData()
-        adapter = EventAdapter(null)
+        adapter = ActivityAdapter(null)
         rv_notifications.layoutManager = LinearLayoutManager(context)
         adapter.setOnItemClickListener { adapter, view, position ->
             var type = (adapter.data[position] as Event).type
