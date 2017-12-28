@@ -2,7 +2,7 @@ package com.gkzxhn.mygithub.mvp.presenter
 
 import android.util.Log
 import com.gkzxhn.balabala.mvp.contract.BaseView
-import com.gkzxhn.balabala.ui.activity.MainActivity
+import com.gkzxhn.mygithub.ui.activity.MainActivity
 import com.gkzxhn.mygithub.api.OAuthApi
 import com.gkzxhn.mygithub.bean.entity.FinishMain
 import com.gkzxhn.mygithub.bean.info.Event

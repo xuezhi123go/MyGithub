@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.text.TextUtils
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import com.gkzxhn.balabala.base.BaseFragment
 import com.gkzxhn.balabala.mvp.contract.BaseView
 import com.gkzxhn.mygithub.R
@@ -18,13 +16,11 @@ import com.gkzxhn.mygithub.bean.info.Organization
 import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
-import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.edit
 import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.mvp.presenter.ProfilePresenter
 import com.gkzxhn.mygithub.ui.activity.LoginActivity
-import com.gkzxhn.mygithub.ui.activity.RepoListActivity
 import com.gkzxhn.mygithub.ui.activity.UserActivity
 import com.gkzxhn.mygithub.ui.adapter.IconListAdapter
 import com.ldoublem.loadingviewlib.view.LVGhost
@@ -47,17 +43,20 @@ class ProfileFragment : BaseFragment(), BaseView {
     }
 
     override fun showLoading() {
-        loading = LVGhost(context)
+        /*loading = LVGhost(context)
         val params = FrameLayout.LayoutParams(300f.dp2px().toInt(), 150f.dp2px().toInt(), Gravity.CENTER)
         loading.layoutParams = params
         loading.startAnim()
-        fl_profile.addView(loading)
-
+        fl_profile.addView(loading)*/
+        progress.visibility = View.VISIBLE
+        rv_organization.visibility = View.GONE
     }
 
     override fun hideLoading() {
-        loading.stopAnim()
-        fl_profile.removeView(loading)
+        progress.visibility = View.GONE
+        rv_organization.visibility = View.VISIBLE
+        /*loading.stopAnim()
+        fl_profile.removeView(loading)*/
     }
 
     override fun showMessage() {
@@ -128,10 +127,11 @@ class ProfileFragment : BaseFragment(), BaseView {
         iconAdapter = IconListAdapter(null)
         iconAdapter.setOnItemClickListener { adapter, view, position ->
 
-            val org = (adapter.data[position] as Organization).login
-            val intent = Intent(context, RepoListActivity::class.java)
-            intent.action = IntentConstant.ORG_REPOS
-            intent.putExtra(IntentConstant.ORG_NAME, org)
+            val org = adapter.data[position] as Organization
+            val intent = Intent(context, UserActivity::class.java)
+            val data = Bundle()
+            data.putParcelable(IntentConstant.USER, org)
+            intent.putExtras(data)
             startActivity(intent)
         }
         rv_organization.adapter = iconAdapter
