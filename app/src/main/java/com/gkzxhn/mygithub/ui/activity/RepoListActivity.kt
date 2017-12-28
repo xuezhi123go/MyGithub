@@ -26,7 +26,7 @@ import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.dp2px
 import com.gkzxhn.mygithub.extension.getSharedPreference
 import com.gkzxhn.mygithub.mvp.presenter.RepoListPresenter
-import com.gkzxhn.mygithub.ui.adapter.EventAdapter
+import com.gkzxhn.mygithub.ui.adapter.ActivityAdapter
 import com.gkzxhn.mygithub.ui.adapter.RepoListAdapter
 import com.gkzxhn.mygithub.ui.adapter.UserListAdapter
 import com.gkzxhn.mygithub.ui.wedgit.RecycleViewDivider
@@ -41,7 +41,7 @@ class RepoListActivity : BaseActivity(), BaseView {
 
     private lateinit var repoListAdapter: RepoListAdapter
     private lateinit var userListAdapter: UserListAdapter
-    private lateinit var eventAdapter: EventAdapter
+    private lateinit var activityAdapter: ActivityAdapter
     private lateinit var action: String
     private lateinit var loading: LVGhost
 
@@ -169,9 +169,9 @@ class RepoListActivity : BaseActivity(), BaseView {
 
     private fun setActivityView() {
         rv_repo_list.layoutManager = LinearLayoutManager(this)
-        eventAdapter = EventAdapter(null)
-        eventAdapter.openLoadAnimation()
-        eventAdapter.setOnItemClickListener { adapter, view, position ->
+        activityAdapter = ActivityAdapter(null)
+        activityAdapter.openLoadAnimation()
+        activityAdapter.setOnItemClickListener { adapter, view, position ->
             var type = (adapter.data[position] as Event).type
             var fullName = (adapter.data[position] as Event).repo.name
             var s = fullName.split("/")
@@ -202,7 +202,7 @@ class RepoListActivity : BaseActivity(), BaseView {
             }
 
         }
-        rv_repo_list.adapter = eventAdapter
+        rv_repo_list.adapter = activityAdapter
     }
 
     private fun setUsersRecyclerView() {
@@ -299,7 +299,7 @@ class RepoListActivity : BaseActivity(), BaseView {
     }
 
     fun loadActivityData(event: List<Event>) {
-        eventAdapter.setNewData(event)
+        activityAdapter.setNewData(event)
     }
 
     /**

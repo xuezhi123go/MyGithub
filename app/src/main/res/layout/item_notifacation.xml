@@ -31,7 +31,6 @@
             android:textSize="@dimen/sp_12" />
 
         <TextView
-            android:textSize="@dimen/sp_12"
             android:id="@+id/tv_news"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +42,9 @@
             android:paddingLeft="@dimen/dimen_5"
             android:paddingRight="@dimen/dimen_5"
             android:text="New"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12"
+            android:visibility="gone" />
     </LinearLayout>
 
     <ImageView
