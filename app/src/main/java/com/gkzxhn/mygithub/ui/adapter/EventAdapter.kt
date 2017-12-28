@@ -1,5 +1,6 @@
 package com.gkzxhn.mygithub.ui.adapter
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -9,9 +10,10 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.gkzxhn.mygithub.R
 import com.gkzxhn.mygithub.bean.entity.EventAdapterLoaded
 import com.gkzxhn.mygithub.bean.info.Event
-import com.gkzxhn.mygithub.constant.Constant
+import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.extension.loadRoundConner
+import com.gkzxhn.mygithub.utils.SPUtil
 import com.gkzxhn.mygithub.utils.Utils.getDiffTime
 import com.gkzxhn.mygithub.utils.Utils.parseDate
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
@@ -19,11 +21,12 @@ import com.gkzxhn.mygithub.utils.rxbus.RxBus
 /**
  * Created by Xuezhi on 2017/11/19.
  */
-class EventAdapter(datas: List<Event>?) : BaseQuickAdapter<Event, BaseViewHolder>(R.layout.item_notifacation, datas) {
+class EventAdapter constructor(datas: List<Event>?,
+                               var context: Context) : BaseQuickAdapter<Event, BaseViewHolder>(R.layout.item_notifacation, datas) {
 
     override fun convert(helper: BaseViewHolder?, item: Event?) {
 
-        var lastTime = Constant.TIME
+        var lastTime = SPUtil.get(context, SharedPreConstant.LAST_TIME, 1L) as Long
 
         Log.i(javaClass.simpleName, "" + lastTime)
 

@@ -42,7 +42,7 @@ class MainActivity : BaseActivity(), BaseView {
     @Inject
     lateinit var mainPresenter: MainPresenter
 
-    val context:Context = this
+    val context: Context = this
 
 //    private lateinit var repo: Repo
 

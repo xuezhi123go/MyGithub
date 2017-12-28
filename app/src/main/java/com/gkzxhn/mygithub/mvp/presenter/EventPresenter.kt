@@ -43,9 +43,18 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
                         if (!event.toString().equals(SPUtil.get(view.context, SharedPreConstant.EVENT, ""))) {
                             SPUtil.put(view.context, SharedPreConstant.EVENT, event.toString())
                         }
-                        lastTime = Utils.parseDate(event[0].created_at, "yyyy-MM-dd'T'HH:mm:ss'Z'") + 8 * 60 * 60 * 1000
-                        Log.i(javaClass.simpleName, "event0 = " + event[0])
-                        Log.i(javaClass.simpleName, "event1 = " + event[1])
+                        object : Thread() {
+                            override fun run() {
+                                super.run()
+                                Thread.sleep(1000)//休眠3秒
+                                /**
+                                 * 要执行的操作
+                                 */
+                                SPUtil.put(view.context, SharedPreConstant.LAST_TIME, Utils.parseDate(event[0].created_at, "yyyy-MM-dd'T'HH:mm:ss'Z'") + 8 * 60 * 60 * 1000)
+                            }
+                        }.start()
+
+
                     } else {
                         view.context.toast("没有数据")
                     }
@@ -68,8 +77,8 @@ class EventPresenter @Inject constructor(private val oAuthApi: OAuthApi,
         rxBus.toFlowable(EventAdapterLoaded::class.java)
                 .subscribe({ e: EventAdapterLoaded? ->
                     //var time = Utils.getTiem().time
-                    SPUtil.put(view.context, SharedPreConstant.LAST_TIME, lastTime)
-                    Log.i(javaClass.simpleName, "" + Utils.getTiem())
+                    //SPUtil.put(view.context, SharedPreConstant.LAST_TIME, lastTime)
+                    Log.i(javaClass.simpleName, "LAST_TIME = " + lastTime)
                 })
     }
 

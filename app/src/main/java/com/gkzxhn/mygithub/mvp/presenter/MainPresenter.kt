@@ -2,12 +2,12 @@ package com.gkzxhn.mygithub.mvp.presenter
 
 import android.util.Log
 import com.gkzxhn.balabala.mvp.contract.BaseView
-import com.gkzxhn.mygithub.ui.activity.MainActivity
 import com.gkzxhn.mygithub.api.OAuthApi
 import com.gkzxhn.mygithub.bean.entity.FinishMain
 import com.gkzxhn.mygithub.bean.info.Event
 import com.gkzxhn.mygithub.bean.info.User
 import com.gkzxhn.mygithub.constant.SharedPreConstant
+import com.gkzxhn.mygithub.ui.activity.MainActivity
 import com.gkzxhn.mygithub.utils.AppUtils
 import com.gkzxhn.mygithub.utils.SPUtil
 import com.gkzxhn.mygithub.utils.rxbus.RxBus
@@ -88,12 +88,16 @@ class MainPresenter @Inject constructor(private val rxBus: RxBus
                 .doAfterTerminate { view.hideLoading() }
                 .subscribe({ event ->
                     if (event.size > 0) {
+
+                        Log.i(javaClass.simpleName, "旧EVENT" + SPUtil.get(view.context, SharedPreConstant.EVENT, ""))
+
                         if (!event.toString().equals(SPUtil.get(view.context, SharedPreConstant.EVENT, ""))) {
                             rxBus.post(event[0])
                             SPUtil.put(view.context, SharedPreConstant.EVENT, event.toString())
                         }
                         Log.i(javaClass.simpleName, "event = " + event)
-                    } }, { e ->
+                    }
+                }, { e ->
                     Log.e(javaClass.simpleName, "e = " + e.message)
                 })
     }

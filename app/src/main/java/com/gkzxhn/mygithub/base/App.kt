@@ -1,9 +1,12 @@
 package com.gkzxhn.mygithub.base
 
 import android.app.Application
+import com.gkzxhn.mygithub.constant.Constant
+import com.gkzxhn.mygithub.constant.SharedPreConstant
 import com.gkzxhn.mygithub.di.component.BaseComponent
 import com.gkzxhn.mygithub.di.component.DaggerBaseComponent
 import com.gkzxhn.mygithub.di.module.BaseModule
+import com.gkzxhn.mygithub.utils.SPUtil
 import javax.inject.Inject
 
 /**
