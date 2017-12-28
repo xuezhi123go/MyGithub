@@ -20,10 +20,7 @@ import com.gkzxhn.mygithub.constant.IntentConstant
 import com.gkzxhn.mygithub.di.module.OAuthModule
 import com.gkzxhn.mygithub.extension.load
 import com.gkzxhn.mygithub.mvp.presenter.HomePresenter
-import com.gkzxhn.mygithub.ui.activity.RepoDetailActivity
-import com.gkzxhn.mygithub.ui.activity.RepoListActivity
-import com.gkzxhn.mygithub.ui.activity.SearchActivity
-import com.gkzxhn.mygithub.ui.activity.UserActivity
+import com.gkzxhn.mygithub.ui.activity.*
 import com.gkzxhn.mygithub.ui.adapter.AvatarListAdapter
 import com.youth.banner.BannerConfig
 import com.youth.banner.Transformer
@@ -229,6 +226,12 @@ class GlideImageLoader : ImageLoader() {
          */
 
         imageView.load(context, (path as Icon2Name).avatarUrl!!)
+        imageView.setOnClickListener {
+            val intent = Intent(context, WebViewActivity::class.java)
+            intent.putExtra(IntentConstant.LINK, path.type)
+            intent.putExtra(IntentConstant.TITLE, path.name)
+            context.startActivity(intent)
+        }
     }
 
 }

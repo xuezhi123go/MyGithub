@@ -107,14 +107,19 @@ class HomePresenter @Inject constructor(private val oAuthApi: OAuthApi,
                 .children()
                 .map { ele ->
                     var child: Element? = null
+                    var link: String? = null
                     try {
-                        child = ele.getElementsByTag("a").first().child(0)
+                        val a = ele.getElementsByTag("a")
+                        link = a.attr("href")
+                        child = a.first().child(0)
                     } catch (e: Exception) {
                         child = Element("a")
+                        link = ""
                     }
                     val src = GithubConstant.EXPLORE_URL + child!!.attr("src")
                     val title = child!!.attr("title")
-                    Icon2Name(src, title, "banner")
+                    link = GithubConstant.EXPLORE_URL + link
+                    Icon2Name(src, title, link)
                 }.filter {
             it ->
             it.avatarUrl != GithubConstant.EXPLORE_URL

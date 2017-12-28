@@ -41,6 +41,7 @@
         <activity android:name=".ui.activity.IssuesActivity"/>
         <activity android:name=".ui.activity.FileTreeActivity"/>
         <activity android:name=".ui.activity.FileDetailActivity"/>
+        <activity android:name=".ui.activity.WebViewActivity"/>
 
         <service android:name="com.iflytek.autoupdate.IFlytekDownloadService"/>
     </application>
