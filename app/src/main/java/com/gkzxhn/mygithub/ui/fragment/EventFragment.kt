@@ -76,19 +76,23 @@ class EventFragment : BaseFragment(), BaseView {
     }
 
     override fun initContentView() {
+
         presenter.subscribe()
+
         srl_notifications.setOnRefreshListener {
+            //下拉刷新
             getNewData()
         }
         getNewData()
 
-        adapter = EventAdapter(null)
+        adapter = EventAdapter(null, activity)
         rv_notifications.layoutManager = LinearLayoutManager(context)
         adapter.setOnItemClickListener { adapter, view, position ->
             var type = (adapter.data[position] as Event).type
             var fullName = (adapter.data[position] as Event).repo.name
             var s = fullName.split("/")
-            Constant.TIME = Utils.parseDate((adapter.data[position] as Event).created_at, "yyyy-MM-dd'T'HH:mm:ss'Z'") + 8 * 60 * 60 * 1000
+            var time = Utils.parseDate((adapter.data[position] as Event).created_at, "yyyy-MM-dd'T'HH:mm:ss'Z'") + 8 * 60 * 60 * 1000
+            SPUtil.put(context, SharedPreConstant.LAST_TIME, time)
             /*这里点击item之后刷新当前item，由于加载完数据之后已经记录了新的lasttime，所以刷新之后新消息标志会隐藏*/
             adapter.notifyItemChanged(position)
 
@@ -142,7 +146,8 @@ class EventFragment : BaseFragment(), BaseView {
     }
 
     fun getNewData() {
-        Constant.TIME = SPUtil.get(context, SharedPreConstant.LAST_TIME, 1L) as Long
+//        var time = SPUtil.get(context, SharedPreConstant.LAST_TIME, 1L) as Long
+//        SPUtil.put(activity, SharedPreConstant.LAST_TIME, time)
         var string: String = SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, "")
         Log.i(javaClass.simpleName, "USER_NAME = " + string)
         presenter.getEvents(SharedPreConstant.USER_SP.getSharedPreference().getString(SharedPreConstant.USER_NAME, ""))
